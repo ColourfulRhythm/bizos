@@ -9,15 +9,9 @@
 4. Select folder: **`/ (root)`**
 5. Click **Save**
 
-### Step 2: Set Custom Domain (Optional)
-1. In the same Pages settings, scroll to **"Custom domain"**
-2. Enter your domain (e.g., `www.yourdomain.com` or `yourdomain.com`)
-3. Click **Save**
-4. Update the `CNAME` file in the repository with your domain
-5. Add DNS records at your domain provider:
-   - Type: `CNAME`
-   - Name: `www` (or `@` for root domain)
-   - Value: `colourfulrhythm.github.io`
+## Your Site URL
+After enabling, your site will be live at:
+**https://colourfulrhythm.github.io/sosd/**
 
 ## Deploy Your Site
 
@@ -38,7 +32,7 @@ git checkout main
 
 # Copy built files
 cp -r out/* .
-cp CNAME .
+rm -f CNAME  # Remove CNAME for default domain
 cp .nojekyll .
 
 # Commit and push
@@ -52,11 +46,9 @@ git checkout main
 
 ## After Deployment
 - Your site will be live at: `https://colourfulrhythm.github.io/sosd/`
-- Or your custom domain if configured
 - Updates take 1-2 minutes to go live
 
 ## Notes
 - The `out/` folder contains your built site
-- The `CNAME` file is for custom domains
 - The `.nojekyll` file tells GitHub not to process with Jekyll
-
+- No CNAME file = uses default GitHub Pages domain
