@@ -7,7 +7,10 @@
     "start": "node server.js",
     "dev": "node server.js",
     "frontend": "python3 -m http.server 3002",
-    "serve": "npx http-server -p 3002"
+    "serve": "npx http-server -p 3002",
+    "vercel": "npx vercel",
+    "vercel:dev": "npx vercel dev",
+    "vercel:prod": "npx vercel --prod"
   },
   "keywords": [
     "business",
@@ -17,7 +20,9 @@
   ],
   "author": "",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "vercel": "^34.0.0"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",

@@ -289,6 +289,10 @@
   .radio-option input:checked + .radio-label {
     border-color:var(--ink); background:var(--ink); color:var(--white);
   }
+  /* Checkbox styling (same as radio for consistency) */
+  .radio-option input[type="checkbox"]:checked + .radio-label {
+    border-color:var(--ink); background:var(--ink); color:var(--white);
+  }
   .form-nav {
     display:flex; justify-content:space-between;
     align-items:center; margin-top:32px;
@@ -354,7 +358,12 @@
     letter-spacing:-1px; text-align:center;
     margin-bottom:16px;
   }
-  .gen-sub { font-size:16px; color:var(--muted); text-align:center; margin-bottom:48px; }
+  .gen-sub { font-size:16px; color:var(--muted); text-align:center; margin-bottom:16px; line-height:1.6; }
+  .gen-time {
+    font-size:13px; color:var(--gold); text-align:center;
+    margin-bottom:48px; font-weight:500; letter-spacing:0.3px;
+    font-family:'DM Sans',sans-serif;
+  }
   .progress-track {
     width:100%; max-width:480px; height:3px;
     background:var(--line); border-radius:2px; overflow:hidden;
@@ -697,12 +706,12 @@
             <textarea id="biz-delivery" placeholder="e.g. Clients visit our showroom, then we guide them through the plot selection and payment process. We have a 3-step onboarding flow after initial payment."></textarea>
           </div>
           <div class="form-group">
-            <label>How do clients pay you?</label>
+            <label>How do clients pay you? <span>(select all that apply)</span></label>
             <div class="radio-group">
-              <div class="radio-option"><input type="radio" name="pay-model" id="pm1" value="Full payment upfront"/><label class="radio-label" for="pm1">Upfront</label></div>
-              <div class="radio-option"><input type="radio" name="pay-model" id="pm2" value="Instalment / payment plan"/><label class="radio-label" for="pm2">Instalments</label></div>
-              <div class="radio-option"><input type="radio" name="pay-model" id="pm3" value="Monthly subscription"/><label class="radio-label" for="pm3">Subscription</label></div>
-              <div class="radio-option"><input type="radio" name="pay-model" id="pm4" value="Invoice on delivery"/><label class="radio-label" for="pm4">Invoice</label></div>
+              <div class="radio-option"><input type="checkbox" name="pay-model" id="pm1" value="Full payment upfront"/><label class="radio-label" for="pm1">Upfront</label></div>
+              <div class="radio-option"><input type="checkbox" name="pay-model" id="pm2" value="Instalment / payment plan"/><label class="radio-label" for="pm2">Instalments</label></div>
+              <div class="radio-option"><input type="checkbox" name="pay-model" id="pm3" value="Monthly subscription"/><label class="radio-label" for="pm3">Subscription</label></div>
+              <div class="radio-option"><input type="checkbox" name="pay-model" id="pm4" value="Invoice on delivery"/><label class="radio-label" for="pm4">Invoice</label></div>
             </div>
           </div>
           <div class="form-group">
@@ -882,7 +891,8 @@
 <div id="generation-screen">
   <div class="gen-logo">BizOS</div>
   <div class="gen-title" id="gen-title">Building your system…</div>
-  <div class="gen-sub" id="gen-sub">Analysing your business and generating documents</div>
+  <div class="gen-sub" id="gen-sub">Your payment was successful! We're now generating your complete business operating system.</div>
+  <div class="gen-time" id="gen-time">Estimated time: 3-5 minutes</div>
   <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   <div class="gen-log" id="gen-log"></div>
 </div>
@@ -910,10 +920,12 @@
 // CONFIGURATION - Update these values with your credentials
 // ═══════════════════════════════════════════════════════════════
 const CONFIG = {
-  // Backend API URL - Update this to your backend server URL
+  // Backend API URL - Auto-detects based on current domain
   // For local development: http://localhost:3001
-  // For production: https://your-backend-domain.com
-  BACKEND_URL: 'http://localhost:3001',
+  // For production: Uses same domain (bizos.adparlay.com)
+  BACKEND_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3001' 
+    : window.location.origin, // Same domain for production
   
   // Get your Paystack public key from: https://dashboard.paystack.com/#/settings/developer
   // Test key format: pk_test_xxxxxxxxxxxxx
@@ -1051,7 +1063,7 @@ function collectData() {
     city: document.getElementById('biz-city').value.trim() || '',
     salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
     delivery: document.getElementById('biz-delivery').value.trim(),
-    paymentModel: document.querySelector('input[name="pay-model"]:checked')?.value || 'Full payment upfront',
+    paymentModel: Array.from(document.querySelectorAll('input[name="pay-model"]:checked')).map(cb => cb.value).join(', ') || 'Full payment upfront',
     bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
     customer: document.getElementById('biz-customer').value.trim(),
     existingDocs: document.getElementById('biz-docs').value.trim(),
@@ -1134,6 +1146,10 @@ function initPayment() {
       payBtn.disabled = false;
       payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
       
+      // Close payment form and show generation screen
+      document.getElementById('step-5').classList.remove('active');
+      document.getElementById('form-card').style.display = 'none';
+      
       // Start generation immediately after payment
       startGeneration();
     },
@@ -1157,6 +1173,9 @@ async function startGeneration() {
   const progress = document.getElementById('progress-fill');
   const genTitle = document.getElementById('gen-title');
   const genSub = document.getElementById('gen-sub');
+  const genTime = document.getElementById('gen-time');
+  
+  const startTime = Date.now();
 
   function addLog(text, done = false) {
     const line = document.createElement('div');
@@ -1168,10 +1187,22 @@ async function startGeneration() {
 
   function setProgress(pct) {
     progress.style.width = pct + '%';
+    // Update time estimate
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const remaining = Math.max(0, Math.ceil((100 - pct) * (elapsed / pct)));
+    if (pct < 100) {
+      genTime.textContent = `Estimated time remaining: ${remaining} seconds`;
+    }
   }
 
   try {
-    addLog('Analysing your business profile…');
+    addLog('Payment confirmed ✓');
+    addLog('Starting document generation…');
+    setProgress(5);
+    
+    await new Promise(r => setTimeout(r, 500));
+    
+    addLog('Analysing your business profile with Claude AI…');
     setProgress(8);
 
     // Call Claude API to generate the document plan
@@ -1217,9 +1248,11 @@ async function startGeneration() {
     generatedZip = { blob: zipBlob, name: bizData.name };
 
     setProgress(100);
+    const totalTime = Math.floor((Date.now() - startTime) / 1000);
+    genTime.textContent = `Completed in ${totalTime} seconds`;
     addLog('ZIP ready for download', true);
 
-    await new Promise(r => setTimeout(r, 800));
+    await new Promise(r => setTimeout(r, 1000));
 
     // Show download screen
     document.getElementById('generation-screen').classList.remove('active');
@@ -1227,7 +1260,7 @@ async function startGeneration() {
     document.getElementById('dl-doc-count').textContent = docsGenerated;
     document.getElementById('dl-folder-count').textContent = structure.folders.length;
     document.getElementById('download-sub').textContent =
-      `Your complete operating system for ${bizData.name} is ready. ${docsGenerated} professionally formatted documents across ${structure.folders.length} organised folders.`;
+      `Your complete operating system for ${bizData.name} is ready! ${docsGenerated} professionally formatted documents across ${structure.folders.length} organised folders. Click below to download your ZIP file.`;
 
     document.getElementById('download-btn').onclick = downloadZip;
 
@@ -1251,8 +1284,15 @@ function downloadZip() {
 
 // ─── CALL BACKEND API ───────────────────────────────────────────
 async function callClaude(biz) {
+  // Ensure we're using the correct backend URL (override CONFIG to fix deployment issue)
+  const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3001' 
+    : window.location.origin;
+  
+  console.log('Calling backend at:', `${backendUrl}/api/generate`);
+  
   // Call backend API instead of direct Anthropic API
-  const response = await fetch(`${CONFIG.BACKEND_URL}/api/generate`, {
+  const response = await fetch(`${backendUrl}/api/generate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
