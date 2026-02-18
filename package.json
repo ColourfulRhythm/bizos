@@ -1,0 +1,28 @@
+{
+  "name": "bizos",
+  "version": "1.0.0",
+  "description": "BizOS - AI-Powered Business Operating System Generator",
+  "main": "BizOS_MVP.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "frontend": "python3 -m http.server 3002",
+    "serve": "npx http-server -p 3002"
+  },
+  "keywords": [
+    "business",
+    "sop",
+    "documentation",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  }
+}
+
