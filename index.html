@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BizOS — Your Business Operating System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root {
+    --ink: #0A0A0A;
+    --paper: #F5F0E8;
+    --cream: #EDE8DC;
+    --gold: #C8963E;
+    --gold-light: #F0D89A;
+    --muted: #7A7468;
+    --line: #D8D2C4;
+    --white: #FFFFFF;
+    --success: #2D6A4F;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 48px;
+    background: rgba(245,240,232,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size:22px; letter-spacing:-0.5px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-mark {
+    width:32px; height:32px; background:var(--ink);
+    border-radius:6px; display:flex; align-items:center; justify-content:center;
+  }
+  .logo-mark svg { width:18px; height:18px; }
+  .nav-right { display:flex; align-items:center; gap:24px; }
+  .nav-link { font-size:14px; color:var(--muted); text-decoration:none; }
+  .nav-link:hover { color:var(--ink); }
+  .nav-cta {
+    background:var(--ink); color:var(--white);
+    padding:10px 22px; border-radius:8px;
+    font-size:14px; font-weight:500; text-decoration:none;
+    cursor:pointer; border:none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .nav-cta:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,.2); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding: 120px 48px 80px;
+    position:relative; z-index:1;
+    text-align:center;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--cream); border:1px solid var(--line);
+    padding:6px 14px; border-radius:100px;
+    font-size:12px; font-weight:500; letter-spacing:0.5px;
+    color:var(--muted); margin-bottom:32px;
+    text-transform:uppercase;
+  }
+  .hero-badge span { width:6px; height:6px; background:var(--gold); border-radius:50%; display:inline-block; }
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height:1.02; letter-spacing:-2px;
+    max-width:900px; margin-bottom:24px;
+  }
+  h1 em { font-style:italic; color:var(--gold); }
+  .hero-sub {
+    font-size:18px; color:var(--muted); max-width:540px;
+    line-height:1.7; margin-bottom:48px; font-weight:300;
+  }
+  .hero-actions { display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .btn-primary {
+    background:var(--ink); color:var(--white);
+    padding:16px 36px; border-radius:10px;
+    font-size:16px; font-weight:500;
+    border:none; cursor:pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.2); }
+  .btn-secondary {
+    background:transparent; color:var(--ink);
+    padding:16px 28px; border-radius:10px;
+    font-size:16px; border:1.5px solid var(--line);
+    cursor:pointer; transition:border-color 0.15s;
+  }
+  .btn-secondary:hover { border-color:var(--ink); }
+  .hero-proof {
+    margin-top:64px; display:flex; align-items:center; gap:24px;
+    font-size:13px; color:var(--muted);
+  }
+  .proof-divider { width:1px; height:24px; background:var(--line); }
+  .proof-stat strong { color:var(--ink); font-size:18px; font-weight:600; display:block; }
+
+  /* ── HOW IT WORKS ── */
+  .section { padding:96px 48px; position:relative; z-index:1; }
+  .section-label {
+    font-size:11px; font-weight:600; letter-spacing:3px;
+    text-transform:uppercase; color:var(--gold);
+    margin-bottom:16px;
+  }
+  .section-title {
+    font-family:'Instrument Serif', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    letter-spacing:-1px; line-height:1.1;
+    margin-bottom:16px;
+  }
+  .section-sub { font-size:16px; color:var(--muted); max-width:480px; line-height:1.7; }
+
+  .steps-grid {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    gap:2px; margin-top:56px;
+    background:var(--line); border-radius:16px; overflow:hidden;
+  }
+  .step {
+    background:var(--paper); padding:36px 32px;
+    position:relative;
+  }
+  .step-num {
+    font-family:'Instrument Serif', serif;
+    font-size:48px; color:var(--cream);
+    line-height:1; margin-bottom:20px;
+    font-weight:normal;
+  }
+  .step h3 { font-size:16px; font-weight:600; margin-bottom:10px; }
+  .step p { font-size:14px; color:var(--muted); line-height:1.7; }
+
+  /* ── WHAT YOU GET ── */
+  .output-grid {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:16px; margin-top:48px;
+  }
+  .output-card {
+    background:var(--white); border:1px solid var(--line);
+    border-radius:12px; padding:28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .output-card:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,.08); }
+  .output-icon {
+    width:40px; height:40px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px; font-size:18px;
+  }
+  .output-card h3 { font-size:15px; font-weight:600; margin-bottom:8px; }
+  .output-card p { font-size:13px; color:var(--muted); line-height:1.6; }
+  .output-tag {
+    display:inline-block; font-size:11px; font-weight:500;
+    padding:3px 10px; border-radius:100px; margin-top:12px;
+    background:var(--cream); color:var(--muted);
+  }
+
+  /* ── PRICING ── */
+  .pricing-box {
+    max-width:520px; margin:48px auto 0;
+    background:var(--ink); color:var(--white);
+    border-radius:20px; padding:48px;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .pricing-box::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:200px; height:200px; border-radius:50%;
+    background: radial-gradient(circle, rgba(200,150,62,0.3) 0%, transparent 70%);
+  }
+  .price-label { font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:.5; margin-bottom:8px; }
+  .price-amount {
+    font-family:'Instrument Serif', serif;
+    font-size:72px; line-height:1; letter-spacing:-2px;
+    margin-bottom:4px;
+  }
+  .price-currency { font-size:28px; vertical-align:super; }
+  .price-desc { font-size:14px; opacity:.6; margin-bottom:32px; }
+  .price-features { text-align:left; margin-bottom:36px; }
+  .price-features li {
+    display:flex; align-items:center; gap:12px;
+    font-size:14px; padding:8px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .price-features li:last-child { border-bottom:none; }
+  .check-icon { color:var(--gold); font-size:16px; flex-shrink:0; }
+
+  /* ── FORM SECTION ── */
+  #generator { background:var(--cream); }
+  .form-container {
+    max-width:760px; margin:0 auto;
+  }
+  .form-card {
+    background:var(--white); border-radius:20px;
+    border:1px solid var(--line);
+    overflow:hidden; margin-top:48px;
+  }
+  .form-header {
+    background:var(--ink); padding:32px 40px;
+    color:var(--white);
+  }
+  .form-header h2 {
+    font-family:'Instrument Serif', serif;
+    font-size:28px; letter-spacing:-0.5px; margin-bottom:6px;
+  }
+  .form-header p { font-size:14px; opacity:.6; }
+  .form-body { padding:40px; }
+  .form-step { display:none; }
+  .form-step.active { display:block; }
+  .step-indicator {
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:32px;
+  }
+  .step-dot {
+    width:8px; height:8px; border-radius:50%;
+    background:var(--line); transition:background 0.3s;
+  }
+  .step-dot.done { background:var(--gold); }
+  .step-dot.active { background:var(--ink); width:24px; border-radius:4px; }
+  .step-title { font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-left:4px; }
+
+  .form-group { margin-bottom:24px; }
+  label { display:block; font-size:13px; font-weight:500; margin-bottom:8px; color:var(--ink); }
+  label span { color:var(--muted); font-weight:400; }
+  input[type=text], input[type=email], input[type=number], textarea, select, input[type=file] {
+    width:100%; padding:13px 16px;
+    border:1.5px solid var(--line); border-radius:10px;
+    font-family:'DM Sans',sans-serif; font-size:15px;
+    background:var(--paper); color:var(--ink);
+    transition:border-color 0.2s, box-shadow 0.2s;
+    outline:none;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  input[type=file] {
+    padding:10px;
+    cursor:pointer;
+  }
+  input[type=file]::file-selector-button {
+    background:var(--ink); color:var(--white);
+    padding:8px 16px; border-radius:6px;
+    border:none; margin-right:12px;
+    font-size:13px; font-weight:500; cursor:pointer;
+  }
+  .file-info {
+    font-size:12px; color:var(--muted);
+    margin-top:6px; display:none;
+  }
+  .file-info.show { display:block; }
+  input:focus, textarea:focus, select:focus {
+    border-color:var(--ink);
+    box-shadow:0 0 0 3px rgba(10,10,10,.06);
+    background:var(--white);
+  }
+  textarea { resize:vertical; min-height:100px; }
+  .input-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .radio-group { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:10px; }
+  .radio-option { position:relative; }
+  .radio-option input { position:absolute; opacity:0; }
+  .radio-label {
+    display:block; padding:12px 16px;
+    border:1.5px solid var(--line); border-radius:10px;
+    font-size:14px; cursor:pointer;
+    transition:all 0.15s; text-align:center;
+    background:var(--paper);
+  }
+  .radio-option input:checked + .radio-label {
+    border-color:var(--ink); background:var(--ink); color:var(--white);
+  }
+  .form-nav {
+    display:flex; justify-content:space-between;
+    align-items:center; margin-top:32px;
+    padding-top:24px; border-top:1px solid var(--line);
+  }
+  .btn-back {
+    background:transparent; color:var(--muted);
+    border:none; font-size:14px; cursor:pointer;
+    padding:10px; display:flex; align-items:center; gap:6px;
+  }
+  .btn-back:hover { color:var(--ink); }
+  .btn-next {
+    background:var(--ink); color:var(--white);
+    padding:14px 32px; border-radius:10px;
+    font-size:15px; font-weight:500; border:none;
+    cursor:pointer; transition:transform 0.15s;
+    display:flex; align-items:center; gap:8px;
+  }
+  .btn-next:hover { transform:translateY(-1px); }
+  .btn-next:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+  /* ── PAYMENT STEP ── */
+  .payment-summary {
+    background:var(--paper); border-radius:12px;
+    padding:24px; margin-bottom:24px; border:1px solid var(--line);
+  }
+  .payment-summary h3 { font-size:15px; font-weight:600; margin-bottom:16px; }
+  .summary-row {
+    display:flex; justify-content:space-between;
+    font-size:14px; padding:6px 0;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+  }
+  .summary-row:last-child { border:none; font-weight:600; color:var(--ink); font-size:15px; }
+  .summary-row span:last-child { color:var(--ink); }
+  .paystack-btn {
+    width:100%; padding:16px;
+    background: linear-gradient(135deg, #00C46E, #00A85A);
+    color:white; border:none; border-radius:12px;
+    font-size:16px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition:transform 0.15s, box-shadow 0.15s;
+  }
+  .paystack-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,196,110,.3); }
+  .paystack-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+  .payment-note { font-size:12px; color:var(--muted); text-align:center; margin-top:12px; }
+
+  /* ── GENERATION SCREEN ── */
+  #generation-screen {
+    display:none; position:fixed; inset:0; z-index:1000;
+    background:var(--paper);
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:48px;
+  }
+  #generation-screen.active { display:flex; }
+  .gen-logo {
+    font-family:'Instrument Serif',serif; font-size:28px;
+    margin-bottom:64px; opacity:.5;
+  }
+  .gen-title {
+    font-family:'Instrument Serif',serif;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing:-1px; text-align:center;
+    margin-bottom:16px;
+  }
+  .gen-sub { font-size:16px; color:var(--muted); text-align:center; margin-bottom:48px; }
+  .progress-track {
+    width:100%; max-width:480px; height:3px;
+    background:var(--line); border-radius:2px; overflow:hidden;
+    margin-bottom:40px;
+  }
+  .progress-fill {
+    height:100%; background:var(--ink);
+    border-radius:2px; transition:width 0.6s ease;
+    width:0%;
+  }
+  .gen-log {
+    width:100%; max-width:480px; min-height:120px;
+    font-size:13px; color:var(--muted); line-height:2;
+    font-family: 'DM Sans', monospace;
+  }
+  .log-line { display:flex; align-items:center; gap:10px; opacity:0; animation:fadeIn 0.4s forwards; }
+  .log-line.done { color:var(--success); }
+  .log-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0; }
+  @keyframes fadeIn { to { opacity:1; } }
+
+  /* ── DOWNLOAD SCREEN ── */
+  #download-screen {
+    display:none; position:fixed; inset:0; z-index:1000;
+    background:var(--paper);
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:48px; text-align:center;
+  }
+  #download-screen.active { display:flex; }
+  .success-icon {
+    width:80px; height:80px; border-radius:50%;
+    background:var(--ink); color:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    font-size:36px; margin-bottom:32px;
+  }
+  .download-title {
+    font-family:'Instrument Serif',serif;
+    font-size:clamp(28px,4vw,48px); letter-spacing:-1px;
+    margin-bottom:12px;
+  }
+  .download-sub { font-size:16px; color:var(--muted); margin-bottom:40px; max-width:480px; }
+  .download-stats {
+    display:flex; gap:40px; margin-bottom:48px;
+    justify-content:center;
+  }
+  .dl-stat strong { display:block; font-size:28px; font-family:'Instrument Serif',serif; }
+  .dl-stat span { font-size:13px; color:var(--muted); }
+  .btn-download {
+    background:var(--ink); color:var(--white);
+    padding:18px 48px; border-radius:12px;
+    font-size:17px; font-weight:500; border:none;
+    cursor:pointer; display:flex; align-items:center; gap:12px;
+    transition:transform 0.15s, box-shadow 0.15s;
+    margin-bottom:16px;
+  }
+  .btn-download:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,0,0,.2); }
+  .btn-restart {
+    background:transparent; color:var(--muted);
+    border:none; font-size:14px; cursor:pointer; padding:8px;
+  }
+  .btn-restart:hover { color:var(--ink); }
+
+  /* ── ERROR BANNER ── */
+  .error-banner {
+    background:#FEE2E2; border:1px solid #FECACA;
+    border-radius:10px; padding:14px 18px;
+    font-size:14px; color:#991B1B; margin-bottom:20px;
+    display:none;
+  }
+  .error-banner.show { display:block; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding:40px 48px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    position:relative; z-index:1; font-size:13px; color:var(--muted);
+  }
+
+  @media(max-width:640px) {
+    nav { padding:16px 20px; }
+    .hero, .section { padding-left:20px; padding-right:20px; }
+    .input-row { grid-template-columns:1fr; }
+    .form-body { padding:24px 20px; }
+    .form-header { padding:24px 20px; }
+    .pricing-box { padding:32px 24px; }
+    .hero-proof { flex-direction:column; gap:12px; }
+    footer { flex-direction:column; gap:12px; text-align:center; }
+    .download-stats { gap:24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="6" height="6" rx="1" fill="white"/>
+        <rect x="10" y="2" width="6" height="6" rx="1" fill="white" opacity=".6"/>
+        <rect x="2" y="10" width="6" height="6" rx="1" fill="white" opacity=".6"/>
+        <rect x="10" y="10" width="6" height="6" rx="1" fill="#C8963E"/>
+      </svg>
+    </div>
+    BizOS
+  </div>
+  <div class="nav-right">
+    <a href="#how-it-works" class="nav-link">How it works</a>
+    <a href="#what-you-get" class="nav-link">What you get</a>
+    <button class="nav-cta" onclick="scrollToGenerator()">Build my system →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span></span> AI-Powered Business Systems</div>
+  <h1>Your entire business,<br/><em>documented</em> in minutes.</h1>
+  <p class="hero-sub">Describe your business. Get a complete operating system — SOPs, templates, sales scripts, onboarding flows — downloaded as a professional folder structure.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="scrollToGenerator()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v14M2 9h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      Build my system
+    </button>
+    <button class="btn-secondary" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works</button>
+  </div>
+  <div class="hero-proof">
+    <div class="proof-stat"><strong>5 min</strong>Setup to download</div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat"><strong>18+</strong>Documents generated</div>
+    <div class="proof-divider"></div>
+    <div class="proof-stat"><strong>Any</strong>Business type</div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works" style="background:var(--cream);">
+  <div class="section-label">Process</div>
+  <div class="section-title">From idea to<br/>operating system</div>
+  <p class="section-sub">Four steps. Five minutes. A complete business documentation suite ready to use from day one.</p>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Describe your business</h3>
+      <p>Tell us what you do, how you sell, how you deliver, and who you serve. Takes about 3 minutes.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Pay once</h3>
+      <p>A one-time fee per generation. No subscription. No hidden costs. Pay, and your system is built.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>AI builds your system</h3>
+      <p>Claude analyses your business and generates a tailored operating system — not a generic template.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Download your folder</h3>
+      <p>A ZIP file with professionally structured folders and ready-to-use Word documents lands on your device.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="section" id="what-you-get">
+  <div class="section-label">Deliverables</div>
+  <div class="section-title">Everything a real<br/>business needs</div>
+  <p class="section-sub">Tailored to your specific business — not copy-paste templates. Every document uses your language, your process, your brand.</p>
+  <div class="output-grid">
+    <div class="output-card">
+      <div class="output-icon" style="background:#EAF0F6;">📋</div>
+      <h3>Company Profile</h3>
+      <p>Professional company overview — mission, vision, values, services, and positioning.</p>
+      <span class="output-tag">1 document</span>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:#E8F5EE;">🔄</div>
+      <h3>Process & Onboarding Flows</h3>
+      <p>Step-by-step documented flows for how clients are onboarded and served.</p>
+      <span class="output-tag">2–3 documents</span>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:#FFF9EC;">📄</div>
+      <h3>Letter & Doc Templates</h3>
+      <p>All the professional correspondence your business sends — proposals, agreements, receipts.</p>
+      <span class="output-tag">4–7 documents</span>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:#FEF3C7;">💬</div>
+      <h3>Sales Kit</h3>
+      <p>Sales scripts, objection handlers, and follow-up sequences tailored to your offer.</p>
+      <span class="output-tag">3 documents</span>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:#FDE8E8;">📣</div>
+      <h3>Marketing Kit</h3>
+      <p>Brand messaging guide, social media playbook, and email campaign templates.</p>
+      <span class="output-tag">3 documents</span>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:#F3E8FF;">⚙️</div>
+      <h3>SOPs & Operations</h3>
+      <p>Standard operating procedures for your core workflows, team responsibilities, and quality standards.</p>
+      <span class="output-tag">2–3 documents</span>
+    </div>
+    <div class="output-card">
+      <div class="output-icon" style="background:#E0F2FE;">💰</div>
+      <h3>Finance & Accounting</h3>
+      <p>Financial management SOPs, budget templates, expense tracking, invoice systems, and financial reporting guides.</p>
+      <span class="output-tag">3–4 documents</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" style="background:var(--cream);" id="pricing">
+  <div style="text-align:center;">
+    <div class="section-label" style="text-align:center;">Pricing</div>
+    <div class="section-title">One price.<br/>Everything included.</div>
+    <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Pay once, download everything.</p>
+  </div>
+  <div class="pricing-box">
+    <div class="price-label">Per Generation</div>
+    <div class="price-amount"><span class="price-currency">₦</span>5,000</div>
+    <div class="price-desc">~$3 USD · One-time payment</div>
+    <ul class="price-features" style="list-style:none;">
+      <li><span class="check-icon">✦</span> Full AI-generated business system</li>
+      <li><span class="check-icon">✦</span> 18–24 professional Word documents</li>
+      <li><span class="check-icon">✦</span> Organised folder structure</li>
+      <li><span class="check-icon">✦</span> Immediate ZIP download</li>
+      <li><span class="check-icon">✦</span> Tailored to your specific business</li>
+      <li><span class="check-icon">✦</span> Editable & brandable</li>
+    </ul>
+    <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;" onclick="scrollToGenerator()">
+      Build my system now →
+    </button>
+  </div>
+</section>
+
+<!-- GENERATOR -->
+<section class="section" id="generator">
+  <div class="section-label">Generator</div>
+  <div class="section-title">Build your system</div>
+  <p class="section-sub">Answer a few questions about your business and we'll generate everything.</p>
+
+  <div class="form-container">
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Business Profile</h2>
+        <p>This takes about 3–4 minutes. The more detail you give, the better your documents.</p>
+      </div>
+      <div class="form-body">
+
+        <div class="error-banner" id="error-banner"></div>
+
+        <!-- STEP 1: BASICS -->
+        <div class="form-step active" id="step-1">
+          <div class="step-indicator">
+            <div class="step-dot active" id="dot-1"></div>
+            <div class="step-dot" id="dot-2"></div>
+            <div class="step-dot" id="dot-3"></div>
+            <div class="step-dot" id="dot-4"></div>
+            <div class="step-dot" id="dot-5"></div>
+            <span class="step-title">Business Basics</span>
+          </div>
+          <div class="form-group">
+            <label>Business Name <span>*</span></label>
+            <input type="text" id="biz-name" placeholder="e.g. Focal Point Property Development" />
+          </div>
+          <div class="form-group">
+            <label>Industry / Sector <span>*</span></label>
+            <select id="biz-industry">
+              <option value="">Select your industry...</option>
+              <option>Real Estate & Property</option>
+              <option>Construction & Engineering</option>
+              <option>Retail & E-commerce</option>
+              <option>Food & Beverage / Restaurant</option>
+              <option>Healthcare & Wellness</option>
+              <option>Education & Training</option>
+              <option>Financial Services</option>
+              <option>Logistics & Delivery</option>
+              <option>Technology / SaaS</option>
+              <option>Creative & Media Agency</option>
+              <option>Legal & Professional Services</option>
+              <option>Beauty & Personal Care</option>
+              <option>Events & Hospitality</option>
+              <option>Agriculture & Agritech</option>
+              <option>Manufacturing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>What does your business do? <span>* (be specific)</span></label>
+            <textarea id="biz-description" placeholder="e.g. We develop and sell residential plots and estates in Abuja, using a flexible instalment model. Our focus is on lifestyle-designed communities for middle-income families."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Upload Business Document/Notes <span>(optional)</span></label>
+            <input type="file" id="biz-document" accept=".pdf,.doc,.docx,.txt,.md" onchange="handleFileUpload(event)" />
+            <div class="file-info" id="file-info"></div>
+            <p style="font-size:11px; color:var(--muted); margin-top:6px;">Upload any existing business docs, notes, or descriptions. We'll use this to better understand your business.</p>
+          </div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Country of Operation</label>
+              <input type="text" id="biz-country" placeholder="e.g. Nigeria" />
+            </div>
+            <div class="form-group">
+              <label>City / Region</label>
+              <input type="text" id="biz-city" placeholder="e.g. Lagos" />
+            </div>
+          </div>
+          <div class="form-nav">
+            <div></div>
+            <button class="btn-next" onclick="nextStep(1)">Continue <span>→</span></button>
+          </div>
+        </div>
+
+        <!-- STEP 2: OPERATIONS -->
+        <div class="form-step" id="step-2">
+          <div class="step-indicator">
+            <div class="step-dot done" id="dot-1b"></div>
+            <div class="step-dot active" id="dot-2b"></div>
+            <div class="step-dot" id="dot-3b"></div>
+            <div class="step-dot" id="dot-4b"></div>
+            <div class="step-dot" id="dot-5b"></div>
+            <span class="step-title">How You Work</span>
+          </div>
+          <div class="form-group">
+            <label>How do you get clients? <span>*</span></label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="sales-channel" id="sc1" value="Direct sales team"/><label class="radio-label" for="sc1">Sales team</label></div>
+              <div class="radio-option"><input type="radio" name="sales-channel" id="sc2" value="Online / social media"/><label class="radio-label" for="sc2">Social media</label></div>
+              <div class="radio-option"><input type="radio" name="sales-channel" id="sc3" value="Referrals & word of mouth"/><label class="radio-label" for="sc3">Referrals</label></div>
+              <div class="radio-option"><input type="radio" name="sales-channel" id="sc4" value="Walk-in / storefront"/><label class="radio-label" for="sc4">Walk-in</label></div>
+              <div class="radio-option"><input type="radio" name="sales-channel" id="sc5" value="Online marketplace / platform"/><label class="radio-label" for="sc5">Marketplace</label></div>
+              <div class="radio-option"><input type="radio" name="sales-channel" id="sc6" value="Multiple channels"/><label class="radio-label" for="sc6">Mixed</label></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>How do you deliver your product/service? <span>*</span></label>
+            <textarea id="biz-delivery" placeholder="e.g. Clients visit our showroom, then we guide them through the plot selection and payment process. We have a 3-step onboarding flow after initial payment."></textarea>
+          </div>
+          <div class="form-group">
+            <label>How do clients pay you?</label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="pay-model" id="pm1" value="Full payment upfront"/><label class="radio-label" for="pm1">Upfront</label></div>
+              <div class="radio-option"><input type="radio" name="pay-model" id="pm2" value="Instalment / payment plan"/><label class="radio-label" for="pm2">Instalments</label></div>
+              <div class="radio-option"><input type="radio" name="pay-model" id="pm3" value="Monthly subscription"/><label class="radio-label" for="pm3">Subscription</label></div>
+              <div class="radio-option"><input type="radio" name="pay-model" id="pm4" value="Invoice on delivery"/><label class="radio-label" for="pm4">Invoice</label></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Business size</label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="biz-size" id="bs1" value="Solo (just me)"/><label class="radio-label" for="bs1">Solo</label></div>
+              <div class="radio-option"><input type="radio" name="biz-size" id="bs2" value="Small team (2–10)"/><label class="radio-label" for="bs2">2–10 people</label></div>
+              <div class="radio-option"><input type="radio" name="biz-size" id="bs3" value="Medium (11–50)"/><label class="radio-label" for="bs3">11–50 people</label></div>
+              <div class="radio-option"><input type="radio" name="biz-size" id="bs4" value="Growing (50+)"/><label class="radio-label" for="bs4">50+ people</label></div>
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn-back" onclick="prevStep(2)">← Back</button>
+            <button class="btn-next" onclick="nextStep(2)">Continue <span>→</span></button>
+          </div>
+        </div>
+
+        <!-- STEP 3: DOCUMENTS & BRAND -->
+        <div class="form-step" id="step-3">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+            <span class="step-title">Brand & Documents</span>
+          </div>
+          <div class="form-group">
+            <label>Who is your typical customer? <span>*</span></label>
+            <textarea id="biz-customer" placeholder="e.g. Middle-income professionals aged 28–45 in Abuja, looking for a first home or investment. Many are diaspora or Lagos-based with Abuja ambitions." style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>What documents do you currently use? <span>(or wish you had)</span></label>
+            <textarea id="biz-docs" placeholder="e.g. We currently have a proposal template but nothing else. We need client agreements, receipts, onboarding letters, and a proper sales process document." style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Any specific services, products, or projects to include?</label>
+            <input type="text" id="biz-products" placeholder="e.g. Project Alpha (luxury homes), Project Beta (affordable plots), Maintenance Service" />
+          </div>
+          <div class="form-group">
+            <label>Your brand tone / personality</label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="brand-tone" id="bt1" value="Professional & formal"/><label class="radio-label" for="bt1">Professional</label></div>
+              <div class="radio-option"><input type="radio" name="brand-tone" id="bt2" value="Warm & approachable"/><label class="radio-label" for="bt2">Warm</label></div>
+              <div class="radio-option"><input type="radio" name="brand-tone" id="bt3" value="Bold & aspirational"/><label class="radio-label" for="bt3">Bold</label></div>
+              <div class="radio-option"><input type="radio" name="brand-tone" id="bt4" value="Technical & expert"/><label class="radio-label" for="bt4">Technical</label></div>
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn-back" onclick="prevStep(3)">← Back</button>
+            <button class="btn-next" onclick="nextStep(3)">Continue <span>→</span></button>
+          </div>
+        </div>
+
+        <!-- STEP 4: PREVIEW -->
+        <div class="form-step" id="step-4">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <span class="step-title">Preview</span>
+          </div>
+
+          <div style="background:var(--cream); border-radius:12px; padding:24px; margin-bottom:24px; border:1px solid var(--line);">
+            <h3 style="font-size:18px; margin-bottom:16px; font-family:'Instrument Serif',serif;">What You'll Get</h3>
+            <p style="font-size:14px; color:var(--muted); margin-bottom:20px; line-height:1.6;">Based on your business profile, we'll generate a complete operating system tailored specifically to <strong id="preview-biz-name"></strong>.</p>
+            
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px; margin-bottom:20px;">
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">📋</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Company Profile</div>
+                <div style="font-size:11px; color:var(--muted);">Mission, vision, services</div>
+              </div>
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">🔄</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Onboarding Flows</div>
+                <div style="font-size:11px; color:var(--muted);">Client process docs</div>
+              </div>
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">📄</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Templates</div>
+                <div style="font-size:11px; color:var(--muted);">Agreements, letters</div>
+              </div>
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">💬</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Sales Kit</div>
+                <div style="font-size:11px; color:var(--muted);">Scripts & objections</div>
+              </div>
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">📣</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Marketing Kit</div>
+                <div style="font-size:11px; color:var(--muted);">Messaging & campaigns</div>
+              </div>
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">⚙️</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">SOPs</div>
+                <div style="font-size:11px; color:var(--muted);">Operations & processes</div>
+              </div>
+              <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--line);">
+                <div style="font-size:24px; margin-bottom:8px;">💰</div>
+                <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Finance</div>
+                <div style="font-size:11px; color:var(--muted);">Budget, expenses, reporting</div>
+              </div>
+            </div>
+
+            <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--gold);">
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+                <span style="color:var(--gold); font-size:20px;">✨</span>
+                <strong style="font-size:14px;">18–24 Professional Documents</strong>
+              </div>
+              <p style="font-size:12px; color:var(--muted); line-height:1.5;">All documents will be tailored to your specific business: <span id="preview-industry"></span>, using your brand tone, and referencing your actual services and customer base. Includes complete financial management system.</p>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <button class="btn-back" onclick="prevStep(4)">← Back</button>
+            <button class="btn-next" onclick="nextStep(4)">Continue to Payment <span>→</span></button>
+          </div>
+        </div>
+
+        <!-- STEP 5: PAYMENT -->
+        <div class="form-step" id="step-5">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <span class="step-title">Payment</span>
+          </div>
+
+          <div class="payment-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-row"><span>Business System Generation</span><span>₦5,000</span></div>
+            <div class="summary-row"><span>Documents (~18–24 files)</span><span>Included</span></div>
+            <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
+            <div class="summary-row"><span><strong>Total</strong></span><span>₦5,000</span></div>
+          </div>
+
+          <div class="form-group">
+            <label>Your Email <span>(for receipt)</span></label>
+            <input type="email" id="user-email" placeholder="you@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="user-name" placeholder="Full name" />
+          </div>
+
+          <button class="paystack-btn" id="pay-btn" onclick="initPayment()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg>
+            Pay <span id="price-display">₦5,000</span> with Paystack
+          </button>
+          <div class="payment-note">🔒 Secured by Paystack · Generation starts immediately after payment</div>
+
+          <div class="form-nav">
+            <button class="btn-back" onclick="prevStep(5)">← Back</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2025 BizOS · Powered by Claude AI</div>
+  <div style="display:flex;gap:24px;">
+    <a href="#" style="color:var(--muted);text-decoration:none;">Privacy</a>
+    <a href="#" style="color:var(--muted);text-decoration:none;">Terms</a>
+    <a href="#" style="color:var(--muted);text-decoration:none;">Support</a>
+  </div>
+</footer>
+
+<!-- GENERATION SCREEN -->
+<div id="generation-screen">
+  <div class="gen-logo">BizOS</div>
+  <div class="gen-title" id="gen-title">Building your system…</div>
+  <div class="gen-sub" id="gen-sub">Analysing your business and generating documents</div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="gen-log" id="gen-log"></div>
+</div>
+
+<!-- DOWNLOAD SCREEN -->
+<div id="download-screen">
+  <div class="gen-logo">BizOS</div>
+  <div class="success-icon">✓</div>
+  <div class="download-title">Your system is ready.</div>
+  <div class="download-sub" id="download-sub">Your complete business operating system has been generated and packaged.</div>
+  <div class="download-stats">
+    <div class="dl-stat"><strong id="dl-doc-count">0</strong><span>Documents</span></div>
+    <div class="dl-stat"><strong id="dl-folder-count">0</strong><span>Folders</span></div>
+  </div>
+  <button class="btn-download" id="download-btn">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v11M5 9l5 6 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 17h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+    Download ZIP
+  </button>
+  <button class="btn-restart" onclick="location.reload()">Generate another business →</button>
+</div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIGURATION - Update these values with your credentials
+// ═══════════════════════════════════════════════════════════════
+const CONFIG = {
+  // Backend API URL - Update this to your backend server URL
+  // For local development: http://localhost:3001
+  // For production: https://your-backend-domain.com
+  BACKEND_URL: 'http://localhost:3001',
+  
+  // Get your Paystack public key from: https://dashboard.paystack.com/#/settings/developer
+  // Test key format: pk_test_xxxxxxxxxxxxx
+  // Live key format: pk_live_xxxxxxxxxxxxx
+  PAYSTACK_PUBLIC_KEY: 'pk_test_05ad31dd74733d0bc2417fc9b193dd30034c20e0', // Test key
+  // For production, replace with: 'pk_live_YOUR_LIVE_PUBLIC_KEY'
+  
+  // Price in kobo (₦5,000 = 500000 kobo)
+  PRICE_KOBO: 500000,
+  PRICE_DISPLAY: '₦5,000'
+};
+
+// ─── GLOBALS ───────────────────────────────────────────────────
+let currentStep = 1;
+let generatedZip = null;
+let bizData = {};
+let uploadedFile = null;
+let uploadedFileContent = null;
+
+// ─── NAVIGATION ────────────────────────────────────────────────
+function scrollToGenerator() {
+  document.getElementById('generator').scrollIntoView({ behavior: 'smooth' });
+}
+
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  
+  // If moving to preview step, populate it
+  if (from === 3 && from + 1 === 4) {
+    populatePreview();
+  }
+  
+  document.getElementById(`step-${from}`).classList.remove('active');
+  document.getElementById(`step-${from + 1}`).classList.add('active');
+  currentStep = from + 1;
+}
+
+function prevStep(from) {
+  document.getElementById(`step-${from}`).classList.remove('active');
+  document.getElementById(`step-${from - 1}`).classList.add('active');
+  currentStep = from - 1;
+}
+
+function validateStep(step) {
+  const err = document.getElementById('error-banner');
+  err.classList.remove('show');
+  if (step === 1) {
+    if (!document.getElementById('biz-name').value.trim()) {
+      showError('Please enter your business name.'); return false;
+    }
+    if (!document.getElementById('biz-industry').value) {
+      showError('Please select your industry.'); return false;
+    }
+    if (!document.getElementById('biz-description').value.trim()) {
+      showError('Please describe what your business does.'); return false;
+    }
+  }
+  if (step === 2) {
+    if (!document.querySelector('input[name="sales-channel"]:checked')) {
+      showError('Please select how you get clients.'); return false;
+    }
+    if (!document.getElementById('biz-delivery').value.trim()) {
+      showError('Please describe how you deliver your service.'); return false;
+    }
+  }
+  if (step === 3) {
+    if (!document.getElementById('biz-customer').value.trim()) {
+      showError('Please describe your typical customer.'); return false;
+    }
+  }
+  if (step === 4) {
+    // Preview step - no validation needed
+  }
+  if (step === 5) {
+    // Payment step - email validation happens in initPayment
+  }
+  return true;
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-banner');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+// ─── FILE UPLOAD ───────────────────────────────────────────────
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) {
+    uploadedFile = null;
+    uploadedFileContent = null;
+    document.getElementById('file-info').classList.remove('show');
+    return;
+  }
+  
+  uploadedFile = file;
+  const fileInfo = document.getElementById('file-info');
+  const fileSize = (file.size / 1024).toFixed(1);
+  fileInfo.textContent = `✓ ${file.name} (${fileSize} KB)`;
+  fileInfo.classList.add('show');
+  
+  // Read file content if it's a text file (for use in API call)
+  if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      uploadedFileContent = e.target.result;
+      // Optionally append to description if it's short and description is empty
+      const desc = document.getElementById('biz-description');
+      if (desc.value.trim().length < 50 && uploadedFileContent.length < 3000) {
+        desc.value = desc.value.trim() + (desc.value.trim() ? '\n\n' : '') + uploadedFileContent;
+      }
+    };
+    reader.readAsText(file);
+  } else {
+    uploadedFileContent = null;
+  }
+}
+
+// ─── PREVIEW ───────────────────────────────────────────────────
+function populatePreview() {
+  const bizName = document.getElementById('biz-name').value.trim();
+  const industry = document.getElementById('biz-industry').value;
+  
+  document.getElementById('preview-biz-name').textContent = bizName || 'your business';
+  document.getElementById('preview-industry').textContent = industry || 'your industry';
+}
+
+// ─── COLLECT DATA ──────────────────────────────────────────────
+function collectData() {
+  return {
+    name: document.getElementById('biz-name').value.trim(),
+    industry: document.getElementById('biz-industry').value,
+    description: document.getElementById('biz-description').value.trim(),
+    country: document.getElementById('biz-country').value.trim() || 'Nigeria',
+    city: document.getElementById('biz-city').value.trim() || '',
+    salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
+    delivery: document.getElementById('biz-delivery').value.trim(),
+    paymentModel: document.querySelector('input[name="pay-model"]:checked')?.value || 'Full payment upfront',
+    bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
+    customer: document.getElementById('biz-customer').value.trim(),
+    existingDocs: document.getElementById('biz-docs').value.trim(),
+    products: document.getElementById('biz-products').value.trim(),
+    brandTone: document.querySelector('input[name="brand-tone"]:checked')?.value || 'Professional & formal',
+    userName: document.getElementById('user-name').value.trim(),
+    userEmail: document.getElementById('user-email').value.trim(),
+    uploadedFile: uploadedFile ? uploadedFile.name : null,
+  };
+}
+
+// ─── PAYSTACK ──────────────────────────────────────────────────
+function initPayment() {
+  const email = document.getElementById('user-email').value.trim();
+  if (!email) { 
+    showError('Please enter your email address.'); 
+    return; 
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showError('Please enter a valid email address.');
+    return;
+  }
+
+  // Check if Paystack key is configured
+  if (CONFIG.PAYSTACK_PUBLIC_KEY.includes('YOUR_PAYSTACK')) {
+    showError('Paystack is not configured. Please add your Paystack public key in the CONFIG section at the top of the script.');
+    console.error('Paystack Error: Public key not configured.');
+    console.error('Get your key from: https://dashboard.paystack.com/#/settings/developer');
+    alert('⚠️ Paystack Configuration Required\n\nPlease add your Paystack public key in the CONFIG section of the code.\n\nGet your key from: https://dashboard.paystack.com/#/settings/developer');
+    return;
+  }
+
+  const bizName = document.getElementById('biz-name').value.trim();
+  const userName = document.getElementById('user-name').value.trim() || email.split('@')[0];
+  
+  // Disable button during payment
+  const payBtn = document.getElementById('pay-btn');
+  payBtn.disabled = true;
+  payBtn.textContent = 'Processing...';
+
+  const handler = PaystackPop.setup({
+    key: CONFIG.PAYSTACK_PUBLIC_KEY,
+    email: email,
+    amount: CONFIG.PRICE_KOBO,
+    currency: 'NGN',
+    ref: 'BIZOS_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Business Name",
+          variable_name: "business_name",
+          value: bizName
+        },
+        {
+          display_name: "Customer Name",
+          variable_name: "customer_name",
+          value: userName
+        }
+      ]
+    },
+    callback: async function(response) {
+      console.log('Payment successful!', response);
+      
+      // Store payment reference
+      bizData.paymentReference = response.reference;
+      bizData.paymentStatus = 'success';
+      
+      // Optional: Verify payment with backend
+      try {
+        const verifyResponse = await fetch(`${CONFIG.BACKEND_URL}/api/verify-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reference: response.reference })
+        });
+        const verifyData = await verifyResponse.json();
+        if (verifyData.verified) {
+          console.log('Payment verified by backend');
+        }
+      } catch (err) {
+        console.warn('Payment verification failed (continuing anyway):', err);
+      }
+      
+      // Payment successful - start generation
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+      
+      // Start generation immediately after payment
+      startGeneration();
+    },
+    onClose: function() {
+      console.log('Payment window closed by user');
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+    }
+  });
+  
+  handler.openIframe();
+}
+
+// ─── GENERATION ────────────────────────────────────────────────
+async function startGeneration() {
+  bizData = collectData();
+  document.getElementById('generation-screen').classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  const log = document.getElementById('gen-log');
+  const progress = document.getElementById('progress-fill');
+  const genTitle = document.getElementById('gen-title');
+  const genSub = document.getElementById('gen-sub');
+
+  function addLog(text, done = false) {
+    const line = document.createElement('div');
+    line.className = `log-line ${done ? 'done' : ''}`;
+    line.innerHTML = `<span class="log-dot"></span>${text}`;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function setProgress(pct) {
+    progress.style.width = pct + '%';
+  }
+
+  try {
+    addLog('Analysing your business profile…');
+    setProgress(8);
+
+    // Call Claude API to generate the document plan
+    const plan = await callClaude(bizData);
+    addLog('Business profile analysed', true);
+    setProgress(20);
+
+    addLog('Designing document structure…');
+    const structure = parsePlan(plan);
+    addLog(`Document structure ready — ${structure.totalDocs} documents across ${structure.folders.length} folders`, true);
+    setProgress(35);
+
+    // Generate ZIP
+    const zip = new JSZip();
+    let docsGenerated = 0;
+    const totalDocs = structure.folders.reduce((sum, f) => sum + f.docs.length, 0);
+
+    for (let fi = 0; fi < structure.folders.length; fi++) {
+      const folder = structure.folders[fi];
+      const folderName = `${String(fi+1).padStart(2,'0')} - ${folder.name}`;
+      addLog(`Building: ${folder.name}…`);
+
+      for (let di = 0; di < folder.docs.length; di++) {
+        const doc = folder.docs[di];
+        try {
+          const docxBlob = await generateDocx(doc, bizData);
+          zip.folder(bizData.name).folder(folderName).file(doc.filename + '.docx', docxBlob);
+          docsGenerated++;
+          const pct = 35 + Math.round((docsGenerated / totalDocs) * 55);
+          setProgress(pct);
+        } catch(e) {
+          console.error('Doc gen error:', doc.filename, e);
+        }
+      }
+      addLog(`${folder.name} complete (${folder.docs.length} files)`, true);
+    }
+
+    setProgress(95);
+    genTitle.textContent = 'Packaging your files…';
+    addLog('Creating ZIP archive…');
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    generatedZip = { blob: zipBlob, name: bizData.name };
+
+    setProgress(100);
+    addLog('ZIP ready for download', true);
+
+    await new Promise(r => setTimeout(r, 800));
+
+    // Show download screen
+    document.getElementById('generation-screen').classList.remove('active');
+    document.getElementById('download-screen').classList.add('active');
+    document.getElementById('dl-doc-count').textContent = docsGenerated;
+    document.getElementById('dl-folder-count').textContent = structure.folders.length;
+    document.getElementById('download-sub').textContent =
+      `Your complete operating system for ${bizData.name} is ready. ${docsGenerated} professionally formatted documents across ${structure.folders.length} organised folders.`;
+
+    document.getElementById('download-btn').onclick = downloadZip;
+
+  } catch(err) {
+    console.error('Generation error:', err);
+    document.getElementById('generation-screen').classList.remove('active');
+    document.body.style.overflow = '';
+    showError('Generation failed: ' + err.message + '. Please try again.');
+  }
+}
+
+function downloadZip() {
+  if (!generatedZip) return;
+  const url = URL.createObjectURL(generatedZip.blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = generatedZip.name.replace(/[^a-z0-9]/gi,'_') + '_Business_System.zip';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── CALL BACKEND API ───────────────────────────────────────────
+async function callClaude(biz) {
+  // Call backend API instead of direct Anthropic API
+  const response = await fetch(`${CONFIG.BACKEND_URL}/api/generate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      businessData: biz,
+      uploadedFileContent: uploadedFileContent || null
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+    throw new Error(error.message || `Backend error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  if (!data.success || !data.plan) {
+    throw new Error(data.message || 'Failed to generate document plan');
+  }
+
+  return data.plan;
+}
+
+function parsePlan(plan) {
+  const folders = plan.folders || [];
+  const totalDocs = folders.reduce((sum, f) => sum + (f.docs || []).length, 0);
+  return { folders, totalDocs };
+}
+
+// ─── GENERATE DOCX CLIENT-SIDE ─────────────────────────────────
+// Uses docx.js loaded via CDN fallback — we'll use a simple HTML→Blob approach
+// since docx.js CDN may vary. We generate proper .docx using Office XML.
+
+async function generateDocx(doc, biz) {
+  // Build a simple but professional .docx using Office Open XML
+  const content = buildDocxXml(doc, biz);
+  return content;
+}
+
+function buildDocxXml(doc, biz) {
+  // Build Office Open XML document
+  const sections = (doc.sections || []).map(s => `
+    <w:p>
+      <w:pPr><w:pStyle w:val="Heading1"/><w:spacing w:before="240" w:after="120"/></w:pPr>
+      <w:r><w:t>${escapeXml(s.heading || '')}</w:t></w:r>
+    </w:p>
+    ${wrapParagraphs(s.content || '')}
+  `).join('');
+
+  const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
+  xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:mv="urn:schemas-microsoft-com:mac:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+  xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+  xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+  xmlns:w10="urn:schemas-microsoft-com:office:word"
+  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+  xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
+  xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk"
+  xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml"
+  xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+  mc:Ignorable="w14 wp14">
+  <w:body>
+    <w:p>
+      <w:pPr><w:spacing w:before="0" w:after="120"/></w:pPr>
+      <w:r><w:rPr><w:b/><w:sz w:val="48"/><w:color w:val="1A3C5E"/></w:rPr><w:t>${escapeXml(biz.name)}</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:pPr><w:spacing w:before="0" w:after="400"/></w:pPr>
+      <w:r><w:rPr><w:sz w:val="24"/><w:color w:val="C8963E"/></w:rPr><w:t>${escapeXml(doc.title)}</w:t></w:r>
+    </w:p>
+    ${sections}
+    <w:p>
+      <w:pPr><w:spacing w:before="480"/></w:pPr>
+      <w:r><w:rPr><w:sz w:val="18"/><w:color w:val="999999"/><w:i/></w:rPr>
+        <w:t>Generated by BizOS · ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</w:t>
+      </w:r>
+    </w:p>
+    <w:sectPr>
+      <w:pgSz w:w="11906" w:h="16838"/>
+      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/>
+    </w:sectPr>
+  </w:body>
+</w:document>`;
+
+  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:docDefaults>
+    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr></w:rPrDefault>
+  </w:docDefaults>
+  <w:style w:type="paragraph" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+    <w:pPr><w:spacing w:before="80" w:after="80" w:line="320" w:lineRule="auto"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1">
+    <w:name w:val="heading 1"/>
+    <w:basedOn w:val="Normal"/>
+    <w:pPr><w:spacing w:before="320" w:after="120"/><w:shd w:val="clear" w:color="auto" w:fill="1A3C5E"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:sz w:val="26"/><w:color w:val="FFFFFF"/></w:rPr>
+  </w:style>
+</w:styles>`;
+
+  const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`;
+
+  const appRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
+
+  const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+</Types>`;
+
+  // Build ZIP using JSZip
+  const docZip = new JSZip();
+  docZip.file('[Content_Types].xml', contentTypes);
+  docZip.folder('_rels').file('.rels', appRels);
+  const wordFolder = docZip.folder('word');
+  wordFolder.file('document.xml', docXml);
+  wordFolder.file('styles.xml', stylesXml);
+  wordFolder.folder('_rels').file('document.xml.rels', relsXml);
+
+  return docZip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}
+
+function wrapParagraphs(text) {
+  if (!text) return '';
+  return text.split('\n').filter(l => l.trim()).map(line => {
+    if (line.trim().startsWith('•') || line.trim().startsWith('-') || line.trim().startsWith('◆')) {
+      const content = line.replace(/^[•\-◆]\s*/, '');
+      return `<w:p>
+        <w:pPr><w:ind w:left="560" w:hanging="280"/><w:spacing w:before="60" w:after="60"/></w:pPr>
+        <w:r><w:rPr><w:color w:val="C8963E"/></w:rPr><w:t xml:space="preserve">◆  </w:t></w:r>
+        <w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t>${escapeXml(content)}</w:t></w:r>
+      </w:p>`;
+    }
+    if (line.match(/^\d+\./)) {
+      return `<w:p>
+        <w:pPr><w:ind w:left="400"/><w:spacing w:before="60" w:after="60"/></w:pPr>
+        <w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t>${escapeXml(line)}</w:t></w:r>
+      </w:p>`;
+    }
+    return `<w:p>
+      <w:pPr><w:spacing w:before="80" w:after="80"/></w:pPr>
+      <w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t xml:space="preserve">${escapeXml(line)}</w:t></w:r>
+    </w:p>`;
+  }).join('');
+}
+
+function escapeXml(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&apos;');
+}
+</script>
+</body>
+</html>
