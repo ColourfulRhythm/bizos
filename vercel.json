@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/**/*.js": {
-      "maxDuration": 30
+      "maxDuration": 60
     }
   },
   "rewrites": [
@@ -15,23 +15,36 @@
       "destination": "/api/generate.js"
     },
     {
+      "source": "/api/generate-plan",
+      "destination": "/api/generate-plan.js"
+    },
+    {
+      "source": "/api/generate-content",
+      "destination": "/api/generate-content.js"
+    },
+    {
+      "source": "/api/generate-document",
+      "destination": "/api/generate-document.js"
+    },
+    {
       "source": "/api/verify-payment",
       "destination": "/api/verify-payment.js"
     },
     {
       "source": "/api/webhook",
       "destination": "/api/webhook.js"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/index.html"
     },
     {
-      "src": "/BizOS_MVP.html",
-      "dest": "/BizOS_MVP.html"
+      "source": "/api/send-email",
+      "destination": "/api/send-email.js"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/BizOS_MVP.html",
+      "destination": "/BizOS_MVP.html"
     }
   ]
 }
-

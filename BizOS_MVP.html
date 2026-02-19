@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>BizOS — Your Business Operating System</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='40' height='40' rx='5' fill='%230A0A0A'/><rect x='50' y='10' width='40' height='40' rx='5' fill='%230A0A0A' opacity='0.6'/><rect x='10' y='50' width='40' height='40' rx='5' fill='%230A0A0A' opacity='0.6'/><rect x='50' y='50' width='40' height='40' rx='5' fill='%23C8963E'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -358,12 +359,27 @@
     letter-spacing:-1px; text-align:center;
     margin-bottom:16px;
   }
-  .gen-sub { font-size:16px; color:var(--muted); text-align:center; margin-bottom:16px; line-height:1.6; }
+  .gen-sub { font-size:16px; color:var(--muted); text-align:center; margin-bottom:8px; line-height:1.6; }
+  .gen-phase {
+    font-size:14px; color:var(--ink); text-align:center;
+    margin-bottom:8px; font-weight:600;
+  }
   .gen-time {
     font-size:13px; color:var(--gold); text-align:center;
-    margin-bottom:48px; font-weight:500; letter-spacing:0.3px;
+    margin-bottom:32px; font-weight:500; letter-spacing:0.3px;
     font-family:'DM Sans',sans-serif;
+    min-height:18px;
   }
+  .gen-error {
+    width:100%; max-width:480px;
+    background:#FEF2F2; border:1px solid #FECACA; border-radius:12px;
+    padding:24px; text-align:center; margin-top:24px;
+  }
+  .gen-error-title { font-size:16px; font-weight:600; color:#991B1B; margin-bottom:8px; }
+  .gen-error-msg { font-size:14px; color:#7F1D1D; line-height:1.5; margin-bottom:8px; }
+  .gen-error-ref { font-size:12px; color:var(--muted); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .gen-pulse { animation: pulse 1.5s ease-in-out infinite; }
   .progress-track {
     width:100%; max-width:480px; height:3px;
     background:var(--line); border-radius:2px; overflow:hidden;
@@ -375,9 +391,26 @@
     width:0%;
   }
   .gen-log {
-    width:100%; max-width:480px; min-height:120px;
+    width:100%; max-width:480px; min-height:120px; max-height:400px;
     font-size:13px; color:var(--muted); line-height:2;
     font-family: 'DM Sans', monospace;
+    overflow-y: auto; overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding-right: 8px;
+  }
+  .gen-log::-webkit-scrollbar {
+    width: 6px;
+  }
+  .gen-log::-webkit-scrollbar-track {
+    background: var(--line);
+    border-radius: 3px;
+  }
+  .gen-log::-webkit-scrollbar-thumb {
+    background: var(--muted);
+    border-radius: 3px;
+  }
+  .gen-log::-webkit-scrollbar-thumb:hover {
+    background: var(--ink);
   }
   .log-line { display:flex; align-items:center; gap:10px; opacity:0; animation:fadeIn 0.4s forwards; }
   .log-line.done { color:var(--success); }
@@ -479,8 +512,8 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-badge"><span></span> AI-Powered Business Systems</div>
-  <h1>Your entire business,<br/><em>documented</em> in minutes.</h1>
-  <p class="hero-sub">Describe your business. Get a complete operating system — SOPs, templates, sales scripts, onboarding flows — downloaded as a professional folder structure.</p>
+  <h1>Your entire business,<br/><em>systematized</em> in minutes.</h1>
+  <p class="hero-sub">Transform your business from chaos to a scalable, automated system. Get a complete operating system — strategic frameworks, SOPs, sales systems, automation guides — that boosts revenue and increases customer retention by 70%+.</p>
   <div class="hero-actions">
     <button class="btn-primary" onclick="scrollToGenerator()">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v14M2 9h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
@@ -491,7 +524,7 @@
   <div class="hero-proof">
     <div class="proof-stat"><strong>5 min</strong>Setup to download</div>
     <div class="proof-divider"></div>
-    <div class="proof-stat"><strong>18+</strong>Documents generated</div>
+    <div class="proof-stat"><strong>24-30</strong>Strategic documents</div>
     <div class="proof-divider"></div>
     <div class="proof-stat"><strong>Any</strong>Business type</div>
   </div>
@@ -500,8 +533,8 @@
 <!-- HOW IT WORKS -->
 <section class="section" id="how-it-works" style="background:var(--cream);">
   <div class="section-label">Process</div>
-  <div class="section-title">From idea to<br/>operating system</div>
-  <p class="section-sub">Four steps. Five minutes. A complete business documentation suite ready to use from day one.</p>
+  <div class="section-title">From chaos to<br/>scalable system</div>
+  <p class="section-sub">Four steps. Five minutes. A complete business operating system that transforms operations, boosts revenue, and increases customer retention by 70%+.</p>
   <div class="steps-grid">
     <div class="step">
       <div class="step-num">01</div>
@@ -511,17 +544,17 @@
     <div class="step">
       <div class="step-num">02</div>
       <h3>Pay once</h3>
-      <p>A one-time fee per generation. No subscription. No hidden costs. Pay, and your system is built.</p>
+      <p>A one-time fee per generation. No subscription. No hidden costs. Pay, and your transformation system is built.</p>
     </div>
     <div class="step">
       <div class="step-num">03</div>
       <h3>AI builds your system</h3>
-      <p>Claude analyses your business and generates a tailored operating system — not a generic template.</p>
+      <p>Claude creates a complete strategic operating system with frameworks, automation guides, and revenue-boosting systems — tailored to your business.</p>
     </div>
     <div class="step">
       <div class="step-num">04</div>
-      <h3>Download your folder</h3>
-      <p>A ZIP file with professionally structured folders and ready-to-use Word documents lands on your device.</p>
+      <h3>Transform your business</h3>
+      <p>Download your complete system. Implement the frameworks. Watch revenue grow and customer retention increase by 70%+.</p>
     </div>
   </div>
 </section>
@@ -530,49 +563,49 @@
 <section class="section" id="what-you-get">
   <div class="section-label">Deliverables</div>
   <div class="section-title">Everything a real<br/>business needs</div>
-  <p class="section-sub">Tailored to your specific business — not copy-paste templates. Every document uses your language, your process, your brand.</p>
+  <p class="section-sub">Strategic frameworks that boost revenue and increase customer retention by 70%+. Tailored to your specific business — not copy-paste templates. Every system uses your language, your process, your brand.</p>
   <div class="output-grid">
     <div class="output-card">
       <div class="output-icon" style="background:#EAF0F6;">📋</div>
-      <h3>Company Profile</h3>
-      <p>Professional company overview — mission, vision, values, services, and positioning.</p>
-      <span class="output-tag">1 document</span>
+      <h3>Company Profile & Strategy</h3>
+      <p>Strategic foundation — mission, vision, values, competitive positioning, and growth frameworks.</p>
+      <span class="output-tag">3–4 documents</span>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:#E8F5EE;">🔄</div>
-      <h3>Process & Onboarding Flows</h3>
-      <p>Step-by-step documented flows for how clients are onboarded and served.</p>
-      <span class="output-tag">2–3 documents</span>
+      <h3>Client Experience System</h3>
+      <p>Complete onboarding flows, journey mapping, and retention strategies that increase customer retention by 70%+.</p>
+      <span class="output-tag">3–4 documents</span>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:#FFF9EC;">📄</div>
-      <h3>Letter & Doc Templates</h3>
-      <p>All the professional correspondence your business sends — proposals, agreements, receipts.</p>
-      <span class="output-tag">4–7 documents</span>
+      <h3>Document Templates & Legal</h3>
+      <p>Complete legal framework — service agreements, proposals with pricing strategy, client communications, and compliance templates.</p>
+      <span class="output-tag">4–5 documents</span>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:#FEF3C7;">💬</div>
-      <h3>Sales Kit</h3>
-      <p>Sales scripts, objection handlers, and follow-up sequences tailored to your offer.</p>
-      <span class="output-tag">3 documents</span>
+      <h3>Sales & Revenue System</h3>
+      <p>Complete sales methodology, discovery frameworks, closing systems, and pipeline management that boost revenue.</p>
+      <span class="output-tag">4–5 documents</span>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:#FDE8E8;">📣</div>
-      <h3>Marketing Kit</h3>
-      <p>Brand messaging guide, social media playbook, and email campaign templates.</p>
-      <span class="output-tag">3 documents</span>
+      <h3>Marketing & Growth Engine</h3>
+      <p>Brand messaging frameworks, content strategies, growth systems, and referral programs that drive retention.</p>
+      <span class="output-tag">4–5 documents</span>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:#F3E8FF;">⚙️</div>
-      <h3>SOPs & Operations</h3>
-      <p>Standard operating procedures for your core workflows, team responsibilities, and quality standards.</p>
-      <span class="output-tag">2–3 documents</span>
+      <h3>Operations & Scalability</h3>
+      <p>Complete SOP library, workflow automation guides, quality systems, and scalability roadmaps for growth.</p>
+      <span class="output-tag">4–5 documents</span>
     </div>
     <div class="output-card">
       <div class="output-icon" style="background:#E0F2FE;">💰</div>
-      <h3>Finance & Accounting</h3>
-      <p>Financial management SOPs, budget templates, expense tracking, invoice systems, and financial reporting guides.</p>
-      <span class="output-tag">3–4 documents</span>
+      <h3>Finance & Business Intelligence</h3>
+      <p>Financial management systems, forecasting frameworks, pricing strategies, and business intelligence dashboards.</p>
+      <span class="output-tag">4–5 documents</span>
     </div>
   </div>
 </section>
@@ -582,7 +615,7 @@
   <div style="text-align:center;">
     <div class="section-label" style="text-align:center;">Pricing</div>
     <div class="section-title">One price.<br/>Everything included.</div>
-    <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Pay once, download everything.</p>
+    <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Pay once, get a complete business transformation system that boosts revenue and increases customer retention by 70%+.</p>
   </div>
   <div class="pricing-box">
     <div class="price-label">Per Generation</div>
@@ -590,7 +623,7 @@
     <div class="price-desc">~$3 USD · One-time payment</div>
     <ul class="price-features" style="list-style:none;">
       <li><span class="check-icon">✦</span> Full AI-generated business system</li>
-      <li><span class="check-icon">✦</span> 18–24 professional Word documents</li>
+      <li><span class="check-icon">✦</span> 24–30 strategic business documents</li>
       <li><span class="check-icon">✦</span> Organised folder structure</li>
       <li><span class="check-icon">✦</span> Immediate ZIP download</li>
       <li><span class="check-icon">✦</span> Tailored to your specific business</li>
@@ -822,9 +855,9 @@
             <div style="background:var(--white); padding:16px; border-radius:8px; border:1px solid var(--gold);">
               <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
                 <span style="color:var(--gold); font-size:20px;">✨</span>
-                <strong style="font-size:14px;">18–24 Professional Documents</strong>
+                <strong style="font-size:14px;">24–30 Strategic Business Documents</strong>
               </div>
-              <p style="font-size:12px; color:var(--muted); line-height:1.5;">All documents will be tailored to your specific business: <span id="preview-industry"></span>, using your brand tone, and referencing your actual services and customer base. Includes complete financial management system.</p>
+              <p style="font-size:12px; color:var(--muted); line-height:1.5;">Complete business transformation system tailored to your specific business: <span id="preview-industry"></span>. Includes strategic frameworks, operational systems, automation guides, scalability roadmaps, and complete financial intelligence. This is not just templates—it's a premium business operating system.</p>
             </div>
           </div>
 
@@ -848,7 +881,7 @@
           <div class="payment-summary">
             <h3>Order Summary</h3>
             <div class="summary-row"><span>Business System Generation</span><span>₦5,000</span></div>
-            <div class="summary-row"><span>Documents (~18–24 files)</span><span>Included</span></div>
+            <div class="summary-row"><span>Strategic Documents (24–30 files)</span><span>Included</span></div>
             <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
             <div class="summary-row"><span><strong>Total</strong></span><span>₦5,000</span></div>
           </div>
@@ -891,10 +924,17 @@
 <div id="generation-screen">
   <div class="gen-logo">BizOS</div>
   <div class="gen-title" id="gen-title">Building your system…</div>
-  <div class="gen-sub" id="gen-sub">Your payment was successful! We're now generating your complete business operating system.</div>
-  <div class="gen-time" id="gen-time">Estimated time: 3-5 minutes</div>
+  <div class="gen-sub" id="gen-sub">Your payment was successful. Generating your complete business operating system now.</div>
+  <div class="gen-phase" id="gen-phase">Step 1 of 8 — Planning document structure</div>
+  <div class="gen-time" id="gen-time"></div>
   <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   <div class="gen-log" id="gen-log"></div>
+  <div class="gen-error" id="gen-error" style="display:none;">
+    <div class="gen-error-title">Generation encountered an issue</div>
+    <div class="gen-error-msg" id="gen-error-msg"></div>
+    <div class="gen-error-ref" id="gen-error-ref"></div>
+    <button class="btn-primary" id="gen-retry-btn" onclick="retryGeneration()" style="margin-top:16px;">Try Again</button>
+  </div>
 </div>
 
 <!-- DOWNLOAD SCREEN -->
@@ -923,9 +963,15 @@ const CONFIG = {
   // Backend API URL - Auto-detects based on current domain
   // For local development: http://localhost:3001
   // For production: Uses same domain (bizos.adparlay.com)
-  BACKEND_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'http://localhost:3001' 
-    : window.location.origin, // Same domain for production
+  // Backend URL - auto-detects based on current domain
+  // This is overridden in callClaude() function for safety
+  BACKEND_URL: (() => {
+    const isLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.hostname.startsWith('192.168.') ||
+                    window.location.hostname.startsWith('10.');
+    return isLocal ? 'http://localhost:3001' : window.location.origin;
+  })(),
   
   // Get your Paystack public key from: https://dashboard.paystack.com/#/settings/developer
   // Test key format: pk_test_xxxxxxxxxxxxx
@@ -944,6 +990,121 @@ let generatedZip = null;
 let bizData = {};
 let uploadedFile = null;
 let uploadedFileContent = null;
+const FORM_SAVE_KEY = 'bizos_form_data';
+let formSaveTimeout = null;
+
+// ─── FORM AUTO-SAVE ────────────────────────────────────────────
+function saveFormData() {
+  try {
+    const formData = collectData();
+    // Also save current step
+    formData._currentStep = currentStep;
+    localStorage.setItem(FORM_SAVE_KEY, JSON.stringify({
+      ...formData,
+      _timestamp: Date.now()
+    }));
+    console.log('Form data auto-saved');
+  } catch(e) {
+    console.warn('Could not save form data:', e);
+  }
+}
+
+function restoreFormData() {
+  try {
+    const saved = localStorage.getItem(FORM_SAVE_KEY);
+    if (!saved) return false;
+    
+    const formData = JSON.parse(saved);
+    // Only restore if less than 7 days old
+    if (Date.now() - (formData._timestamp || 0) > 7 * 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(FORM_SAVE_KEY);
+      return false;
+    }
+    
+    // Restore all form fields
+    if (formData.name) document.getElementById('biz-name').value = formData.name;
+    if (formData.industry) document.getElementById('biz-industry').value = formData.industry;
+    if (formData.description) document.getElementById('biz-description').value = formData.description;
+    if (formData.country) document.getElementById('biz-country').value = formData.country;
+    if (formData.city) document.getElementById('biz-city').value = formData.city;
+    if (formData.delivery) document.getElementById('biz-delivery').value = formData.delivery;
+    if (formData.customer) document.getElementById('biz-customer').value = formData.customer;
+    if (formData.existingDocs) document.getElementById('biz-docs').value = formData.existingDocs;
+    if (formData.products) document.getElementById('biz-products').value = formData.products;
+    if (formData.userName) document.getElementById('user-name').value = formData.userName;
+    if (formData.userEmail) document.getElementById('user-email').value = formData.userEmail;
+    
+    // Restore radio buttons
+    if (formData.salesChannel) {
+      const scRadio = document.querySelector(`input[name="sales-channel"][value="${formData.salesChannel}"]`);
+      if (scRadio) scRadio.checked = true;
+    }
+    if (formData.paymentModel) {
+      const pmValues = formData.paymentModel.split(', ');
+      pmValues.forEach(val => {
+        const pmRadio = document.querySelector(`input[name="pay-model"][value="${val}"]`);
+        if (pmRadio) pmRadio.checked = true;
+      });
+    }
+    if (formData.bizSize) {
+      const bsRadio = document.querySelector(`input[name="biz-size"][value="${formData.bizSize}"]`);
+      if (bsRadio) bsRadio.checked = true;
+    }
+    if (formData.brandTone) {
+      const btRadio = document.querySelector(`input[name="brand-tone"][value="${formData.brandTone}"]`);
+      if (btRadio) btRadio.checked = true;
+    }
+    
+    // Restore step if valid
+    if (formData._currentStep && formData._currentStep >= 1 && formData._currentStep <= 5) {
+      // Show the saved step
+      document.querySelectorAll('.form-step').forEach((step, idx) => {
+        step.classList.toggle('active', idx + 1 === formData._currentStep);
+      });
+      currentStep = formData._currentStep;
+      
+      // Show indicator
+      const banner = document.createElement('div');
+      banner.style.cssText = `
+        position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+        z-index: 1001; background: var(--gold); color: var(--ink);
+        padding: 12px 20px; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,.15);
+        font-size: 13px; text-align: center;
+      `;
+      banner.innerHTML = `✓ Form data restored — continuing from Step ${formData._currentStep}`;
+      document.body.appendChild(banner);
+      setTimeout(() => banner.remove(), 4000);
+    }
+    
+    return true;
+  } catch(e) {
+    console.warn('Could not restore form data:', e);
+    return false;
+  }
+}
+
+function clearFormData() {
+  localStorage.removeItem(FORM_SAVE_KEY);
+}
+
+function setupFormAutoSave() {
+  // Save on input/change with debounce
+  const formInputs = document.querySelectorAll('#generator input, #generator textarea, #generator select');
+  formInputs.forEach(input => {
+    input.addEventListener('input', () => {
+      clearTimeout(formSaveTimeout);
+      formSaveTimeout = setTimeout(saveFormData, 1000); // Save 1 second after typing stops
+    });
+    input.addEventListener('change', saveFormData);
+  });
+  
+  // Save on step change
+  const originalNextStep = nextStep;
+  window.nextStep = function(from) {
+    saveFormData();
+    return originalNextStep(from);
+  };
+}
 
 // ─── NAVIGATION ────────────────────────────────────────────────
 function scrollToGenerator() {
@@ -1138,6 +1299,7 @@ function initPayment() {
     callback: function(response) {
       console.log('Payment successful!', response);
       
+      try {
       // Store payment reference
       bizData.paymentReference = response.reference;
       bizData.paymentStatus = 'success';
@@ -1145,13 +1307,26 @@ function initPayment() {
       // Payment successful - start generation
       payBtn.disabled = false;
       payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
-      
-      // Close payment form and show generation screen
-      document.getElementById('step-5').classList.remove('active');
-      document.getElementById('form-card').style.display = 'none';
+        
+        // Close payment form and show generation screen
+        const step5 = document.getElementById('step-5');
+        const formCard = document.querySelector('.form-card');
+        if (step5) step5.classList.remove('active');
+        if (formCard) formCard.style.display = 'none';
+        
+        // Clear form data after successful payment
+        clearFormData();
       
       // Start generation immediately after payment
-      startGeneration();
+        console.log('Starting generation after payment...');
+        startGeneration().catch(err => {
+          console.error('Generation failed after payment:', err);
+          showError('Generation failed: ' + err.message + '. Please contact support with payment reference: ' + response.reference);
+        });
+      } catch (err) {
+        console.error('Error in payment callback:', err);
+        showError('Error processing payment: ' + err.message);
+      }
     },
     onClose: function() {
       console.log('Payment window closed by user');
@@ -1163,113 +1338,638 @@ function initPayment() {
   handler.openIframe();
 }
 
-// ─── GENERATION ────────────────────────────────────────────────
-async function startGeneration() {
+// ─── BACKEND URL ────────────────────────────────────────────────
+function getBackendUrl() {
+  const hostname = window.location.hostname;
+  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' ||
+                  hostname.startsWith('192.168.') || hostname.startsWith('10.');
+  return isLocal ? 'http://localhost:3001' : window.location.origin;
+}
+
+// ─── API HELPER ─────────────────────────────────────────────────
+async function apiCall(endpoint, body) {
+  const url = `${getBackendUrl()}${endpoint}`;
+  console.log(`API call: ${url}`);
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    let error;
+    try { error = JSON.parse(errorText); } catch { error = { message: errorText }; }
+    throw new Error(error.error || error.message || `Server error: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+// ─── GENERATION STATE MANAGEMENT ───────────────────────────────
+const GEN_STORAGE_KEY = 'bizos_generation_state';
+
+function saveGenerationState(state) {
+  try {
+    localStorage.setItem(GEN_STORAGE_KEY, JSON.stringify({
+      ...state,
+      timestamp: Date.now()
+    }));
+  } catch(e) {
+    console.warn('Could not save generation state:', e);
+  }
+}
+
+function loadGenerationState() {
+  try {
+    const stored = localStorage.getItem(GEN_STORAGE_KEY);
+    if (!stored) return null;
+    const state = JSON.parse(stored);
+    // Only resume if state is less than 1 hour old
+    if (Date.now() - state.timestamp > 3600000) {
+      localStorage.removeItem(GEN_STORAGE_KEY);
+      return null;
+    }
+    return state;
+  } catch(e) {
+    console.warn('Could not load generation state:', e);
+    return null;
+  }
+}
+
+function clearGenerationState() {
+  localStorage.removeItem(GEN_STORAGE_KEY);
+}
+
+// ─── GENERATION (SPLIT INTO MULTIPLE FAST CALLS + RESUME) ──────
+let generationTimer = null;
+let generationStartTime = null;
+
+async function startGeneration(resumeFromSaved = false) {
+  console.log('=== START GENERATION ===', resumeFromSaved ? '(RESUMING)' : '(NEW)');
+  
+  let savedState = null;
+  if (resumeFromSaved) {
+    savedState = loadGenerationState();
+    if (!savedState) {
+      resumeFromSaved = false;
+      console.log('No valid saved state found, starting fresh');
+    }
+  }
+
+  if (!resumeFromSaved) {
   bizData = collectData();
-  document.getElementById('generation-screen').classList.add('active');
+    clearGenerationState();
+  } else {
+    bizData = savedState.bizData;
+    console.log('Resuming from saved state:', {
+      completedFolders: savedState.completedFolders?.length || 0,
+      totalFolders: savedState.folders?.length || 0
+    });
+  }
+
+  // Show generation screen
+  const genScreen = document.getElementById('generation-screen');
+  genScreen.classList.add('active');
   document.body.style.overflow = 'hidden';
 
   const log = document.getElementById('gen-log');
   const progress = document.getElementById('progress-fill');
   const genTitle = document.getElementById('gen-title');
   const genSub = document.getElementById('gen-sub');
+  const genPhase = document.getElementById('gen-phase');
   const genTime = document.getElementById('gen-time');
+  const genError = document.getElementById('gen-error');
+
+  // Reset or restore UI
+  if (!resumeFromSaved) {
+    log.innerHTML = '';
+    progress.style.width = '0%';
+    genError.style.display = 'none';
+    genTitle.textContent = 'Building your system…';
+    genSub.textContent = 'Your payment was successful. Generating your complete business operating system now.';
+    generationStartTime = Date.now();
+  } else {
+    genError.style.display = 'none';
+    genTitle.textContent = 'Resuming generation…';
+    genSub.textContent = `Continuing from where we left off. ${savedState.completedFolders?.length || 0} of ${savedState.folders?.length || 0} folders already completed.`;
+    addLog('Resuming generation…', false);
+    addLog(`Previously completed: ${savedState.completedFolders?.map(f => f.name).join(', ') || 'none'}`, true);
+    generationStartTime = savedState.startTime || Date.now();
+  }
   
-  const startTime = Date.now();
+  const startTime = generationStartTime;
+  let elapsedInterval = null;
+  let folderStartTimes = {}; // Track when each folder starts
+  let folderDurations = []; // Track how long each folder took
+  let totalFolders = 0; // Will be set when we know folder count
+
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    const elapsedText = `Time elapsed: ${mins}:${String(secs).padStart(2,'0')}`;
+    
+    // Calculate estimate if we have enough data
+    let estimateText = '';
+    if (totalFolders > 0 && folderDurations.length > 0) {
+      const avgTimePerFolder = folderDurations.reduce((a, b) => a + b, 0) / folderDurations.length;
+      const completedFolders = folderDurations.length;
+      const remainingFolders = totalFolders - completedFolders;
+      
+      if (remainingFolders > 0) {
+        // Estimate: average time per folder * remaining folders
+        // Add 10 seconds for ZIP packaging
+        const estimatedSeconds = Math.ceil(avgTimePerFolder * remainingFolders + 10);
+        const estMins = Math.floor(estimatedSeconds / 60);
+        const estSecs = estimatedSeconds % 60;
+        
+        if (estMins > 0) {
+          estimateText = ` • Est. remaining: ~${estMins}m ${estSecs}s`;
+        } else {
+          estimateText = ` • Est. remaining: ~${estSecs}s`;
+        }
+      } else {
+        estimateText = ` • Almost done!`;
+      }
+    } else if (totalFolders > 0) {
+      // Initial estimate: ~20 seconds per folder (conservative)
+      const initialEstimate = totalFolders * 20 + 10; // +10 for ZIP
+      const estMins = Math.floor(initialEstimate / 60);
+      const estSecs = initialEstimate % 60;
+      if (estMins > 0) {
+        estimateText = ` • Est. total: ~${estMins}m ${estSecs}s`;
+      } else {
+        estimateText = ` • Est. total: ~${estSecs}s`;
+      }
+    }
+    
+    genTime.textContent = `${elapsedText}${estimateText} — Please keep this window open`;
+  }
+  elapsedInterval = setInterval(updateTimer, 1000);
+  updateTimer();
 
   function addLog(text, done = false) {
     const line = document.createElement('div');
     line.className = `log-line ${done ? 'done' : ''}`;
     line.innerHTML = `<span class="log-dot"></span>${text}`;
     log.appendChild(line);
+    
+    // Auto-scroll to bottom after DOM update
+    // Use setTimeout to ensure the line is rendered first
+    setTimeout(() => {
     log.scrollTop = log.scrollHeight;
+    }, 10);
+    
+    // Also use requestAnimationFrame for smoother scrolling
+    requestAnimationFrame(() => {
+      log.scrollTop = log.scrollHeight;
+    });
   }
 
   function setProgress(pct) {
-    progress.style.width = pct + '%';
-    // Update time estimate
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    const remaining = Math.max(0, Math.ceil((100 - pct) * (elapsed / pct)));
-    if (pct < 100) {
-      genTime.textContent = `Estimated time remaining: ${remaining} seconds`;
+    progress.style.width = Math.min(pct, 100) + '%';
+  }
+
+  function setPhase(step, total, text) {
+    genPhase.textContent = `Step ${step} of ${total} — ${text}`;
+  }
+
+  function showGenError(msg, canResume = false) {
+    clearInterval(elapsedInterval);
+    genTitle.textContent = 'Generation paused';
+    genSub.textContent = canResume 
+      ? 'Your progress has been saved. You can resume from where you left off.'
+      : 'An error occurred, but your payment is safe. You can retry immediately.';
+    genPhase.textContent = '';
+    genError.style.display = 'block';
+    document.getElementById('gen-error-msg').textContent = msg;
+    const ref = bizData.paymentReference || '';
+    document.getElementById('gen-error-ref').textContent = ref ? `Payment reference: ${ref}` : '';
+    const retryBtn = document.getElementById('gen-retry-btn');
+    if (canResume) {
+      retryBtn.textContent = 'Resume Generation';
+      retryBtn.onclick = () => retryGeneration();
+    } else {
+      retryBtn.textContent = 'Try Again';
+      retryBtn.onclick = () => retryGeneration();
     }
   }
 
   try {
-    addLog('Payment confirmed ✓');
-    addLog('Starting document generation…');
-    setProgress(5);
+    let folders, zip, completedFolders, completedDocs;
     
-    await new Promise(r => setTimeout(r, 500));
-    
-    addLog('Analysing your business profile with Claude AI…');
-    setProgress(8);
+    // ── PHASE 1: Get document structure plan (or use saved) ──
+    if (resumeFromSaved && savedState.plan) {
+      folders = savedState.folders;
+      completedFolders = savedState.completedFolders || [];
+      completedDocs = savedState.completedDocs || [];
+      zip = new JSZip();
+      
+      // Rebuild ZIP from saved folders
+      for (const cf of completedFolders) {
+        const folderName = `${String(cf.index + 1).padStart(2,'0')} - ${cf.name}`;
+        for (const doc of cf.docs) {
+          try {
+            const docxBlob = await generateDocx(doc, bizData);
+            zip.folder(bizData.name).folder(folderName).file((doc.filename || doc.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
+          } catch(e) {
+            console.error('Error rebuilding doc:', doc.filename, e);
+          }
+        }
+      }
+      
+      addLog(`Resuming — ${completedFolders.length} folders already done`, true);
+      setProgress(12 + Math.round((completedFolders.length / folders.length) * 80));
+      totalFolders = folders.length; // Set for timer estimates
+    } else {
+      setPhase(1, 8, 'Planning document structure');
+    addLog('Analysing your business profile…');
+      setProgress(5);
 
-    // Call Claude API to generate the document plan
-    const plan = await callClaude(bizData);
-    addLog('Business profile analysed', true);
-    setProgress(20);
+      const planResult = await apiCall('/api/generate-plan', {
+        businessData: bizData
+      });
 
-    addLog('Designing document structure…');
-    const structure = parsePlan(plan);
-    addLog(`Document structure ready — ${structure.totalDocs} documents across ${structure.folders.length} folders`, true);
-    setProgress(35);
+      if (!planResult.success || !planResult.plan) {
+        throw new Error(planResult.message || 'Failed to create document plan');
+      }
 
-    // Generate ZIP
-    const zip = new JSZip();
-    let docsGenerated = 0;
-    const totalDocs = structure.folders.reduce((sum, f) => sum + f.docs.length, 0);
+      folders = planResult.plan.folders || [];
+      const totalDocs = folders.reduce((sum, f) => sum + (f.docs?.length || 0), 0);
+      
+      addLog(`Document plan ready — ${totalDocs} documents across ${folders.length} folders`, true);
+      setProgress(12);
+      
+      zip = new JSZip();
+      completedFolders = [];
+      completedDocs = [];
+      totalFolders = folders.length; // Set for timer estimates
+      
+      // Save initial state
+      saveGenerationState({
+        bizData: bizData,
+        plan: planResult.plan,
+        folders: folders,
+        completedFolders: [],
+        completedDocs: [],
+        startTime: startTime
+      });
+    }
 
-    for (let fi = 0; fi < structure.folders.length; fi++) {
-      const folder = structure.folders[fi];
-      const folderName = `${String(fi+1).padStart(2,'0')} - ${folder.name}`;
-      addLog(`Building: ${folder.name}…`);
+    // ── PHASE 2-8: Generate content per folder (skip completed) ──
+    let docsGenerated = completedDocs.length || 0;
+    let foldersCompleted = completedFolders.length || 0;
+
+    for (let fi = 0; fi < folders.length; fi++) {
+      // Skip if already completed
+      if (resumeFromSaved && completedFolders.some(cf => cf.index === fi)) {
+        continue;
+      }
+      
+      const folder = folders[fi];
+      const stepNum = fi + 2;
+      const totalSteps = folders.length + 1;
+      
+      // Track folder start time
+      folderStartTimes[fi] = Date.now();
+      
+      setPhase(stepNum, totalSteps, `Writing ${folder.name}`);
+      addLog(`Generating ${folder.name} (${folder.docs.length} documents)…`);
+      genTitle.textContent = `Writing ${folder.name}…`;
+
+      // Generate documents ONE AT A TIME to avoid timeouts
+      let folderDocs = [];
 
       for (let di = 0; di < folder.docs.length; di++) {
         const doc = folder.docs[di];
+        addLog(`  → ${doc.title}…`);
+        
+        let docContent;
+        let docSuccess = false;
+        
         try {
+          const docResult = await apiCall('/api/generate-document', {
+            businessData: bizData,
+            document: doc,
+            folderName: folder.name,
+            uploadedFileContent: uploadedFileContent || null
+          });
+
+          if (!docResult.success || !docResult.doc) {
+            console.error(`Document ${doc.title} API returned error:`, docResult);
+            throw new Error(docResult.message || docResult.error || 'API returned unsuccessful response');
+          }
+          
+          // Validate doc has proper content
+          if (!docResult.doc.sections || !Array.isArray(docResult.doc.sections) || docResult.doc.sections.length === 0) {
+            throw new Error('Document has no sections');
+          }
+          
+          const hasContent = docResult.doc.sections.some(s => 
+            s.content && s.content.trim().length > 50
+          );
+          
+          if (!hasContent) {
+            throw new Error('Document has insufficient content');
+          }
+          
+          docContent = docResult.doc;
+          docSuccess = true;
+          addLog(`  ✓ ${doc.title} complete`, true);
+          console.log(`Document ${doc.title} success: ${docContent.sections.length} sections`);
+        } catch (docErr) {
+          console.error(`Error generating ${doc.title}:`, docErr);
+          
+          // Check if it's a network error
+          const isNetworkError = docErr.message.includes('Failed to fetch') || 
+                                docErr.message.includes('NetworkError') ||
+                                docErr.message.includes('timeout') ||
+                                docErr.message.includes('FUNCTION_INVOCATION_TIMEOUT');
+          
+          if (isNetworkError) {
+            // Save state and show resume option
+            addLog(`Network/timeout error — ${folder.name} paused`, false);
+            saveGenerationState({
+              bizData: bizData,
+              plan: { folders: folders },
+              folders: folders,
+              completedFolders: completedFolders,
+              completedDocs: completedDocs,
+              startTime: startTime,
+              lastError: docErr.message
+            });
+            
+            showGenError(`Generation timeout while creating ${doc.title} in ${folder.name}. Your progress has been saved.`, true);
+            return; // Exit, user can resume
+          }
+          
+          // For other errors, retry once
+          addLog(`  → ${doc.title} retrying…`);
+          try {
+            const retryResult = await apiCall('/api/generate-document', {
+              businessData: bizData,
+              document: doc,
+              folderName: folder.name,
+              uploadedFileContent: null
+            });
+            
+            if (!retryResult.success || !retryResult.doc) {
+              throw new Error(retryResult.message || 'Retry returned no document');
+            }
+            
+            const hasRetryContent = retryResult.doc.sections?.some(s => 
+              s.content && s.content.trim().length > 50
+            );
+            
+            if (!hasRetryContent) {
+              throw new Error('Retry returned document with insufficient content');
+            }
+            
+            docContent = retryResult.doc;
+            docSuccess = true;
+            addLog(`  ✓ ${doc.title} complete (retry)`, true);
+          } catch (retryErr) {
+            console.error(`Retry failed for ${doc.title}:`, retryErr);
+            addLog(`  ⚠️ ${doc.title} — using fallback`, false);
+            // Create minimal fallback
+            docContent = {
+              filename: doc.filename,
+              title: doc.title,
+              sections: [{
+                heading: doc.title,
+                content: `Content generation encountered an issue for ${doc.title}. This document is part of ${folder.name} for ${bizData.name}. Please regenerate this document or contact support.`
+              }]
+            };
+          }
+        }
+        
+        if (docContent) {
+          folderDocs.push(docContent);
+        }
+      }
+      
+      // Ensure folder has at least one document
+      if (folderDocs.length === 0) {
+        addLog(`⚠️ ${folder.name} had no documents generated`, false);
+        folderDocs = folder.docs.map(d => ({
+          filename: d.filename,
+          title: d.title,
+          sections: [{
+            heading: d.title,
+            content: `Content generation failed for ${d.title}. Please regenerate this folder or contact support.`
+          }]
+        }));
+      }
+
+      // Build .docx files for this folder (with validation)
+      const folderName = `${String(fi+1).padStart(2,'0')} - ${folder.name}`;
+      let folderDocsAdded = 0;
+      
+      for (const doc of folderDocs) {
+        try {
+          // Validate document has content
+          if (!doc.sections || !Array.isArray(doc.sections) || doc.sections.length === 0) {
+            console.warn(`Document ${doc.filename || doc.title} has no sections, adding default`);
+            doc.sections = [{
+              heading: doc.title || 'Overview',
+              content: `This document contains information relevant to ${bizData.name} in the ${bizData.industry} industry.`
+            }];
+          }
+          
+          // Ensure at least one section has meaningful content
+          const hasContent = doc.sections.some(s => 
+            s.content && s.content.trim().length >= 50
+          );
+          
+          if (!hasContent) {
+            console.warn(`Document ${doc.filename || doc.title} has insufficient content, enhancing`);
+            doc.sections[0].content = doc.sections[0].content || 
+              `This document contains information relevant to ${bizData.name} in the ${bizData.industry} industry.`;
+            // Ensure minimum length
+            if (doc.sections[0].content.trim().length < 100) {
+              doc.sections[0].content += ` This document is part of your complete business operating system and should be customized to your specific needs.`;
+            }
+          }
+          
           const docxBlob = await generateDocx(doc, bizData);
-          zip.folder(bizData.name).folder(folderName).file(doc.filename + '.docx', docxBlob);
+          zip.folder(bizData.name).folder(folderName).file((doc.filename || doc.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
           docsGenerated++;
-          const pct = 35 + Math.round((docsGenerated / totalDocs) * 55);
-          setProgress(pct);
+          folderDocsAdded++;
         } catch(e) {
           console.error('Doc gen error:', doc.filename, e);
         }
       }
-      addLog(`${folder.name} complete (${folder.docs.length} files)`, true);
+      
+      // Ensure folder has at least one document
+      if (folderDocsAdded === 0) {
+        addLog(`Warning: ${folder.name} had no valid documents, creating placeholder`, false);
+        // Create a minimal placeholder document
+        const placeholderDoc = {
+          filename: `${folder.name.replace(/\s+/g,'_')}_Placeholder`,
+          title: `${folder.name} - Content`,
+          sections: [{
+            heading: 'Overview',
+            content: `This folder contains documents for ${folder.name} related to ${bizData.name}. Please regenerate this folder if content is missing.`
+          }]
+        };
+        try {
+          const docxBlob = await generateDocx(placeholderDoc, bizData);
+          zip.folder(bizData.name).folder(folderName).file(placeholderDoc.filename + '.docx', docxBlob);
+          docsGenerated++;
+          folderDocsAdded++;
+        } catch(e) {
+          console.error('Error creating placeholder:', e);
+        }
+      }
+
+      // Save completed folder to state
+      completedFolders.push({
+        index: fi,
+        name: folder.name,
+        docs: folderDocs
+      });
+      completedDocs.push(...folderDocs);
+      
+      // Track folder completion time
+      if (folderStartTimes[fi]) {
+        const folderDuration = Math.floor((Date.now() - folderStartTimes[fi]) / 1000);
+        folderDurations.push(folderDuration);
+        delete folderStartTimes[fi];
+      }
+      
+      foldersCompleted++;
+      const pct = 12 + Math.round((foldersCompleted / folders.length) * 80);
+      setProgress(pct);
+      addLog(`${folder.name} complete — ${folderDocs.length} files`, true);
+      
+      // Save progress after each folder
+      saveGenerationState({
+        bizData: bizData,
+        plan: { folders: folders },
+        folders: folders,
+        completedFolders: completedFolders,
+        completedDocs: completedDocs,
+        startTime: startTime
+      });
     }
 
-    setProgress(95);
+    // ── FINAL: Package ZIP ──
+    setPhase(folders.length + 1, folders.length + 1, 'Packaging your files');
     genTitle.textContent = 'Packaging your files…';
     addLog('Creating ZIP archive…');
+    setProgress(95);
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     generatedZip = { blob: zipBlob, name: bizData.name };
 
-    setProgress(100);
-    const totalTime = Math.floor((Date.now() - startTime) / 1000);
-    genTime.textContent = `Completed in ${totalTime} seconds`;
-    addLog('ZIP ready for download', true);
+    // Clear saved state on success
+    clearGenerationState();
 
-    await new Promise(r => setTimeout(r, 1000));
+    setProgress(100);
+    clearInterval(elapsedInterval);
+    const totalTime = Math.floor((Date.now() - startTime) / 1000);
+    const mins = Math.floor(totalTime / 60);
+    const secs = totalTime % 60;
+    genTime.textContent = `Completed in ${mins > 0 ? mins + 'm ' : ''}${secs}s`;
+    addLog('Your business operating system is ready for download', true);
+
+    // Send email with ZIP attachment (non-blocking)
+    const userEmail = bizData.userEmail;
+    if (userEmail) {
+      addLog('Sending ZIP to your email…');
+      try {
+        // Convert blob to base64
+        const reader = new FileReader();
+        reader.onload = async function() {
+          const base64 = reader.result.split(',')[1]; // Remove data:application/zip;base64, prefix
+          
+          try {
+            const emailResult = await apiCall('/api/send-email', {
+              email: userEmail,
+              businessName: bizData.name,
+              zipBase64: base64,
+              paymentReference: bizData.paymentReference || ''
+            });
+            
+            if (emailResult.success && !emailResult.skipped) {
+              addLog(`✓ ZIP sent to ${userEmail}`, true);
+            } else if (emailResult.skipped) {
+              console.log('Email service not configured');
+            } else {
+              console.warn('Email sending failed:', emailResult.message);
+            }
+          } catch (emailErr) {
+            console.error('Email error:', emailErr);
+            // Don't block - email is optional
+          }
+        };
+        reader.readAsDataURL(zipBlob);
+      } catch(e) {
+        console.error('Error preparing email:', e);
+      }
+    }
+
+    await new Promise(r => setTimeout(r, 800));
 
     // Show download screen
-    document.getElementById('generation-screen').classList.remove('active');
+    genScreen.classList.remove('active');
     document.getElementById('download-screen').classList.add('active');
     document.getElementById('dl-doc-count').textContent = docsGenerated;
-    document.getElementById('dl-folder-count').textContent = structure.folders.length;
+    document.getElementById('dl-folder-count').textContent = folders.length;
+    const emailNote = userEmail ? ` We've also sent it to ${userEmail}.` : '';
     document.getElementById('download-sub').textContent =
-      `Your complete operating system for ${bizData.name} is ready! ${docsGenerated} professionally formatted documents across ${structure.folders.length} organised folders. Click below to download your ZIP file.`;
-
+      `Your complete operating system for ${bizData.name} is ready. ${docsGenerated} professionally formatted documents across ${folders.length} organised folders.${emailNote}`;
     document.getElementById('download-btn').onclick = downloadZip;
 
   } catch(err) {
-    console.error('Generation error:', err);
-    document.getElementById('generation-screen').classList.remove('active');
-    document.body.style.overflow = '';
-    showError('Generation failed: ' + err.message + '. Please try again.');
+    console.error('=== GENERATION ERROR ===', err);
+    
+    // Save state on error (unless it's a critical error)
+    const isNetworkError = err.message.includes('Failed to fetch') || 
+                          err.message.includes('NetworkError');
+    
+    // Check if we have progress to save
+    if (isNetworkError && typeof folders !== 'undefined' && typeof completedFolders !== 'undefined') {
+      saveGenerationState({
+        bizData: bizData,
+        plan: { folders: folders },
+        folders: folders,
+        completedFolders: completedFolders,
+        completedDocs: completedDocs || [],
+        startTime: startTime,
+        lastError: err.message
+      });
+      const progressMsg = completedFolders.length > 0 
+        ? `Network connection lost. Your progress (${completedFolders.length}/${folders.length} folders) has been saved.`
+        : `Network connection lost.`;
+      showGenError(progressMsg, true);
+    } else {
+      showGenError(err.message || 'An unexpected error occurred. You can retry, or contact support with your payment reference.');
+    }
   }
+}
+
+function retryGeneration() {
+  // Check if there's saved state to resume from
+  const savedState = loadGenerationState();
+  const genError = document.getElementById('gen-error');
+  genError.style.display = 'none';
+  
+  if (savedState && savedState.completedFolders && savedState.completedFolders.length > 0) {
+    // Offer resume option
+    const resume = confirm(`Resume generation? You have ${savedState.completedFolders.length} of ${savedState.folders?.length || 0} folders already completed.`);
+    if (resume) {
+      startGeneration(true); // Resume from saved state
+      return;
+    }
+  }
+  
+  // Start fresh
+  document.getElementById('gen-log').innerHTML = '';
+  clearGenerationState();
+  startGeneration(false);
 }
 
 function downloadZip() {
@@ -1280,46 +1980,6 @@ function downloadZip() {
   a.download = generatedZip.name.replace(/[^a-z0-9]/gi,'_') + '_Business_System.zip';
   a.click();
   URL.revokeObjectURL(url);
-}
-
-// ─── CALL BACKEND API ───────────────────────────────────────────
-async function callClaude(biz) {
-  // Ensure we're using the correct backend URL (override CONFIG to fix deployment issue)
-  const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'http://localhost:3001' 
-    : window.location.origin;
-  
-  console.log('Calling backend at:', `${backendUrl}/api/generate`);
-  
-  // Call backend API instead of direct Anthropic API
-  const response = await fetch(`${backendUrl}/api/generate`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      businessData: biz,
-      uploadedFileContent: uploadedFileContent || null
-    })
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
-    throw new Error(error.message || `Backend error: ${response.status}`);
-  }
-
-  const data = await response.json();
-  if (!data.success || !data.plan) {
-    throw new Error(data.message || 'Failed to generate document plan');
-  }
-
-  return data.plan;
-}
-
-function parsePlan(plan) {
-  const folders = plan.folders || [];
-  const totalDocs = folders.reduce((sum, f) => sum + (f.docs || []).length, 0);
-  return { folders, totalDocs };
 }
 
 // ─── GENERATE DOCX CLIENT-SIDE ─────────────────────────────────
@@ -1333,14 +1993,80 @@ async function generateDocx(doc, biz) {
 }
 
 function buildDocxXml(doc, biz) {
-  // Build Office Open XML document
-  const sections = (doc.sections || []).map(s => `
+  // Detect if document needs tables (expense tracking, budgets, invoices, etc.)
+  const docTitle = (doc.title || '').toLowerCase();
+  const needsTable = docTitle.includes('expense') || docTitle.includes('tracking') || 
+                     docTitle.includes('budget') || docTitle.includes('invoice') ||
+                     docTitle.includes('pipeline') || docTitle.includes('template') ||
+                     docTitle.includes('tracker') || docTitle.includes('sheet') ||
+                     docTitle.includes('dashboard') || docTitle.includes('report');
+  
+  // Build sections with proper hierarchy and strategic formatting
+  const sections = (doc.sections || []).map((s, idx) => {
+    const isFirstSection = idx === 0;
+    const headingLevel = isFirstSection ? 'Heading1' : 'Heading2';
+    
+    let sectionContent = `
     <w:p>
-      <w:pPr><w:pStyle w:val="Heading1"/><w:spacing w:before="240" w:after="120"/></w:pPr>
-      <w:r><w:t>${escapeXml(s.heading || '')}</w:t></w:r>
-    </w:p>
-    ${wrapParagraphs(s.content || '')}
-  `).join('');
+      <w:pPr>
+        <w:pStyle w:val="${headingLevel}"/>
+        <w:spacing w:before="${isFirstSection ? '360' : '280'}" w:after="120"/>
+        ${isFirstSection ? '<w:keepNext/>' : ''}
+        <w:borderBetween w:val="single" w:sz="6" w:space="1" w:color="C8963E"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:sz w:val="${isFirstSection ? '32' : '28'}"/><w:color w:val="${isFirstSection ? '1A3C5E' : '2C3E50'}"/></w:rPr>
+        <w:t>${escapeXml(s.heading || '')}</w:t>
+      </w:r>
+    </w:p>`;
+    
+    // Add content paragraphs with enhanced formatting
+    sectionContent += wrapParagraphs(s.content || '', true);
+    
+    // Add strategic callout boxes for key insights
+    if (s.content && (s.content.toLowerCase().includes('key') || s.content.toLowerCase().includes('important') || 
+                      s.content.toLowerCase().includes('critical') || s.content.toLowerCase().includes('strategic'))) {
+      sectionContent += addCalloutBox('Key Insight', extractKeyInsight(s.content));
+    }
+    
+    // Add table if this section needs one (for expense/budget/tracking docs)
+    if (needsTable && (s.heading?.toLowerCase().includes('track') || 
+                       s.heading?.toLowerCase().includes('expense') ||
+                       s.heading?.toLowerCase().includes('budget') ||
+                       s.heading?.toLowerCase().includes('invoice') ||
+                       s.heading?.toLowerCase().includes('pipeline') ||
+                       s.heading?.toLowerCase().includes('dashboard') ||
+                       idx === 0)) {
+      sectionContent += generateTable(docTitle, s.heading);
+    }
+    
+    // Add subsections if they exist
+    if (s.subsections && Array.isArray(s.subsections) && s.subsections.length > 0) {
+      s.subsections.forEach(subsec => {
+        sectionContent += `
+        <w:p>
+          <w:pPr>
+            <w:pStyle w:val="Heading3"/>
+            <w:spacing w:before="200" w:after="80"/>
+            <w:ind w:left="360"/>
+          </w:pPr>
+          <w:r>
+            <w:rPr><w:b/><w:sz w:val="24"/><w:color w:val="34495E"/></w:rPr>
+            <w:t>${escapeXml(subsec.heading || '')}</w:t>
+          </w:r>
+        </w:p>`;
+        sectionContent += wrapParagraphs(subsec.content || '', false);
+      });
+    }
+    
+    // Add checklist if section mentions steps or actions
+    if (s.content && (s.content.toLowerCase().includes('step') || s.content.toLowerCase().includes('action') || 
+                      s.content.toLowerCase().includes('checklist'))) {
+      sectionContent += addChecklist(s.content);
+    }
+    
+    return sectionContent;
+  }).join('');
 
   const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
@@ -1363,12 +2089,26 @@ function buildDocxXml(doc, biz) {
   mc:Ignorable="w14 wp14">
   <w:body>
     <w:p>
-      <w:pPr><w:spacing w:before="0" w:after="120"/></w:pPr>
-      <w:r><w:rPr><w:b/><w:sz w:val="48"/><w:color w:val="1A3C5E"/></w:rPr><w:t>${escapeXml(biz.name)}</w:t></w:r>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+        <w:spacing w:before="0" w:after="180"/>
+        <w:jc w:val="center"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:sz w:val="36"/><w:color w:val="1A3C5E"/></w:rPr>
+        <w:t>${escapeXml(biz.name)}</w:t>
+      </w:r>
     </w:p>
     <w:p>
-      <w:pPr><w:spacing w:before="0" w:after="400"/></w:pPr>
-      <w:r><w:rPr><w:sz w:val="24"/><w:color w:val="C8963E"/></w:rPr><w:t>${escapeXml(doc.title)}</w:t></w:r>
+      <w:pPr>
+        <w:spacing w:before="0" w:after="360"/>
+        <w:jc w:val="center"/>
+        <w:borderBetween w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:sz w:val="28"/><w:color w:val="C8963E"/></w:rPr>
+        <w:t>${escapeXml(doc.title)}</w:t>
+      </w:r>
     </w:p>
     ${sections}
     <w:p>
@@ -1387,18 +2127,64 @@ function buildDocxXml(doc, biz) {
   const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
   <w:docDefaults>
-    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr></w:rPrDefault>
+    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:rPrDefault>
+    <w:pPrDefault><w:pPr><w:spacing w:after="200" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault>
   </w:docDefaults>
   <w:style w:type="paragraph" w:styleId="Normal">
     <w:name w:val="Normal"/>
-    <w:pPr><w:spacing w:before="80" w:after="80" w:line="320" w:lineRule="auto"/></w:pPr>
-    <w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr>
+    <w:qFormat/>
+    <w:pPr><w:spacing w:after="200" w:line="276" w:lineRule="auto"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr>
   </w:style>
   <w:style w:type="paragraph" w:styleId="Heading1">
     <w:name w:val="heading 1"/>
     <w:basedOn w:val="Normal"/>
-    <w:pPr><w:spacing w:before="320" w:after="120"/><w:shd w:val="clear" w:color="auto" w:fill="1A3C5E"/></w:pPr>
-    <w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:sz w:val="26"/><w:color w:val="FFFFFF"/></w:rPr>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:keepNext/><w:spacing w:before="480" w:after="0" w:line="276" w:lineRule="auto"/><w:outlineLvl w:val="0"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:b/><w:bCs/><w:sz w:val="32"/><w:szCs w:val="32"/><w:color w:val="1A3C5E"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading2">
+    <w:name w:val="heading 2"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:keepNext/><w:spacing w:before="240" w:after="0" w:line="276" w:lineRule="auto"/><w:outlineLvl w:val="1"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:b/><w:bCs/><w:sz w:val="28"/><w:szCs w:val="28"/><w:color w:val="2C3E50"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3">
+    <w:name w:val="heading 3"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:keepNext/><w:spacing w:before="200" w:after="0" w:line="276" w:lineRule="auto"/><w:outlineLvl w:val="2"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:color w:val="34495E"/></w:rPr>
+  </w:style>
+  <w:style w:type="table" w:styleId="TableGrid">
+    <w:name w:val="Table Grid"/>
+    <w:basedOn w:val="TableNormal"/>
+    <w:tblPr>
+      <w:tblBorders>
+        <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+        <w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+        <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+        <w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+        <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+        <w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+      </w:tblBorders>
+    </w:tblPr>
+  </w:style>
+  <w:style w:type="table" w:styleId="TableNormal">
+    <w:name w:val="Normal Table"/>
+    <w:tblPr>
+      <w:tblInd w:w="0" w:type="dxa"/>
+      <w:tblCellMar>
+        <w:top w:w="0" w:type="dxa"/>
+        <w:left w:w="108" w:type="dxa"/>
+        <w:bottom w:w="0" w:type="dxa"/>
+        <w:right w:w="108" w:type="dxa"/>
+      </w:tblCellMar>
+    </w:tblPr>
   </w:style>
 </w:styles>`;
 
@@ -1432,7 +2218,203 @@ function buildDocxXml(doc, biz) {
   return docZip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
 
-function wrapParagraphs(text) {
+function generateTable(docTitle, sectionHeading) {
+  const title = (docTitle + ' ' + sectionHeading).toLowerCase();
+  let headers = [];
+  let rows = 5; // Default 5 empty rows
+  
+  if (title.includes('expense') || title.includes('tracking')) {
+    headers = ['Date', 'Description', 'Category', 'Amount', 'Payment Method', 'Notes'];
+  } else if (title.includes('budget')) {
+    headers = ['Category', 'Budgeted Amount', 'Actual Amount', 'Variance', 'Notes'];
+  } else if (title.includes('invoice') || title.includes('receipt')) {
+    headers = ['Item/Service', 'Description', 'Quantity', 'Unit Price', 'Total'];
+  } else if (title.includes('pipeline') || title.includes('sales')) {
+    headers = ['Client Name', 'Stage', 'Value', 'Expected Close Date', 'Next Action', 'Status'];
+  } else if (title.includes('inventory') || title.includes('stock')) {
+    headers = ['Item Name', 'SKU/Code', 'Quantity', 'Unit Cost', 'Total Value', 'Location'];
+  } else {
+    // Generic table
+    headers = ['Item', 'Description', 'Status', 'Date', 'Notes'];
+  }
+  
+  // Build table XML
+  let tableXml = `
+    <w:p>
+      <w:pPr><w:spacing w:before="120" w:after="120"/></w:pPr>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:w="0" w:type="auto"/>
+        <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+      </w:tblPr>
+      <w:tblGrid>
+        ${headers.map(() => '<w:gridCol w:w="1500"/>').join('')}
+      </w:tblGrid>
+      <w:tr>
+        ${headers.map(h => `
+        <w:tc>
+          <w:tcPr>
+            <w:tcBorders>
+              <w:top w:val="single" w:sz="4" w:space="0" w:color="1A3C5E"/>
+              <w:left w:val="single" w:sz="4" w:space="0" w:color="1A3C5E"/>
+              <w:bottom w:val="single" w:sz="4" w:space="0" w:color="1A3C5E"/>
+              <w:right w:val="single" w:sz="4" w:space="0" w:color="1A3C5E"/>
+            </w:tcBorders>
+            <w:shd w:val="clear" w:color="auto" w:fill="1A3C5E"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr><w:spacing w:before="120" w:after="120"/></w:pPr>
+            <w:r>
+              <w:rPr><w:b/><w:color w:val="FFFFFF"/><w:sz w:val="20"/></w:rPr>
+              <w:t>${escapeXml(h)}</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        `).join('')}
+      </w:tr>`;
+  
+  // Add empty rows for user to fill
+  for (let i = 0; i < rows; i++) {
+    tableXml += `
+      <w:tr>
+        ${headers.map(() => `
+        <w:tc>
+          <w:tcPr>
+            <w:tcBorders>
+              <w:top w:val="single" w:sz="4" w:space="0" w:color="D3D3D3"/>
+              <w:left w:val="single" w:sz="4" w:space="0" w:color="D3D3D3"/>
+              <w:bottom w:val="single" w:sz="4" w:space="0" w:color="D3D3D3"/>
+              <w:right w:val="single" w:sz="4" w:space="0" w:color="D3D3D3"/>
+            </w:tcBorders>
+          </w:tcPr>
+          <w:p>
+            <w:pPr><w:spacing w:before="80" w:after="80"/></w:pPr>
+            <w:r>
+              <w:rPr><w:sz w:val="20"/><w:color w:val="999999"/></w:rPr>
+              <w:t></w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        `).join('')}
+      </w:tr>`;
+  }
+  
+  tableXml += `
+    </w:tbl>
+    <w:p>
+      <w:pPr><w:spacing w:before="120" w:after="120"/></w:pPr>
+    </w:p>`;
+  
+  return tableXml;
+}
+
+function extractKeyInsight(text) {
+  // Extract a key insight sentence from the content
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+  const keySentences = sentences.filter(s => 
+    s.toLowerCase().includes('key') || 
+    s.toLowerCase().includes('important') ||
+    s.toLowerCase().includes('critical') ||
+    s.toLowerCase().includes('strategic') ||
+    s.toLowerCase().includes('essential')
+  );
+  return keySentences[0]?.trim() || sentences[0]?.trim() || 'Key strategic insight from this section.';
+}
+
+function addCalloutBox(title, content) {
+  return `
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="120" w:after="120"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="FFF9E6"/>
+        <w:pBdr>
+          <w:top w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+          <w:left w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+          <w:bottom w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+          <w:right w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+        </w:pBdr>
+        <w:ind w:left="360" w:right="360"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:color w:val="C8963E"/><w:sz w:val="20"/></w:rPr>
+        <w:t>${escapeXml(title)}</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="0" w:after="120"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="FFF9E6"/>
+        <w:pBdr>
+          <w:left w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+          <w:right w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+        </w:pBdr>
+        <w:ind w:left="360" w:right="360"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:sz w:val="20"/><w:color w:val="2C3E50"/></w:rPr>
+        <w:t>${escapeXml(content)}</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="0" w:after="120"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="FFF9E6"/>
+        <w:pBdr>
+          <w:bottom w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+          <w:left w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+          <w:right w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+        </w:pBdr>
+        <w:ind w:left="360" w:right="360"/>
+      </w:pPr>
+    </w:p>`;
+}
+
+function addChecklist(text) {
+  // Extract action items from text
+  const lines = text.split('\n').filter(l => l.trim());
+  const actionItems = lines.filter(l => 
+    l.trim().match(/^[•\-\d+\.]/) || 
+    l.toLowerCase().includes('action:') ||
+    l.toLowerCase().includes('step:') ||
+    l.toLowerCase().includes('task:')
+  ).slice(0, 8); // Max 8 items
+  
+  if (actionItems.length === 0) return '';
+  
+  return `
+    <w:p>
+      <w:pPr><w:spacing w:before="120" w:after="60"/></w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:color w:val="1A3C5E"/><w:sz w:val="22"/></w:rPr>
+        <w:t>Implementation Checklist:</w:t>
+      </w:r>
+    </w:p>
+    ${actionItems.map(item => {
+      const cleanItem = item.replace(/^[•\-\d+\.]\s*/, '').replace(/^(action|step|task):\s*/i, '').trim();
+      return `
+      <w:p>
+        <w:pPr>
+          <w:ind w:left="560" w:hanging="280"/>
+          <w:spacing w:before="40" w:after="40"/>
+        </w:pPr>
+        <w:r>
+          <w:rPr><w:color w:val="C8963E"/><w:sz w:val="20"/></w:rPr>
+          <w:sym w:font="Wingdings" w:char="F0FE"/>
+        </w:r>
+        <w:r>
+          <w:rPr><w:sz w:val="20"/></w:rPr>
+          <w:t xml:space="preserve"> ${escapeXml(cleanItem)}</w:t>
+        </w:r>
+      </w:p>`;
+    }).join('')}
+    <w:p>
+      <w:pPr><w:spacing w:before="60" w:after="120"/></w:pPr>
+    </w:p>`;
+}
+
+function wrapParagraphs(text, isMainSection = false) {
   if (!text) return '';
   return text.split('\n').filter(l => l.trim()).map(line => {
     if (line.trim().startsWith('•') || line.trim().startsWith('-') || line.trim().startsWith('◆')) {
@@ -1450,8 +2432,14 @@ function wrapParagraphs(text) {
       </w:p>`;
     }
     return `<w:p>
-      <w:pPr><w:spacing w:before="80" w:after="80"/></w:pPr>
-      <w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t xml:space="preserve">${escapeXml(line)}</w:t></w:r>
+      <w:pPr>
+        <w:spacing w:before="${isMainSection ? '120' : '100'}" w:after="${isMainSection ? '120' : '100'}" w:line="276" w:lineRule="auto"/>
+        ${isMainSection ? '<w:ind w:firstLine="0"/>' : ''}
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:sz w:val="22"/></w:rPr>
+        <w:t xml:space="preserve">${escapeXml(line)}</w:t>
+      </w:r>
     </w:p>`;
   }).join('');
 }
@@ -1464,6 +2452,54 @@ function escapeXml(str) {
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&apos;');
 }
+
+// ─── INITIALIZE ON PAGE LOAD ────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  // Setup form auto-save
+  setupFormAutoSave();
+  
+  // Restore form data if available
+  restoreFormData();
+  
+  // Check for saved generation state
+  const savedState = loadGenerationState();
+  if (savedState && savedState.completedFolders && savedState.completedFolders.length > 0) {
+    const totalFolders = savedState.folders?.length || 0;
+    const completed = savedState.completedFolders.length;
+    
+    // Show a banner at the top offering to resume
+    const banner = document.createElement('div');
+    banner.style.cssText = `
+      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+      z-index: 1001; background: var(--gold); color: var(--ink);
+      padding: 16px 24px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.2);
+      max-width: 600px; text-align: center; font-size: 14px;
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+    `;
+    banner.innerHTML = `
+      <div style="flex: 1;">
+        <strong>Generation in progress</strong><br>
+        <span style="font-size: 12px; opacity: 0.8;">You have ${completed} of ${totalFolders} folders completed. Resume?</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button onclick="this.closest('div').remove(); startGeneration(true);" 
+                style="background: var(--ink); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+          Resume
+        </button>
+        <button onclick="this.closest('div').remove(); clearGenerationState();" 
+                style="background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+          Dismiss
+        </button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+    
+    // Auto-dismiss after 30 seconds
+    setTimeout(() => {
+      if (banner.parentNode) banner.remove();
+    }, 30000);
+  }
+});
 </script>
 </body>
 </html>

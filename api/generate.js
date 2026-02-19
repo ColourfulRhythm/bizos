@@ -19,6 +19,10 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  console.log('=== GENERATE API CALLED ===');
+  console.log('Method:', req.method);
+  console.log('Body received:', JSON.stringify(req.body).substring(0, 200));
+
   try {
     const { businessData, uploadedFileContent } = req.body;
 
@@ -28,7 +32,11 @@ module.exports = async (req, res) => {
 
     // Get API key from environment
     const apiKey = process.env.ANTHROPIC_API_KEY;
+    console.log('API Key present:', !!apiKey);
+    console.log('API Key starts with:', apiKey ? apiKey.substring(0, 10) : 'none');
+    
     if (!apiKey || apiKey.includes('YOUR_ANTHROPIC')) {
+      console.error('ERROR: Anthropic API key not configured');
       return res.status(500).json({ error: 'Anthropic API key not configured' });
     }
 
@@ -96,9 +104,12 @@ Return ONLY valid JSON, no markdown, no explanation.`;
     // Call Anthropic API
     const model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
     
+    console.log('Calling Claude API with model:', model);
+    console.log('Prompt length:', prompt.length);
+    
     const response = await axios.post('https://api.anthropic.com/v1/messages', {
       model: model,
-      max_tokens: 8000,
+      max_tokens: 20000, // Increased to handle 24 documents with full content (150-300 words per section)
       messages: [{ role: 'user', content: prompt }]
     }, {
       headers: {
@@ -109,9 +120,12 @@ Return ONLY valid JSON, no markdown, no explanation.`;
     });
 
     // Parse response
+    console.log('Claude API response received');
     const text = response.data.content[0].text;
+    console.log('Response text length:', text.length);
     const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const plan = JSON.parse(clean);
+    console.log('Plan parsed successfully, folders:', plan.folders?.length || 0);
 
     res.json({ success: true, plan });
 
