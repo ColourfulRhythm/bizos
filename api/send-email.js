@@ -75,7 +75,7 @@ module.exports = async (req, res) => {
             </div>
             <div class="footer">
               <p>This email was sent because you generated a business operating system on BizOS.</p>
-              <p>© 2025 BizOS · Powered by Claude AI</p>
+              <p>© 2026 BizOS · Powered by Claude AI</p>
             </div>
           </div>
         </body>

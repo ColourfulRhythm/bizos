@@ -912,7 +912,7 @@
 </section>
 
 <footer>
-  <div>© 2025 BizOS · Powered by Claude AI</div>
+  <div>© 2026 BizOS · Powered by Claude AI</div>
   <div style="display:flex;gap:24px;">
     <a href="#" style="color:var(--muted);text-decoration:none;">Privacy</a>
     <a href="#" style="color:var(--muted);text-decoration:none;">Terms</a>
@@ -1878,36 +1878,39 @@ async function startGeneration(resumeFromSaved = false) {
     // Send email with ZIP attachment (non-blocking)
     const userEmail = bizData.userEmail;
     if (userEmail) {
-      addLog('Sending ZIP to your email…');
-      try {
-        // Convert blob to base64
-        const reader = new FileReader();
-        reader.onload = async function() {
-          const base64 = reader.result.split(',')[1]; // Remove data:application/zip;base64, prefix
-          
-          try {
-            const emailResult = await apiCall('/api/send-email', {
-              email: userEmail,
-              businessName: bizData.name,
-              zipBase64: base64,
-              paymentReference: bizData.paymentReference || ''
-            });
-            
-            if (emailResult.success && !emailResult.skipped) {
-              addLog(`✓ ZIP sent to ${userEmail}`, true);
-            } else if (emailResult.skipped) {
-              console.log('Email service not configured');
-            } else {
-              console.warn('Email sending failed:', emailResult.message);
+      // Check ZIP size - Vercel has ~4.5MB body limit, base64 adds ~33% overhead
+      const maxEmailSize = 3 * 1024 * 1024; // 3MB raw = ~4MB base64
+      if (zipBlob.size <= maxEmailSize) {
+        addLog('Sending ZIP to your email…');
+        try {
+          const reader = new FileReader();
+          reader.onload = async function() {
+            const base64 = reader.result.split(',')[1];
+            try {
+              const emailResult = await apiCall('/api/send-email', {
+                email: userEmail,
+                businessName: bizData.name,
+                zipBase64: base64,
+                paymentReference: bizData.paymentReference || ''
+              });
+              if (emailResult.success && !emailResult.skipped) {
+                addLog(`✓ ZIP sent to ${userEmail}`, true);
+              } else if (emailResult.skipped) {
+                console.log('Email service not configured');
+              } else {
+                console.warn('Email sending failed:', emailResult.message);
+              }
+            } catch (emailErr) {
+              console.error('Email error:', emailErr);
             }
-          } catch (emailErr) {
-            console.error('Email error:', emailErr);
-            // Don't block - email is optional
-          }
-        };
-        reader.readAsDataURL(zipBlob);
-      } catch(e) {
-        console.error('Error preparing email:', e);
+          };
+          reader.readAsDataURL(zipBlob);
+        } catch(e) {
+          console.error('Error preparing email:', e);
+        }
+      } else {
+        console.log('ZIP too large for email (' + (zipBlob.size / 1024 / 1024).toFixed(1) + 'MB). Skipping email, download available.');
+        addLog('ZIP ready for download (too large for email delivery)', true);
       }
     }
 
@@ -2469,6 +2472,7 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // Show a banner at the top offering to resume
     const banner = document.createElement('div');
+    banner.setAttribute('data-resume-banner', '');
     banner.style.cssText = `
       position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
       z-index: 1001; background: var(--gold); color: var(--ink);
@@ -2482,11 +2486,11 @@ window.addEventListener('DOMContentLoaded', function() {
         <span style="font-size: 12px; opacity: 0.8;">You have ${completed} of ${totalFolders} folders completed. Resume?</span>
       </div>
       <div style="display: flex; gap: 8px;">
-        <button onclick="this.closest('div').remove(); startGeneration(true);" 
+        <button onclick="this.closest('[data-resume-banner]').remove(); startGeneration(true);" 
                 style="background: var(--ink); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">
           Resume
         </button>
-        <button onclick="this.closest('div').remove(); clearGenerationState();" 
+        <button onclick="this.closest('[data-resume-banner]').remove(); clearGenerationState();" 
                 style="background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 8px 16px; border-radius: 6px; cursor: pointer;">
           Dismiss
         </button>
