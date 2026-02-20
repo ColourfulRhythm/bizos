@@ -979,11 +979,18 @@
 // CONFIGURATION - Update these values with your credentials
 // ═══════════════════════════════════════════════════════════════
 const CONFIG = {
-  // Backend API URL - Auto-detects based on current domain
-  // For local development: http://localhost:3001
-  // For production: Uses same domain (bizos.adparlay.com)
-  // Backend URL - auto-detects based on current domain
-  // This is overridden in callClaude() function for safety
+  // ═══════════════════════════════════════════════════════════════
+  // BACKEND CONFIGURATION
+  // ═══════════════════════════════════════════════════════════════
+  // Choose your backend: 'vercel' or 'supabase'
+  BACKEND_TYPE: 'supabase', // Change to 'vercel' to use Vercel functions
+  
+  // Supabase Configuration (if BACKEND_TYPE === 'supabase')
+  SUPABASE_URL: 'https://YOUR_PROJECT_REF.supabase.co/functions/v1', // Replace with your Supabase project URL
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY', // Get from Supabase Dashboard → Settings → API
+  
+  // Vercel Configuration (if BACKEND_TYPE === 'vercel')
+  // Auto-detects based on current domain
   BACKEND_URL: (() => {
     const isLocal = window.location.hostname === 'localhost' || 
                     window.location.hostname === '127.0.0.1' ||
@@ -1359,20 +1366,49 @@ function initPayment() {
 
 // ─── BACKEND URL ────────────────────────────────────────────────
 function getBackendUrl() {
-  const hostname = window.location.hostname;
-  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' ||
-                  hostname.startsWith('192.168.') || hostname.startsWith('10.');
-  return isLocal ? 'http://localhost:3001' : window.location.origin;
+  if (CONFIG.BACKEND_TYPE === 'supabase') {
+    // Supabase Edge Functions
+    const isLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1';
+    return isLocal 
+      ? 'http://localhost:54321/functions/v1'  // Local Supabase
+      : CONFIG.SUPABASE_URL;  // Production Supabase
+  } else {
+    // Vercel Functions (default)
+    const hostname = window.location.hostname;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' ||
+                    hostname.startsWith('192.168.') || hostname.startsWith('10.');
+    return isLocal ? 'http://localhost:3001' : window.location.origin;
+  }
 }
 
 // ─── API HELPER ─────────────────────────────────────────────────
 async function apiCall(endpoint, body) {
-  const url = `${getBackendUrl()}${endpoint}`;
-  console.log(`API call: ${url}`);
+  const baseUrl = getBackendUrl();
+  
+  // Supabase uses /function-name, Vercel uses /api/endpoint
+  let url;
+  if (CONFIG.BACKEND_TYPE === 'supabase') {
+    // Extract function name from endpoint (e.g., /api/generate-plan → generate-plan)
+    const functionName = endpoint.replace('/api/', '').replace('/', '');
+    url = `${baseUrl}/${functionName}`;
+  } else {
+    url = `${baseUrl}${endpoint}`;
+  }
+  
+  console.log(`API call [${CONFIG.BACKEND_TYPE}]: ${url}`);
+  
+  // Build headers
+  const headers = { 'Content-Type': 'application/json' };
+  
+  // Add Supabase auth header if using Supabase
+  if (CONFIG.BACKEND_TYPE === 'supabase' && CONFIG.SUPABASE_ANON_KEY && !CONFIG.SUPABASE_ANON_KEY.includes('YOUR_')) {
+    headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
+  }
   
   const response = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
     body: JSON.stringify(body)
   });
 

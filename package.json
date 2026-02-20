@@ -10,7 +10,16 @@
     "serve": "npx http-server -p 3002",
     "vercel": "npx vercel",
     "vercel:dev": "npx vercel dev",
-    "vercel:prod": "npx vercel --prod"
+    "vercel:prod": "npx vercel --prod",
+    "supabase:login": "supabase login",
+    "supabase:link": "supabase link",
+    "supabase:deploy": "supabase functions deploy",
+    "supabase:deploy:plan": "supabase functions deploy generate-plan",
+    "supabase:deploy:doc": "supabase functions deploy generate-document",
+    "supabase:deploy:email": "supabase functions deploy send-email",
+    "supabase:deploy:payment": "supabase functions deploy verify-payment",
+    "supabase:deploy:health": "supabase functions deploy health",
+    "supabase:serve": "supabase functions serve"
   },
   "keywords": [
     "business",
