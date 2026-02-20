@@ -1017,6 +1017,166 @@
       </div>
     </div>
   </div>
+
+  <!-- BUSINESS PLAN FORM -->
+  <div id="business-plan-form" class="form-container" style="display:none;">
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Business Plan Details</h2>
+        <p>Answer these questions to create your comprehensive one-page business plan. Takes about 2–3 minutes.</p>
+      </div>
+      <div class="form-body">
+
+        <div class="error-banner" id="error-banner-plan"></div>
+
+        <!-- BUSINESS PLAN STEP 1: BASICS -->
+        <div class="form-step active" id="plan-step-1">
+          <div class="step-indicator">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+            <span class="step-title">Business Basics</span>
+          </div>
+          <div class="form-group">
+            <label>Business Name <span>*</span></label>
+            <input type="text" id="plan-biz-name" placeholder="e.g. TechStart Solutions" />
+          </div>
+          <div class="form-group">
+            <label>Industry / Sector <span>*</span></label>
+            <select id="plan-biz-industry">
+              <option value="">Select your industry...</option>
+              <option>Real Estate & Property</option>
+              <option>Construction & Engineering</option>
+              <option>Retail & E-commerce</option>
+              <option>Food & Beverage / Restaurant</option>
+              <option>Healthcare & Wellness</option>
+              <option>Education & Training</option>
+              <option>Financial Services</option>
+              <option>Logistics & Delivery</option>
+              <option>Technology / SaaS</option>
+              <option>Creative & Media Agency</option>
+              <option>Legal & Professional Services</option>
+              <option>Beauty & Personal Care</option>
+              <option>Events & Hospitality</option>
+              <option>Agriculture & Agritech</option>
+              <option>Manufacturing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>What does your business do? <span>*</span></label>
+            <textarea id="plan-biz-description" placeholder="Describe your business, what it does, and what challenges it solves." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Upload Business Document/Notes <span>(optional)</span></label>
+            <input type="file" id="plan-biz-document" accept=".pdf,.doc,.docx,.txt,.md" onchange="handlePlanFileUpload(event)" />
+            <div class="file-info" id="plan-file-info"></div>
+            <p style="font-size:11px; color:var(--muted); margin-top:6px;">Upload any existing business docs, notes, or descriptions.</p>
+          </div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Country of Operation</label>
+              <input type="text" id="plan-biz-country" placeholder="e.g. Nigeria" />
+            </div>
+            <div class="form-group">
+              <label>City / Region</label>
+              <input type="text" id="plan-biz-city" placeholder="e.g. Lagos" />
+            </div>
+          </div>
+          <div class="form-nav">
+            <div></div>
+            <button class="btn-next" onclick="nextPlanStep(1)">Continue <span>→</span></button>
+          </div>
+        </div>
+
+        <!-- BUSINESS PLAN STEP 2: BUSINESS PLAN DETAILS -->
+        <div class="form-step" id="plan-step-2">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <span class="step-title">Business Plan Details</span>
+          </div>
+          <div class="form-group">
+            <label>What problem are you solving? <span>*</span></label>
+            <textarea id="plan-biz-opportunity" placeholder="Describe the problem your business solves, pain points for users, and why this is the right time for your solution." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Who is on your team? <span>*</span></label>
+            <textarea id="plan-biz-team" placeholder="List key team members, their roles, relevant experience, and why they're the right people to build this business." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Who are your main competitors? <span>*</span></label>
+            <textarea id="plan-biz-competitors" placeholder="List competitors, their strengths/weaknesses, and how you differentiate." style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Who is your target market? <span>*</span></label>
+            <textarea id="plan-biz-target-market" placeholder="Describe your ideal customers, buyer personas, market segments, and customer acquisition strategy." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>What is your implementation timeline? <span>*</span></label>
+            <textarea id="plan-biz-timeline" placeholder="Describe how you'll roll out the business, key phases, milestones, and timeline (e.g., Phase 1: Q1 2026 - Launch, Phase 2: Q2 2026 - Scale)." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>What are your marketing channels? <span>*</span></label>
+            <textarea id="plan-biz-marketing" placeholder="List marketing channels, platforms, strategies, and how you'll reach and convert your audience." style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Financial Summary <span>*</span></label>
+            <textarea id="plan-biz-financials" placeholder="Describe cost structure, revenue streams, pricing strategy, sales goals, and key financial projections." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Funding Required <span>*</span></label>
+            <textarea id="plan-biz-funding" placeholder="How much funding do you need? Where will it go? What are the expected returns for investors?" style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-nav">
+            <button class="btn-back" onclick="prevPlanStep(2)">← Back</button>
+            <button class="btn-next" onclick="nextPlanStep(2)">Continue <span>→</span></button>
+          </div>
+        </div>
+
+        <!-- BUSINESS PLAN STEP 3: PAYMENT -->
+        <div class="form-step" id="plan-step-3">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <span class="step-title">Payment</span>
+          </div>
+
+          <div class="payment-summary">
+            <h3>Order Summary</h3>
+            <div id="plan-order-summary-content">
+              <div class="summary-row"><span id="plan-product-name">Business Plan Only</span><span id="plan-product-price">₦5,000</span></div>
+              <div class="summary-row"><span>9 Strategic Sections</span><span>Included</span></div>
+              <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
+              <div class="summary-row"><span><strong>Total</strong></span><span><strong id="plan-total-price">₦5,000</strong></span></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Your Email <span>(for receipt)</span></label>
+            <input type="email" id="plan-user-email" placeholder="you@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="plan-user-name" placeholder="Full name" />
+          </div>
+
+          <button class="paystack-btn" id="plan-pay-btn" onclick="initPlanPayment()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg>
+            Pay <span id="plan-price-display">₦5,000</span> with Paystack
+          </button>
+          <div class="payment-note">🔒 Secured by Paystack · Generation starts immediately after payment</div>
+
+          <div class="form-nav">
+            <button class="btn-back" onclick="prevPlanStep(3)">← Back</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer>
