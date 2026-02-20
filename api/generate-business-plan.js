@@ -34,14 +34,17 @@ BUSINESS CONTEXT:
 - Company Name: ${businessData.name}
 - Industry: ${businessData.industry}
 - Description: ${businessData.description}
-- Location: ${businessData.city || ''}, ${businessData.country || 'Nigeria'}
-- Sales Channel: ${businessData.salesChannel || 'Multiple'}
-- Delivery Method: ${businessData.delivery || 'Not specified'}
-- Payment Model: ${businessData.paymentModel || 'Not specified'}
-- Business Size: ${businessData.bizSize || 'Small team'}
-- Target Customer: ${businessData.customer || 'Not specified'}
-- Products/Services: ${businessData.products || businessData.description}
-- Brand Tone: ${businessData.brandTone || 'Professional'}${fileContext}
+- Location: ${businessData.city || ''}, ${businessData.country || 'Nigeria'}${fileContext}
+
+BUSINESS PLAN DETAILS:
+- Problem/Opportunity: ${businessData.opportunity || 'Not specified'}
+- Team: ${businessData.team || 'Not specified'}
+- Competitors: ${businessData.competitors || 'Not specified'}
+- Target Market: ${businessData.targetMarket || 'Not specified'}
+- Implementation Timeline: ${businessData.timeline || 'Not specified'}
+- Marketing Channels: ${businessData.marketing || 'Not specified'}
+- Financial Summary: ${businessData.financials || 'Not specified'}
+- Funding Required: ${businessData.funding || 'Not specified'}
 
 Create a comprehensive ONE-PAGE business plan with the following 9 sections. Each section should be detailed, strategic, and actionable:
 

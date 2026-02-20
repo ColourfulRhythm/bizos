@@ -672,16 +672,16 @@
         <div style="font-size:13px;color:var(--gold);font-weight:600;letter-spacing:0.5px;">You Save 92% • Professional Documentation</div>
       </div>
       <ul class="price-features" style="list-style:none;text-align:left;">
-        <li><span class="check-icon">✦</span> Full AI-generated business system</li>
+      <li><span class="check-icon">✦</span> Full AI-generated business system</li>
         <li><span class="check-icon">✦</span> 24–30 strategic business documents</li>
-        <li><span class="check-icon">✦</span> Organised folder structure</li>
-        <li><span class="check-icon">✦</span> Immediate ZIP download</li>
-        <li><span class="check-icon">✦</span> Tailored to your specific business</li>
-        <li><span class="check-icon">✦</span> Editable & brandable</li>
-      </ul>
+      <li><span class="check-icon">✦</span> Organised folder structure</li>
+      <li><span class="check-icon">✦</span> Immediate ZIP download</li>
+      <li><span class="check-icon">✦</span> Tailored to your specific business</li>
+      <li><span class="check-icon">✦</span> Editable & brandable</li>
+    </ul>
       <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;margin-top:24px;" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
-        Build my system now →
-      </button>
+      Build my system now →
+    </button>
     </div>
   </div>
 </section>
@@ -704,13 +704,13 @@
 
         <!-- STEP 1: BASICS -->
         <div class="form-step active" id="step-1">
-          <div class="step-indicator">
+          <div class="step-indicator" id="step-indicator-1">
             <div class="step-dot active" id="dot-1"></div>
             <div class="step-dot" id="dot-2"></div>
             <div class="step-dot" id="dot-3"></div>
             <div class="step-dot" id="dot-4"></div>
             <div class="step-dot" id="dot-5"></div>
-            <span class="step-title">Business Basics</span>
+            <span class="step-title" id="step-title-1">Business Basics</span>
           </div>
           <div class="form-group">
             <label>Business Name <span>*</span></label>
@@ -766,14 +766,17 @@
 
         <!-- STEP 2: OPERATIONS -->
         <div class="form-step" id="step-2">
-          <div class="step-indicator">
+          <div class="step-indicator" id="step-indicator-2">
             <div class="step-dot done" id="dot-1b"></div>
             <div class="step-dot active" id="dot-2b"></div>
             <div class="step-dot" id="dot-3b"></div>
             <div class="step-dot" id="dot-4b"></div>
             <div class="step-dot" id="dot-5b"></div>
-            <span class="step-title">How You Work</span>
+            <span class="step-title" id="step-title-2">How You Work</span>
           </div>
+          
+          <!-- Full System Questions -->
+          <div id="full-system-questions">
           <div class="form-group">
             <label>How do you get clients? <span>*</span></label>
             <div class="radio-group">
@@ -807,6 +810,44 @@
               <div class="radio-option"><input type="radio" name="biz-size" id="bs4" value="Growing (50+)"/><label class="radio-label" for="bs4">50+ people</label></div>
             </div>
           </div>
+          </div>
+          
+          <!-- Business Plan Specific Questions -->
+          <div id="business-plan-questions" style="display:none;">
+            <div class="form-group">
+              <label>What problem are you solving? <span>*</span></label>
+              <textarea id="biz-opportunity" placeholder="Describe the problem your business solves, pain points for users, and why this is the right time for your solution." style="min-height:100px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Who is on your team? <span>*</span></label>
+              <textarea id="biz-team" placeholder="List key team members, their roles, relevant experience, and why they're the right people to build this business." style="min-height:100px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Who are your main competitors? <span>*</span></label>
+              <textarea id="biz-competitors" placeholder="List competitors, their strengths/weaknesses, and how you differentiate." style="min-height:80px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Who is your target market? <span>*</span></label>
+              <textarea id="biz-target-market" placeholder="Describe your ideal customers, buyer personas, market segments, and customer acquisition strategy." style="min-height:100px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>What is your implementation timeline? <span>*</span></label>
+              <textarea id="biz-timeline" placeholder="Describe how you'll roll out the business, key phases, milestones, and timeline (e.g., Phase 1: Q1 2026 - Launch, Phase 2: Q2 2026 - Scale)." style="min-height:100px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>What are your marketing channels? <span>*</span></label>
+              <textarea id="biz-marketing" placeholder="List marketing channels, platforms, strategies, and how you'll reach and convert your audience." style="min-height:80px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Financial Summary <span>*</span></label>
+              <textarea id="biz-financials" placeholder="Describe cost structure, revenue streams, pricing strategy, sales goals, and key financial projections." style="min-height:100px;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Funding Required <span>*</span></label>
+              <textarea id="biz-funding" placeholder="How much funding do you need? Where will it go? What are the expected returns for investors?" style="min-height:80px;"></textarea>
+            </div>
+          </div>
+          
           <div class="form-nav">
             <button class="btn-back" onclick="prevStep(2)">← Back</button>
             <button class="btn-next" onclick="nextStep(2)">Continue <span>→</span></button>
@@ -936,7 +977,7 @@
               <div class="summary-row" style="margin-bottom:8px;" id="market-value-row"><span style="font-size:13px;color:var(--muted);text-decoration:line-through;">Market Value: $200 USD</span><span style="font-size:13px;color:var(--gold);font-weight:600;">92% OFF</span></div>
               <div class="summary-row"><span id="product-name">Business System Generation</span><span id="product-price">₦15,000</span></div>
               <div class="summary-row" id="features-row"><span>Strategic Documents (24–30 files)</span><span>Included</span></div>
-              <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
+            <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
               <div class="summary-row"><span><strong>Total</strong></span><span><strong id="total-price">₦15,000</strong></span></div>
             </div>
           </div>
@@ -1180,7 +1221,83 @@ function selectProduct(productType) {
   // Update order summary if visible
   updateOrderSummary();
   
+  // Update form steps based on product type
+  updateFormStepsForProduct();
+  
   console.log('Product selected:', productType, product);
+}
+
+function updateFormStepsForProduct() {
+  const isBusinessPlan = selectedProductType === 'BUSINESS_PLAN';
+  
+  // Show/hide business plan vs full system questions in step 2
+  const businessPlanQuestions = document.getElementById('business-plan-questions');
+  const fullSystemQuestions = document.getElementById('full-system-questions');
+  
+  if (businessPlanQuestions) {
+    businessPlanQuestions.style.display = isBusinessPlan ? 'block' : 'none';
+  }
+  if (fullSystemQuestions) {
+    fullSystemQuestions.style.display = isBusinessPlan ? 'none' : 'block';
+  }
+  
+  // Update step indicators
+  const stepIndicator1 = document.getElementById('step-indicator-1');
+  const stepIndicator2 = document.getElementById('step-indicator-2');
+  const stepTitle1 = document.getElementById('step-title-1');
+  const stepTitle2 = document.getElementById('step-title-2');
+  
+  if (isBusinessPlan) {
+    // Business plan: 3 steps (Basics, Business Plan Info, Payment)
+    if (stepIndicator1) {
+      stepIndicator1.innerHTML = `
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+        <span class="step-title">Business Basics</span>
+      `;
+    }
+    if (stepIndicator2) {
+      stepIndicator2.innerHTML = `
+        <div class="step-dot done" id="dot-1b"></div>
+        <div class="step-dot active" id="dot-2b"></div>
+        <div class="step-dot" id="dot-3b"></div>
+        <span class="step-title">Business Plan Details</span>
+      `;
+    }
+    if (stepTitle2) stepTitle2.textContent = 'Business Plan Details';
+    
+    // Hide step 3 (Brand & Documents) for business plan
+    const step3 = document.getElementById('step-3');
+    if (step3) step3.style.display = 'none';
+  } else {
+    // Full system: 5 steps (original)
+    if (stepIndicator1) {
+      stepIndicator1.innerHTML = `
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+        <div class="step-dot" id="dot-4"></div>
+        <div class="step-dot" id="dot-5"></div>
+        <span class="step-title">Business Basics</span>
+      `;
+    }
+    if (stepIndicator2) {
+      stepIndicator2.innerHTML = `
+        <div class="step-dot done" id="dot-1b"></div>
+        <div class="step-dot active" id="dot-2b"></div>
+        <div class="step-dot" id="dot-3b"></div>
+        <div class="step-dot" id="dot-4b"></div>
+        <div class="step-dot" id="dot-5b"></div>
+        <span class="step-title">How You Work</span>
+      `;
+    }
+    if (stepTitle2) stepTitle2.textContent = 'How You Work';
+    
+    // Show step 3 for full system
+    const step3 = document.getElementById('step-3');
+    if (step3) step3.style.display = 'block';
+  }
 }
 
 function updateOrderSummary() {
@@ -1370,6 +1487,8 @@ function prevStep(from) {
 function validateStep(step) {
   const err = document.getElementById('error-banner');
   err.classList.remove('show');
+  const isBusinessPlan = selectedProductType === 'BUSINESS_PLAN';
+  
   if (step === 1) {
     if (!document.getElementById('biz-name').value.trim()) {
       showError('Please enter your business name.'); return false;
@@ -1382,16 +1501,48 @@ function validateStep(step) {
     }
   }
   if (step === 2) {
+    if (isBusinessPlan) {
+      // Business plan validation
+      if (!document.getElementById('biz-opportunity')?.value.trim()) {
+        showError('Please describe the problem you are solving.'); return false;
+      }
+      if (!document.getElementById('biz-team')?.value.trim()) {
+        showError('Please describe your team.'); return false;
+      }
+      if (!document.getElementById('biz-competitors')?.value.trim()) {
+        showError('Please list your competitors.'); return false;
+      }
+      if (!document.getElementById('biz-target-market')?.value.trim()) {
+        showError('Please describe your target market.'); return false;
+      }
+      if (!document.getElementById('biz-timeline')?.value.trim()) {
+        showError('Please describe your implementation timeline.'); return false;
+      }
+      if (!document.getElementById('biz-marketing')?.value.trim()) {
+        showError('Please describe your marketing channels.'); return false;
+      }
+      if (!document.getElementById('biz-financials')?.value.trim()) {
+        showError('Please provide financial summary.'); return false;
+      }
+      if (!document.getElementById('biz-funding')?.value.trim()) {
+        showError('Please describe funding requirements.'); return false;
+      }
+    } else {
+      // Full system validation
     if (!document.querySelector('input[name="sales-channel"]:checked')) {
       showError('Please select how you get clients.'); return false;
     }
     if (!document.getElementById('biz-delivery').value.trim()) {
       showError('Please describe how you deliver your service.'); return false;
+      }
     }
   }
   if (step === 3) {
+    if (!isBusinessPlan) {
+      // Only validate step 3 for full system
     if (!document.getElementById('biz-customer').value.trim()) {
       showError('Please describe your typical customer.'); return false;
+      }
     }
   }
   if (step === 4) {
@@ -1510,7 +1661,7 @@ function initPayment() {
   if (typeof PaystackPop === 'undefined') {
     if (window.paystackLoadError) {
       showError('Paystack payment system failed to load. Please refresh the page or check your internet connection.');
-      payBtn.disabled = false;
+    payBtn.disabled = false;
       payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
       return;
     } else {
@@ -1624,7 +1775,7 @@ function initPayment() {
   });
   
   try {
-    handler.openIframe();
+  handler.openIframe();
     console.log('Paystack payment popup opened');
   } catch (error) {
     console.error('Error opening Paystack payment:', error);
@@ -2199,7 +2350,7 @@ async function startGeneration(resumeFromSaved = false) {
       setProgress(95);
       
       // Create ZIP with single document
-      const zip = new JSZip();
+    const zip = new JSZip();
       zip.file(`${businessPlanDoc.filename}.docx`, docxBlob);
       
       addLog('Business plan ready!', true);
