@@ -1467,7 +1467,7 @@ function selectProduct(productType) {
       document.getElementById('product-price-badge').textContent = '₦15,000';
     }
     if (generatorTitle) generatorTitle.textContent = 'Build your system';
-    if (generatorSub) generatorSub.textContent = 'Answer a few questions about your business and we'll generate everything.';
+    if (generatorSub) generatorSub.textContent = 'Answer a few questions about your business and we will generate everything.';
   }
   
   // Update price display in UI if payment step is visible
@@ -1745,6 +1745,76 @@ function prevStep(from) {
   document.getElementById(`step-${from}`).classList.remove('active');
   document.getElementById(`step-${from - 1}`).classList.add('active');
   currentStep = from - 1;
+}
+
+// ─── BUSINESS PLAN FORM NAVIGATION ──────────────────────────────
+function nextPlanStep(from) {
+  if (!validatePlanStep(from)) return;
+  
+  document.getElementById(`plan-step-${from}`).classList.remove('active');
+  document.getElementById(`plan-step-${from + 1}`).classList.add('active');
+  currentPlanStep = from + 1;
+}
+
+function prevPlanStep(from) {
+  document.getElementById(`plan-step-${from}`).classList.remove('active');
+  document.getElementById(`plan-step-${from - 1}`).classList.add('active');
+  currentPlanStep = from - 1;
+}
+
+function validatePlanStep(step) {
+  const err = document.getElementById('error-banner-plan');
+  if (err) err.classList.remove('show');
+  
+  if (step === 1) {
+    if (!document.getElementById('plan-biz-name')?.value.trim()) {
+      showError('Please enter your business name.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-industry')?.value) {
+      showError('Please select your industry.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-description')?.value.trim()) {
+      showError('Please describe what your business does.', 'plan');
+      return false;
+    }
+  }
+  if (step === 2) {
+    if (!document.getElementById('plan-biz-opportunity')?.value.trim()) {
+      showError('Please describe the problem you are solving.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-team')?.value.trim()) {
+      showError('Please describe your team.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-competitors')?.value.trim()) {
+      showError('Please list your competitors.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-target-market')?.value.trim()) {
+      showError('Please describe your target market.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-timeline')?.value.trim()) {
+      showError('Please describe your implementation timeline.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-marketing')?.value.trim()) {
+      showError('Please describe your marketing channels.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-financials')?.value.trim()) {
+      showError('Please provide financial summary.', 'plan');
+      return false;
+    }
+    if (!document.getElementById('plan-biz-funding')?.value.trim()) {
+      showError('Please describe funding requirements.', 'plan');
+      return false;
+    }
+  }
+  return true;
 }
 
 function validateStep(step) {
