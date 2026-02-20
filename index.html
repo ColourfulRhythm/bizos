@@ -1426,7 +1426,8 @@ let formSaveTimeout = null;
 let selectedProductType = 'FULL_SYSTEM'; // 'FULL_SYSTEM' or 'BUSINESS_PLAN'
 
 // ─── PRODUCT SELECTION ──────────────────────────────────────────
-function selectProduct(productType) {
+// Make functions globally accessible immediately
+window.selectProduct = function(productType) {
   selectedProductType = productType;
   CONFIG.SELECTED_PRODUCT = productType;
   
@@ -1480,15 +1481,17 @@ function selectProduct(productType) {
   updateOrderSummary();
   
   console.log('Product selected:', productType, product);
-}
+};
+window.selectProduct = window.selectProduct || selectProduct;
 
-function showProductSelection() {
+window.showProductSelection = function() {
   // Hide both forms and show pricing section
   document.getElementById('full-system-form').style.display = 'none';
   document.getElementById('business-plan-form').style.display = 'none';
   document.getElementById('product-selection-banner').style.display = 'none';
   document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
-}
+};
+window.showProductSelection = window.showProductSelection || showProductSelection;
 
 function updateFormStepsForProduct() {
   const isBusinessPlan = selectedProductType === 'BUSINESS_PLAN';
@@ -1719,9 +1722,9 @@ function setupFormAutoSave() {
 }
 
 // ─── NAVIGATION ────────────────────────────────────────────────
-function scrollToGenerator() {
+window.scrollToGenerator = function() {
   document.getElementById('generator').scrollIntoView({ behavior: 'smooth' });
-}
+};
 
 function nextStep(from) {
   if (!validateStep(from)) return;
@@ -1748,21 +1751,19 @@ function prevStep(from) {
 }
 
 // ─── BUSINESS PLAN FORM NAVIGATION ──────────────────────────────
-function nextPlanStep(from) {
+window.nextPlanStep = function(from) {
   if (!validatePlanStep(from)) return;
   
   document.getElementById(`plan-step-${from}`).classList.remove('active');
   document.getElementById(`plan-step-${from + 1}`).classList.add('active');
   currentPlanStep = from + 1;
-}
+};
 
-function prevPlanStep(from) {
+window.prevPlanStep = function(from) {
   document.getElementById(`plan-step-${from}`).classList.remove('active');
   document.getElementById(`plan-step-${from - 1}`).classList.add('active');
   currentPlanStep = from - 1;
-}
-
-function validatePlanStep(step) {
+};
   const err = document.getElementById('error-banner-plan');
   if (err) err.classList.remove('show');
   
@@ -1928,7 +1929,7 @@ function handleFileUpload(event) {
   }
 }
 
-function handlePlanFileUpload(event) {
+window.handlePlanFileUpload = function(event) {
   const file = event.target.files[0];
   if (!file) {
     uploadedFile = null;
@@ -2186,7 +2187,7 @@ function initPayment() {
 }
 
 // ─── BUSINESS PLAN PAYMENT ──────────────────────────────────────
-function initPlanPayment() {
+window.initPlanPayment = function() {
   const email = document.getElementById('plan-user-email')?.value.trim();
   if (!email) { 
     showError('Please enter your email address.', 'plan'); 
