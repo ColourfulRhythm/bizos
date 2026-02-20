@@ -27,6 +27,10 @@
       "destination": "/api/generate-document.js"
     },
     {
+      "source": "/api/generate-business-plan",
+      "destination": "/api/generate-business-plan.js"
+    },
+    {
       "source": "/api/verify-payment",
       "destination": "/api/verify-payment.js"
     },

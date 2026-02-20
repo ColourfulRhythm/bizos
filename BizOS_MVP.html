@@ -633,31 +633,56 @@
 <section class="section" style="background:var(--cream);" id="pricing">
   <div style="text-align:center;">
     <div class="section-label" style="text-align:center;">Pricing</div>
-    <div class="section-title">One price.<br/>Everything included.</div>
-    <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Pay once, get a complete business transformation system that boosts revenue and increases customer retention by 70%+.</p>
+    <div class="section-title">Choose your plan.<br/>Pay once, own forever.</div>
+    <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Professional business documentation tailored to your needs.</p>
   </div>
-  <div class="pricing-box">
-    <div class="price-label">Per Generation</div>
-    <div style="margin-bottom:12px;">
-      <div style="font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
-      <div class="price-amount" style="margin-bottom:0;"><span class="price-currency">₦</span>15,000</div>
-      <div class="price-desc">~$10 USD · One-time payment</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:32px;max-width:1000px;margin:0 auto;">
+    <!-- Business Plan Only -->
+    <div class="pricing-box" style="position:relative;">
+      <div style="position:absolute;top:16px;right:16px;background:var(--gold);color:var(--ink);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:0.5px;">POPULAR</div>
+      <div class="price-label">Business Plan Only</div>
+      <div style="margin-bottom:12px;">
+        <div class="price-amount" style="margin-bottom:0;"><span class="price-currency">₦</span>5,000</div>
+        <div class="price-desc">~$3.50 USD · One-time payment</div>
+      </div>
+      <ul class="price-features" style="list-style:none;text-align:left;">
+        <li><span class="check-icon">✦</span> One-page comprehensive business plan</li>
+        <li><span class="check-icon">✦</span> 9 strategic sections included</li>
+        <li><span class="check-icon">✦</span> Investor-ready format</li>
+        <li><span class="check-icon">✦</span> Immediate download</li>
+        <li><span class="check-icon">✦</span> Tailored to your business</li>
+        <li><span class="check-icon">✦</span> Editable & brandable</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;margin-top:24px;" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">
+        Get Business Plan →
+      </button>
     </div>
-    <div style="margin:16px 0;padding:16px;background:linear-gradient(135deg, rgba(200,150,62,0.15) 0%, rgba(200,150,62,0.08) 100%);border-radius:10px;border:2px solid var(--gold);text-align:center;">
-      <div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;">Worth $200 USD</div>
-      <div style="font-size:13px;color:var(--gold);font-weight:600;letter-spacing:0.5px;">You Save 92% • Professional Documentation</div>
+    
+    <!-- Full System -->
+    <div class="pricing-box" style="border:2px solid var(--gold);position:relative;">
+      <div style="position:absolute;top:16px;right:16px;background:var(--ink);color:var(--white);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:0.5px;">BEST VALUE</div>
+      <div class="price-label">Full Business System</div>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
+        <div class="price-amount" style="margin-bottom:0;"><span class="price-currency">₦</span>15,000</div>
+        <div class="price-desc">~$10 USD · One-time payment</div>
+      </div>
+      <div style="margin:16px 0;padding:16px;background:linear-gradient(135deg, rgba(200,150,62,0.15) 0%, rgba(200,150,62,0.08) 100%);border-radius:10px;border:2px solid var(--gold);text-align:center;">
+        <div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;">Worth $200 USD</div>
+        <div style="font-size:13px;color:var(--gold);font-weight:600;letter-spacing:0.5px;">You Save 92% • Professional Documentation</div>
+      </div>
+      <ul class="price-features" style="list-style:none;text-align:left;">
+        <li><span class="check-icon">✦</span> Full AI-generated business system</li>
+        <li><span class="check-icon">✦</span> 24–30 strategic business documents</li>
+        <li><span class="check-icon">✦</span> Organised folder structure</li>
+        <li><span class="check-icon">✦</span> Immediate ZIP download</li>
+        <li><span class="check-icon">✦</span> Tailored to your specific business</li>
+        <li><span class="check-icon">✦</span> Editable & brandable</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;margin-top:24px;" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
+        Build my system now →
+      </button>
     </div>
-    <ul class="price-features" style="list-style:none;">
-      <li><span class="check-icon">✦</span> Full AI-generated business system</li>
-      <li><span class="check-icon">✦</span> 24–30 strategic business documents</li>
-      <li><span class="check-icon">✦</span> Organised folder structure</li>
-      <li><span class="check-icon">✦</span> Immediate ZIP download</li>
-      <li><span class="check-icon">✦</span> Tailored to your specific business</li>
-      <li><span class="check-icon">✦</span> Editable & brandable</li>
-    </ul>
-    <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;" onclick="scrollToGenerator()">
-      Build my system now →
-    </button>
   </div>
 </section>
 
@@ -906,11 +931,14 @@
 
           <div class="payment-summary">
             <h3>Order Summary</h3>
-            <div class="summary-row" style="margin-bottom:8px;"><span style="font-size:13px;color:var(--muted);text-decoration:line-through;">Market Value: $200 USD</span><span style="font-size:13px;color:var(--gold);font-weight:600;">92% OFF</span></div>
-            <div class="summary-row"><span>Business System Generation</span><span>₦15,000</span></div>
-            <div class="summary-row"><span>Strategic Documents (24–30 files)</span><span>Included</span></div>
-            <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
-            <div class="summary-row"><span><strong>Total</strong></span><span><strong>₦15,000</strong></span></div>
+            <div id="order-summary-content">
+              <!-- Will be populated by updateOrderSummary() -->
+              <div class="summary-row" style="margin-bottom:8px;" id="market-value-row"><span style="font-size:13px;color:var(--muted);text-decoration:line-through;">Market Value: $200 USD</span><span style="font-size:13px;color:var(--gold);font-weight:600;">92% OFF</span></div>
+              <div class="summary-row"><span id="product-name">Business System Generation</span><span id="product-price">₦15,000</span></div>
+              <div class="summary-row" id="features-row"><span>Strategic Documents (24–30 files)</span><span>Included</span></div>
+              <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
+              <div class="summary-row"><span><strong>Total</strong></span><span><strong id="total-price">₦15,000</strong></span></div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -1100,7 +1128,25 @@ const CONFIG = {
   // Live key format: pk_live_xxxxxxxxxxxxx
   PAYSTACK_PUBLIC_KEY: 'pk_live_65167bc2839df9c0dc11ca91e608ce2635abf44b', // Live key - Production
   
-  // Price in kobo (₦15,000 = 1500000 kobo)
+  // Product types
+  PRODUCT_TYPES: {
+    FULL_SYSTEM: {
+      name: 'Full Business System',
+      priceKobo: 1500000,
+      priceDisplay: '₦15,000',
+      description: 'Complete business transformation system (24-30 documents)'
+    },
+    BUSINESS_PLAN: {
+      name: 'Business Plan Only',
+      priceKobo: 500000,
+      priceDisplay: '₦5,000',
+      description: 'One-page comprehensive business plan'
+    }
+  },
+  // Default to full system
+  SELECTED_PRODUCT: 'FULL_SYSTEM',
+  
+  // Legacy support - defaults to full system
   PRICE_KOBO: 1500000,
   PRICE_DISPLAY: '₦15,000'
 };
@@ -1113,6 +1159,51 @@ let uploadedFile = null;
 let uploadedFileContent = null;
 const FORM_SAVE_KEY = 'bizos_form_data';
 let formSaveTimeout = null;
+let selectedProductType = 'FULL_SYSTEM'; // 'FULL_SYSTEM' or 'BUSINESS_PLAN'
+
+// ─── PRODUCT SELECTION ──────────────────────────────────────────
+function selectProduct(productType) {
+  selectedProductType = productType;
+  CONFIG.SELECTED_PRODUCT = productType;
+  
+  // Update price display
+  const product = CONFIG.PRODUCT_TYPES[productType];
+  CONFIG.PRICE_KOBO = product.priceKobo;
+  CONFIG.PRICE_DISPLAY = product.priceDisplay;
+  
+  // Update price display in UI if payment step is visible
+  const priceDisplay = document.getElementById('price-display');
+  if (priceDisplay) {
+    priceDisplay.textContent = product.priceDisplay;
+  }
+  
+  // Update order summary if visible
+  updateOrderSummary();
+  
+  console.log('Product selected:', productType, product);
+}
+
+function updateOrderSummary() {
+  const product = CONFIG.PRODUCT_TYPES[selectedProductType];
+  const summaryRows = document.querySelectorAll('.summary-row');
+  if (summaryRows.length > 0) {
+    // Update first row (product name and price)
+    const firstRow = summaryRows[0];
+    if (firstRow) {
+      const span = firstRow.querySelector('span:last-child');
+      if (span) span.textContent = product.priceDisplay;
+      const firstSpan = firstRow.querySelector('span:first-child');
+      if (firstSpan) firstSpan.textContent = product.name;
+    }
+    
+    // Update total
+    const totalRow = summaryRows[summaryRows.length - 1];
+    if (totalRow) {
+      const totalSpan = totalRow.querySelector('span:last-child');
+      if (totalSpan) totalSpan.innerHTML = '<strong>' + product.priceDisplay + '</strong>';
+    }
+  }
+}
 
 // ─── FORM AUTO-SAVE ────────────────────────────────────────────
 function saveFormData() {
@@ -1238,6 +1329,11 @@ function nextStep(from) {
   // If moving to preview step, populate it
   if (from === 3 && from + 1 === 4) {
     populatePreview();
+  }
+  
+  // If moving to payment step, update order summary
+  if (from + 1 === 5) {
+    updateOrderSummary();
   }
   
   document.getElementById(`step-${from}`).classList.remove('active');
@@ -2049,6 +2145,69 @@ async function startGeneration(resumeFromSaved = false) {
 
 
   try {
+    // ── CHECK PRODUCT TYPE: Business Plan vs Full System ──
+    if (selectedProductType === 'BUSINESS_PLAN') {
+      // Generate business plan only
+      setPhase(1, 1, 'Generating business plan');
+      addLog('Creating your comprehensive business plan…');
+      setProgress(10);
+      
+      genTitle.textContent = 'Building your business plan…';
+      genSub.textContent = 'Your payment was successful. Generating your comprehensive one-page business plan now.';
+      
+      const planResult = await apiCall('/api/generate-business-plan', {
+        businessData: bizData,
+        uploadedFileContent: uploadedFileContent
+      });
+      
+      if (!planResult.success || !planResult.sections) {
+        throw new Error(planResult.message || 'Failed to generate business plan');
+      }
+      
+      addLog(`Business plan generated — ${planResult.sections.length} sections`, true);
+      setProgress(90);
+      
+      // Generate DOCX for business plan
+      addLog('Formatting business plan document…');
+      const businessPlanDoc = {
+        title: `${bizData.name} - Business Plan`,
+        filename: `${bizData.name.replace(/\s+/g, '_')}_Business_Plan`,
+        sections: planResult.sections
+      };
+      
+      const docxBlob = await generateBusinessPlanDocx(businessPlanDoc, bizData);
+      setProgress(95);
+      
+      // Create ZIP with single document
+      const zip = new JSZip();
+      zip.file(`${businessPlanDoc.filename}.docx`, docxBlob);
+      
+      addLog('Business plan ready!', true);
+      setProgress(100);
+      
+      // Download
+      generatedZip = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(generatedZip);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${bizData.name.replace(/\s+/g, '_')}_Business_Plan.zip`;
+      a.click();
+      
+      clearInterval(elapsedInterval);
+      genTitle.textContent = 'Business plan ready!';
+      genSub.textContent = 'Your comprehensive business plan has been generated and downloaded.';
+      genPhase.textContent = '';
+      
+      setTimeout(() => {
+        genScreen.classList.remove('active');
+        document.body.style.overflow = '';
+        showDownloadScreen();
+      }, 2000);
+      
+      return; // Exit early for business plan
+    }
+    
+    // ── FULL SYSTEM GENERATION (original flow) ──
     let folders, zip, completedFolders, completedDocs;
     
     // ── PHASE 1: Get document structure plan (or use saved) ──
@@ -2532,6 +2691,156 @@ async function generateDocx(doc, biz) {
   // Build a simple but professional .docx using Office Open XML
   const content = buildDocxXml(doc, biz);
   return content;
+}
+
+async function generateBusinessPlanDocx(planDoc, biz) {
+  // Build a professional business plan DOCX with 9 sections
+  const content = buildBusinessPlanDocxXml(planDoc, biz);
+  return content;
+}
+
+function buildBusinessPlanDocxXml(planDoc, biz) {
+  // Build sections from the plan data
+  const sections = (planDoc.sections || []).map((section, idx) => {
+    const isFirstSection = idx === 0;
+    const headingLevel = isFirstSection ? 'Heading1' : 'Heading2';
+    
+    let sectionContent = `
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="${headingLevel}"/>
+        <w:spacing w:before="${isFirstSection ? '360' : '280'}" w:after="120"/>
+        ${isFirstSection ? '<w:keepNext/>' : ''}
+        <w:borderBetween w:val="single" w:sz="6" w:space="1" w:color="C8963E"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:sz w:val="${isFirstSection ? '32' : '28'}"/><w:color w:val="${isFirstSection ? '1A3C5E' : '2C3E50'}"/></w:rPr>
+        <w:t>${escapeXml(section.title || '')}</w:t>
+      </w:r>
+    </w:p>`;
+    
+    // Add content paragraphs
+    sectionContent += wrapParagraphs(section.content || '', true);
+    
+    return sectionContent;
+  }).join('');
+
+  const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
+  xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:mv="urn:schemas-microsoft-com:mac:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+  xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+  xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+  xmlns:w10="urn:schemas-microsoft-com:office:word"
+  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+  xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
+  xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk"
+  xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml"
+  xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+  mc:Ignorable="w14 wp14">
+  <w:body>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+        <w:spacing w:before="0" w:after="180"/>
+        <w:jc w:val="center"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:sz w:val="36"/><w:color w:val="1A3C5E"/></w:rPr>
+        <w:t>${escapeXml(biz.name)}</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:before="0" w:after="360"/>
+        <w:jc w:val="center"/>
+        <w:borderBetween w:val="single" w:sz="12" w:space="1" w:color="C8963E"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr><w:b/><w:sz w:val="28"/><w:color w:val="C8963E"/></w:rPr>
+        <w:t>Comprehensive Business Plan</w:t>
+      </w:r>
+    </w:p>
+    ${sections}
+    <w:p>
+      <w:pPr><w:spacing w:before="480"/></w:pPr>
+      <w:r><w:rPr><w:sz w:val="18"/><w:color w:val="999999"/><w:i/></w:rPr>
+        <w:t>Generated by BizOS · ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</w:t>
+      </w:r>
+    </w:p>
+    <w:sectPr>
+      <w:pgSz w:w="11906" w:h="16838"/>
+      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/>
+    </w:sectPr>
+  </w:body>
+</w:document>`;
+
+  // Use the same styles as regular documents
+  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:docDefaults>
+    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:rPrDefault>
+    <w:pPrDefault><w:pPr><w:spacing w:after="200" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault>
+  </w:docDefaults>
+  <w:style w:type="paragraph" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:spacing w:after="200" w:line="276" w:lineRule="auto"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1">
+    <w:name w:val="heading 1"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:keepNext/><w:spacing w:before="480" w:after="0" w:line="276" w:lineRule="auto"/><w:outlineLvl w:val="0"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:b/><w:bCs/><w:sz w:val="32"/><w:szCs w:val="32"/><w:color w:val="1A3C5E"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading2">
+    <w:name w:val="heading 2"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:keepNext/><w:spacing w:before="240" w:after="0" w:line="276" w:lineRule="auto"/><w:outlineLvl w:val="1"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:b/><w:bCs/><w:sz w:val="28"/><w:szCs w:val="28"/><w:color w:val="2C3E50"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3">
+    <w:name w:val="heading 3"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:qFormat/>
+    <w:pPr><w:keepNext/><w:spacing w:before="200" w:after="0" w:line="276" w:lineRule="auto"/><w:outlineLvl w:val="2"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:color w:val="34495E"/></w:rPr>
+  </w:style>
+</w:styles>`;
+
+  // Create DOCX structure (same as generateDocx)
+  const zip = new JSZip();
+  zip.file('word/document.xml', docXml);
+  zip.file('word/styles.xml', stylesXml);
+  zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+</Types>`);
+  zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`);
+  zip.file('word/_rels/document.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`);
+
+  return zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
 
 function buildDocxXml(doc, biz) {
