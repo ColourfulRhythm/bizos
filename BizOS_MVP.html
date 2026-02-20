@@ -689,13 +689,21 @@
 <!-- GENERATOR -->
 <section class="section" id="generator">
   <div class="section-label">Generator</div>
-  <div class="section-title">Build your system</div>
-  <p class="section-sub">Answer a few questions about your business and we'll generate everything.</p>
+  <div class="section-title" id="generator-title">Build your system</div>
+  <p class="section-sub" id="generator-sub">Answer a few questions about your business and we'll generate everything.</p>
 
-  <div class="form-container">
+  <!-- Product Selection Banner -->
+  <div id="product-selection-banner" style="display:none;background:var(--cream);border:2px solid var(--gold);border-radius:12px;padding:20px;margin-bottom:32px;text-align:center;">
+    <div style="font-size:18px;font-weight:600;color:var(--ink);margin-bottom:8px;" id="selected-product-name">Full Business System</div>
+    <div style="font-size:14px;color:var(--muted);">You're generating: <strong id="selected-product-desc">Complete business transformation system (24-30 documents)</strong></div>
+    <button onclick="showProductSelection()" style="margin-top:12px;background:transparent;border:1px solid var(--line);padding:8px 16px;border-radius:8px;color:var(--ink);cursor:pointer;font-size:13px;">Change Selection</button>
+  </div>
+
+  <!-- FULL SYSTEM FORM -->
+  <div id="full-system-form" class="form-container">
     <div class="form-card">
       <div class="form-header">
-        <h2>Business Profile</h2>
+        <h2>Full Business System Profile</h2>
         <p>This takes about 3–4 minutes. The more detail you give, the better your documents.</p>
       </div>
       <div class="form-body">
@@ -1200,6 +1208,7 @@ const CONFIG = {
 
 // ─── GLOBALS ───────────────────────────────────────────────────
 let currentStep = 1;
+let currentPlanStep = 1; // Separate step counter for business plan form
 let generatedZip = null;
 let bizData = {};
 let uploadedFile = null;
@@ -1218,6 +1227,35 @@ function selectProduct(productType) {
   CONFIG.PRICE_KOBO = product.priceKobo;
   CONFIG.PRICE_DISPLAY = product.priceDisplay;
   
+  // Show/hide forms
+  const fullSystemForm = document.getElementById('full-system-form');
+  const businessPlanForm = document.getElementById('business-plan-form');
+  const productBanner = document.getElementById('product-selection-banner');
+  const generatorTitle = document.getElementById('generator-title');
+  const generatorSub = document.getElementById('generator-sub');
+  
+  if (productType === 'BUSINESS_PLAN') {
+    if (fullSystemForm) fullSystemForm.style.display = 'none';
+    if (businessPlanForm) businessPlanForm.style.display = 'block';
+    if (productBanner) {
+      productBanner.style.display = 'block';
+      document.getElementById('selected-product-name').textContent = 'Business Plan Only';
+      document.getElementById('selected-product-desc').textContent = 'One-page comprehensive business plan';
+    }
+    if (generatorTitle) generatorTitle.textContent = 'Create Your Business Plan';
+    if (generatorSub) generatorSub.textContent = 'Answer a few questions and we'll generate your investor-ready business plan.';
+  } else {
+    if (fullSystemForm) fullSystemForm.style.display = 'block';
+    if (businessPlanForm) businessPlanForm.style.display = 'none';
+    if (productBanner) {
+      productBanner.style.display = 'block';
+      document.getElementById('selected-product-name').textContent = 'Full Business System';
+      document.getElementById('selected-product-desc').textContent = 'Complete business transformation system (24-30 documents)';
+    }
+    if (generatorTitle) generatorTitle.textContent = 'Build your system';
+    if (generatorSub) generatorSub.textContent = 'Answer a few questions about your business and we'll generate everything.';
+  }
+  
   // Update price display in UI if payment step is visible
   const priceDisplay = document.getElementById('price-display');
   if (priceDisplay) {
@@ -1227,10 +1265,15 @@ function selectProduct(productType) {
   // Update order summary if visible
   updateOrderSummary();
   
-  // Update form steps based on product type
-  updateFormStepsForProduct();
-  
   console.log('Product selected:', productType, product);
+}
+
+function showProductSelection() {
+  // Hide both forms and show pricing section
+  document.getElementById('full-system-form').style.display = 'none';
+  document.getElementById('business-plan-form').style.display = 'none';
+  document.getElementById('product-selection-banner').style.display = 'none';
+  document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
 }
 
 function updateFormStepsForProduct() {
@@ -1560,10 +1603,12 @@ function validateStep(step) {
   return true;
 }
 
-function showError(msg) {
-  const el = document.getElementById('error-banner');
-  el.textContent = msg;
-  el.classList.add('show');
+function showError(msg, formType = 'full') {
+  const el = document.getElementById(formType === 'plan' ? 'error-banner-plan' : 'error-banner');
+  if (el) {
+    el.textContent = msg;
+    el.classList.add('show');
+  }
 }
 
 // ─── FILE UPLOAD ───────────────────────────────────────────────
