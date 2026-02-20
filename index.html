@@ -1355,6 +1355,14 @@
   loadPaystack();
 })();
 
+// Ensure functions are globally accessible
+window.selectProduct = selectProduct;
+window.showProductSelection = showProductSelection;
+window.nextPlanStep = nextPlanStep;
+window.prevPlanStep = prevPlanStep;
+window.initPlanPayment = initPlanPayment;
+window.handlePlanFileUpload = handlePlanFileUpload;
+
 // Initialize form steps on page load
 document.addEventListener('DOMContentLoaded', function() {
   // Update form steps based on default product type
