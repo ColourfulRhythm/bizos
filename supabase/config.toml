@@ -1,6 +1,4 @@
 # Supabase Edge Functions Configuration
-[functions]
-  # Maximum execution time for functions (in seconds)
-  # Free tier: 60s, Pro tier: 300s
-  max_duration = 300
+# Note: max_duration is set per function in the function code
+# or in the Supabase Dashboard → Edge Functions → Settings
 

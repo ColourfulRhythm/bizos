@@ -1,5 +1,6 @@
 // Supabase Edge Function: Generate Single Document
 // Deno runtime with 300s timeout support
+// max_duration: 300 (set in Supabase Dashboard or via CLI flag)
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 

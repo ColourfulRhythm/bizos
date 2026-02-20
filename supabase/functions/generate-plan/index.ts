@@ -1,5 +1,6 @@
 // Supabase Edge Function: Generate Document Plan
 // Deno runtime with 300s timeout support
+// max_duration: 60 (set in Supabase Dashboard or via CLI flag)
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
