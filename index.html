@@ -1390,7 +1390,8 @@ function initPayment() {
   payBtn.textContent = 'Processing...';
 
   // Check if PaystackPop is loaded
-  if (typeof PaystackPop === 'undefined' || !window.paystackReady) {
+  // Direct check - sometimes PaystackPop is available even if window.paystackReady is false
+  if (typeof PaystackPop === 'undefined') {
     if (window.paystackLoadError) {
       showError('Paystack payment system failed to load. Please refresh the page or check your internet connection.');
       payBtn.disabled = false;
