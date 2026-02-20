@@ -977,7 +977,79 @@
   <button class="btn-restart" onclick="location.reload()">Generate another business →</button>
 </div>
 
-<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+// Load Paystack script with error handling
+(function() {
+  let paystackLoaded = false;
+  let retryCount = 0;
+  const maxRetries = 3;
+  
+  function loadPaystack() {
+    const script = document.createElement('script');
+    script.src = 'https://js.paystack.co/v1/inline.js';
+    script.async = true;
+    
+    script.onload = function() {
+      paystackLoaded = true;
+      console.log('Paystack script loaded successfully');
+      // Check if PaystackPop is available
+      if (typeof PaystackPop !== 'undefined') {
+        window.paystackReady = true;
+      } else {
+        console.warn('Paystack script loaded but PaystackPop not available');
+        window.paystackReady = false;
+      }
+    };
+    
+    script.onerror = function() {
+      console.error('Failed to load Paystack script');
+      retryCount++;
+      
+      if (retryCount < maxRetries) {
+        console.log(`Retrying Paystack script load (attempt ${retryCount + 1}/${maxRetries})...`);
+        setTimeout(loadPaystack, 2000 * retryCount); // Exponential backoff
+      } else {
+        console.error('Paystack script failed to load after ' + maxRetries + ' attempts');
+        window.paystackReady = false;
+        window.paystackLoadError = true;
+        
+        // Show user-friendly error
+        if (document.readyState === 'complete') {
+          showPaystackError();
+        } else {
+          window.addEventListener('load', showPaystackError);
+        }
+      }
+    };
+    
+    document.head.appendChild(script);
+  }
+  
+  function showPaystackError() {
+    // Only show if user is on payment step
+    const payBtn = document.getElementById('pay-btn');
+    if (payBtn && !paystackLoaded) {
+      payBtn.disabled = true;
+      payBtn.innerHTML = '⚠️ Payment system unavailable - Please refresh';
+      payBtn.style.background = 'var(--muted)';
+      
+      // Show error message
+      const errorMsg = document.createElement('div');
+      errorMsg.style.cssText = 'margin-top:12px;padding:12px;background:#fee;border:1px solid #fcc;border-radius:8px;color:#c33;font-size:14px;';
+      errorMsg.innerHTML = '⚠️ <strong>Payment system unavailable</strong><br>Unable to load Paystack. Please:<br>1. Check your internet connection<br>2. Refresh the page<br>3. Try again in a moment';
+      
+      const paymentNote = document.querySelector('.payment-note');
+      if (paymentNote && !paymentNote.nextElementSibling?.classList.contains('paystack-error')) {
+        errorMsg.className = 'paystack-error';
+        paymentNote.parentNode.insertBefore(errorMsg, paymentNote.nextSibling);
+      }
+    }
+  }
+  
+  // Start loading
+  loadPaystack();
+})();
+</script>
 <script>
 // ═══════════════════════════════════════════════════════════════
 // CONFIGURATION - Update these values with your credentials
@@ -1299,8 +1371,19 @@ function initPayment() {
   payBtn.textContent = 'Processing...';
 
   // Check if PaystackPop is loaded
-  if (typeof PaystackPop === 'undefined') {
-    showError('Paystack payment system is not loaded. Please refresh the page.');
+  if (typeof PaystackPop === 'undefined' || !window.paystackReady) {
+    if (window.paystackLoadError) {
+      showError('Paystack payment system failed to load. Please refresh the page or check your internet connection.');
+    } else {
+      showError('Paystack payment system is still loading. Please wait a moment and try again.');
+      // Retry after 2 seconds
+      setTimeout(() => {
+        if (typeof PaystackPop !== 'undefined' && window.paystackReady) {
+          payBtn.disabled = false;
+          payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+        }
+      }, 2000);
+    }
     payBtn.disabled = false;
     payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
     return;
