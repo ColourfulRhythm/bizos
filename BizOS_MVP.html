@@ -1564,6 +1564,230 @@ function clearGenerationState() {
 let generationTimer = null;
 let generationStartTime = null;
 
+// Global functions for folder downloads (must be global for onclick handlers)
+function showFolderDownload(folderIndex, folderName, docCount) {
+  const folderDownloads = document.getElementById('folder-downloads');
+  const folderList = document.getElementById('folder-download-list');
+  
+  if (!folderDownloads || !folderList) return;
+  
+  folderDownloads.style.display = 'block';
+  
+  const downloadItem = document.createElement('div');
+  downloadItem.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);';
+  downloadItem.innerHTML = `
+    <div>
+      <div style="font-weight:500;color:var(--ink);">${folderName}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">${docCount} document${docCount !== 1 ? 's' : ''} ready</div>
+    </div>
+    <button class="btn-primary" onclick="downloadFolderZip(${folderIndex})" style="padding:8px 16px;font-size:14px;">
+      Download
+    </button>
+  `;
+  folderList.appendChild(downloadItem);
+}
+
+function downloadFolderZip(folderIndex) {
+  if (!window.folderZips || !window.folderZips[folderIndex]) {
+    console.error('Folder ZIP not found:', folderIndex);
+    showError('Folder download not available yet. Please wait for generation to complete.');
+    return;
+  }
+  
+  const folderZip = window.folderZips[folderIndex];
+  const url = URL.createObjectURL(folderZip.blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${folderZip.name}.zip`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  // Try to add log if available
+  const log = document.getElementById('gen-log');
+  if (log) {
+    const line = document.createElement('div');
+    line.className = 'log-line done';
+    line.innerHTML = `<span class="log-dot"></span>✓ Downloaded ${folderZip.folderName}`;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+}
+
+// Global helper to add log messages (used by retry functions)
+function addGlobalLog(text, done = false) {
+  const log = document.getElementById('gen-log');
+  if (!log) return;
+  
+  const line = document.createElement('div');
+  line.className = `log-line ${done ? 'done' : ''}`;
+  line.innerHTML = `<span class="log-dot"></span>${text}`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function retryFailedDocuments(failedDocs, folders, bizData, uploadedFileContent, zip, completedFolders, completedDocs) {
+  let successCount = 0;
+  const remainingFailed = [];
+  const maxRetries = 3; // More retries for manual retry
+  
+  for (const failed of failedDocs) {
+    const { folderIndex, folderName, docIndex, document } = failed;
+    const folder = folders[folderIndex];
+    const folderNameFormatted = `${String(folderIndex + 1).padStart(2,'0')} - ${folderName}`;
+    
+    addGlobalLog(`  → Retrying ${document.title} in ${folderName}…`);
+    
+    let docSuccess = false;
+    let retryCount = 0;
+    
+    while (!docSuccess && retryCount < maxRetries) {
+      try {
+        if (retryCount > 0) {
+          addGlobalLog(`    → Attempt ${retryCount + 1}/${maxRetries}…`);
+          await new Promise(r => setTimeout(r, 2000 * retryCount)); // Longer backoff for retries
+        }
+        
+        const docResult = await apiCall('/api/generate-document', {
+          businessData: bizData,
+          document: document,
+          folderName: folderName,
+          uploadedFileContent: uploadedFileContent || null
+        });
+
+        if (!docResult.success || !docResult.doc) {
+          throw new Error(docResult.message || docResult.error || 'API returned unsuccessful response');
+        }
+        
+        // Validate doc has proper content
+        if (!docResult.doc.sections || !Array.isArray(docResult.doc.sections) || docResult.doc.sections.length === 0) {
+          throw new Error('Document has no sections');
+        }
+        
+        const hasContent = docResult.doc.sections.some(s => 
+          s.content && s.content.trim().length > 50
+        );
+        
+        if (!hasContent) {
+          throw new Error('Document has insufficient content');
+        }
+        
+        // Success! Add to ZIP and update completed lists
+        try {
+          const docxBlob = await generateDocx(docResult.doc, bizData);
+          zip.folder(bizData.name).folder(folderNameFormatted).file((document.filename || document.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
+          
+          // Update completed folders/docs
+          const existingFolder = completedFolders.find(cf => cf.index === folderIndex);
+          if (existingFolder) {
+            existingFolder.docs.push(docResult.doc);
+          } else {
+            completedFolders.push({
+              index: folderIndex,
+              name: folderName,
+              docs: [docResult.doc]
+            });
+          }
+          completedDocs.push(docResult.doc);
+          
+          successCount++;
+          docSuccess = true;
+          addGlobalLog(`  ✓ ${document.title} — retry successful!`, true);
+        } catch (docxErr) {
+          console.error('Error creating DOCX for retried doc:', docxErr);
+          throw new Error('Failed to create document file');
+        }
+      } catch (retryErr) {
+        retryCount++;
+        console.error(`Retry attempt ${retryCount} failed for ${document.title}:`, retryErr);
+        
+        if (retryCount >= maxRetries) {
+          addGlobalLog(`  ⚠️ ${document.title} — still failed after ${maxRetries} retry attempts`, false);
+          remainingFailed.push(failed);
+        }
+      }
+    }
+  }
+  
+  return { successCount, remainingFailed };
+}
+
+async function retryAllFailedDocuments() {
+  if (!window.failedDocsForRetry || window.failedDocsForRetry.length === 0) {
+    addGlobalLog('No failed documents to retry', false);
+    return;
+  }
+  
+  const failedDocs = window.failedDocsForRetry;
+  const savedState = loadGenerationState();
+  
+  if (!savedState || !savedState.folders) {
+    addGlobalLog('Error: Cannot find generation state. Please start a new generation.', false);
+    return;
+  }
+  
+  addGlobalLog(`Retrying ${failedDocs.length} failed document${failedDocs.length !== 1 ? 's' : ''}…`, true);
+  
+  // Get current ZIP and state
+  const zip = new JSZip();
+  const bizData = savedState.bizData;
+  const folders = savedState.folders;
+  const completedFolders = savedState.completedFolders || [];
+  const completedDocs = savedState.completedDocs || [];
+  
+  // Rebuild existing ZIP
+  for (const cf of completedFolders) {
+    const folderName = `${String(cf.index + 1).padStart(2,'0')} - ${cf.name}`;
+    for (const doc of cf.docs) {
+      try {
+        const docxBlob = await generateDocx(doc, bizData);
+        zip.folder(bizData.name).folder(folderName).file((doc.filename || doc.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
+      } catch(e) {
+        console.error('Error rebuilding doc:', doc.filename, e);
+      }
+    }
+  }
+  
+  const uploadedFileContent = null; // Could be stored in state if needed
+  
+  // Call retryFailedDocuments
+  const retryResults = await retryFailedDocuments(
+    failedDocs, 
+    folders, 
+    bizData, 
+    uploadedFileContent, 
+    zip, 
+    completedFolders, 
+    completedDocs
+  );
+  
+  if (retryResults.successCount > 0) {
+    addGlobalLog(`✓ Successfully retried ${retryResults.successCount} document${retryResults.successCount !== 1 ? 's' : ''}`, true);
+    
+    // Update final ZIP
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    generatedZip = { blob: zipBlob, name: bizData.name };
+    
+    // Update download button
+    const downloadBtn = document.getElementById('download-btn');
+    if (downloadBtn) {
+      downloadBtn.onclick = downloadZip;
+      downloadBtn.textContent = 'Download Complete System';
+    }
+  }
+  
+  if (retryResults.remainingFailed.length > 0) {
+    addGlobalLog(`⚠️ ${retryResults.remainingFailed.length} document${retryResults.remainingFailed.length !== 1 ? 's' : ''} still failed`, false);
+    window.failedDocsForRetry = retryResults.remainingFailed;
+  } else {
+    // All retries successful
+    window.failedDocsForRetry = [];
+    clearGenerationState();
+    addGlobalLog('✓ All documents generated successfully!', true);
+  }
+}
+
 async function startGeneration(resumeFromSaved = false) {
   console.log('=== START GENERATION ===', resumeFromSaved ? '(RESUMING)' : '(NEW)');
   
@@ -1724,132 +1948,8 @@ async function startGeneration(resumeFromSaved = false) {
     }
   }
 
-  function showFolderDownload(folderIndex, folderName, docCount) {
-    const folderDownloads = document.getElementById('folder-downloads');
-    const folderList = document.getElementById('folder-download-list');
-    
-    if (!folderDownloads || !folderList) return;
-    
-    folderDownloads.style.display = 'block';
-    
-    const downloadItem = document.createElement('div');
-    downloadItem.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);';
-    downloadItem.innerHTML = `
-      <div>
-        <div style="font-weight:500;color:var(--ink);">${folderName}</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${docCount} document${docCount !== 1 ? 's' : ''} ready</div>
-      </div>
-      <button class="btn-primary" onclick="downloadFolderZip(${folderIndex})" style="padding:8px 16px;font-size:14px;">
-        Download
-      </button>
-    `;
-    folderList.appendChild(downloadItem);
-  }
 
-  function downloadFolderZip(folderIndex) {
-    if (!window.folderZips || !window.folderZips[folderIndex]) {
-      console.error('Folder ZIP not found:', folderIndex);
-      return;
-    }
-    
-    const folderZip = window.folderZips[folderIndex];
-    const url = URL.createObjectURL(folderZip.blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${folderZip.name}.zip`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    addLog(`✓ Downloaded ${folderZip.folderName}`, true);
-  }
-
-  async function retryFailedDocuments(failedDocs, folders, bizData, uploadedFileContent, zip, completedFolders, completedDocs) {
-    let successCount = 0;
-    const remainingFailed = [];
-    const maxRetries = 3; // More retries for manual retry
-    
-    for (const failed of failedDocs) {
-      const { folderIndex, folderName, docIndex, document } = failed;
-      const folder = folders[folderIndex];
-      const folderNameFormatted = `${String(folderIndex + 1).padStart(2,'0')} - ${folderName}`;
-      
-      addLog(`  → Retrying ${document.title} in ${folderName}…`);
-      
-      let docSuccess = false;
-      let retryCount = 0;
-      
-      while (!docSuccess && retryCount < maxRetries) {
-        try {
-          if (retryCount > 0) {
-            addLog(`    → Attempt ${retryCount + 1}/${maxRetries}…`);
-            await new Promise(r => setTimeout(r, 2000 * retryCount)); // Longer backoff for retries
-          }
-          
-          const docResult = await apiCall('/api/generate-document', {
-            businessData: bizData,
-            document: document,
-            folderName: folderName,
-            uploadedFileContent: uploadedFileContent || null
-          });
-
-          if (!docResult.success || !docResult.doc) {
-            throw new Error(docResult.message || docResult.error || 'API returned unsuccessful response');
-          }
-          
-          // Validate doc has proper content
-          if (!docResult.doc.sections || !Array.isArray(docResult.doc.sections) || docResult.doc.sections.length === 0) {
-            throw new Error('Document has no sections');
-          }
-          
-          const hasContent = docResult.doc.sections.some(s => 
-            s.content && s.content.trim().length > 50
-          );
-          
-          if (!hasContent) {
-            throw new Error('Document has insufficient content');
-          }
-          
-          // Success! Add to ZIP and update completed lists
-          try {
-            const docxBlob = await generateDocx(docResult.doc, bizData);
-            zip.folder(bizData.name).folder(folderNameFormatted).file((document.filename || document.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
-            
-            // Update completed folders/docs
-            const existingFolder = completedFolders.find(cf => cf.index === folderIndex);
-            if (existingFolder) {
-              existingFolder.docs.push(docResult.doc);
-            } else {
-              completedFolders.push({
-                index: folderIndex,
-                name: folderName,
-                docs: [docResult.doc]
-              });
-            }
-            completedDocs.push(docResult.doc);
-            
-            successCount++;
-            docSuccess = true;
-            addLog(`  ✓ ${document.title} — retry successful!`, true);
-          } catch (docxErr) {
-            console.error('Error creating DOCX for retried doc:', docxErr);
-            throw new Error('Failed to create document file');
-          }
-        } catch (retryErr) {
-          retryCount++;
-          console.error(`Retry attempt ${retryCount} failed for ${document.title}:`, retryErr);
-          
-          if (retryCount >= maxRetries) {
-            addLog(`  ⚠️ ${document.title} — still failed after ${maxRetries} retry attempts`, false);
-            remainingFailed.push(failed);
-          }
-        }
-      }
-    }
-    
-    return { successCount, remainingFailed };
-  }
+  // retryFailedDocuments is now global (defined above)
 
   function showFailedDocumentsRetry(failedDocs) {
     const folderDownloads = document.getElementById('folder-downloads');
@@ -1875,79 +1975,6 @@ async function startGeneration(resumeFromSaved = false) {
     window.failedDocsForRetry = failedDocs;
   }
 
-  async function retryAllFailedDocuments() {
-    if (!window.failedDocsForRetry || window.failedDocsForRetry.length === 0) {
-      addLog('No failed documents to retry', false);
-      return;
-    }
-    
-    const failedDocs = window.failedDocsForRetry;
-    const savedState = loadGenerationState();
-    
-    if (!savedState || !savedState.folders) {
-      addLog('Error: Cannot find generation state. Please start a new generation.', false);
-      return;
-    }
-    
-    addLog(`Retrying ${failedDocs.length} failed document${failedDocs.length !== 1 ? 's' : ''}…`, true);
-    
-    // Get current ZIP and state
-    const zip = new JSZip();
-    const bizData = savedState.bizData;
-    const folders = savedState.folders;
-    const completedFolders = savedState.completedFolders || [];
-    const completedDocs = savedState.completedDocs || [];
-    
-    // Rebuild existing ZIP
-    for (const cf of completedFolders) {
-      const folderName = `${String(cf.index + 1).padStart(2,'0')} - ${cf.name}`;
-      for (const doc of cf.docs) {
-        try {
-          const docxBlob = await generateDocx(doc, bizData);
-          zip.folder(bizData.name).folder(folderName).file((doc.filename || doc.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
-        } catch(e) {
-          console.error('Error rebuilding doc:', doc.filename, e);
-        }
-      }
-    }
-    
-    const uploadedFileContent = null; // Could be stored in state if needed
-    
-    const retryResults = await retryFailedDocuments(
-      failedDocs, 
-      folders, 
-      bizData, 
-      uploadedFileContent, 
-      zip, 
-      completedFolders, 
-      completedDocs
-    );
-    
-    if (retryResults.successCount > 0) {
-      addLog(`✓ Successfully retried ${retryResults.successCount} document${retryResults.successCount !== 1 ? 's' : ''}`, true);
-      
-      // Update final ZIP
-      const zipBlob = await zip.generateAsync({ type: 'blob' });
-      generatedZip = { blob: zipBlob, name: bizData.name };
-      
-      // Update download button
-      const downloadBtn = document.getElementById('download-btn');
-      if (downloadBtn) {
-        downloadBtn.onclick = downloadZip;
-        downloadBtn.textContent = 'Download Complete System';
-      }
-    }
-    
-    if (retryResults.remainingFailed.length > 0) {
-      addLog(`⚠️ ${retryResults.remainingFailed.length} document${retryResults.remainingFailed.length !== 1 ? 's' : ''} still failed`, false);
-      window.failedDocsForRetry = retryResults.remainingFailed;
-    } else {
-      // All retries successful
-      window.failedDocsForRetry = [];
-      clearGenerationState();
-      addLog('✓ All documents generated successfully!', true);
-    }
-  }
 
   try {
     let folders, zip, completedFolders, completedDocs;
