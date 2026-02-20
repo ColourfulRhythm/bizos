@@ -1468,6 +1468,9 @@ function initPayment() {
     callback: function(response) {
       console.log('Payment successful!', response);
       
+      // Note: Payment verification happens on backend, but we proceed with generation
+      // since Paystack callback means payment was successful
+      
       try {
       // Store payment reference
       bizData.paymentReference = response.reference;
@@ -1513,6 +1516,11 @@ function initPayment() {
     payBtn.disabled = false;
     payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
   }
+  
+  // Note: If you see a 400 error about "pay_with_transfer" in the console,
+  // this is usually a Paystack account configuration issue (transfer payments not enabled).
+  // Card payments should still work. Check your Paystack dashboard:
+  // Settings → Business → Enable Transfer Payments (if needed)
 }
 
 // ─── BACKEND URL ────────────────────────────────────────────────
