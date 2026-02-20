@@ -948,6 +948,10 @@
   <div class="gen-time" id="gen-time"></div>
   <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   <div class="gen-log" id="gen-log"></div>
+  <div id="folder-downloads" style="margin-top:24px;padding:20px;background:var(--cream);border-radius:12px;display:none;">
+    <div style="font-weight:600;margin-bottom:16px;color:var(--ink);">📦 Download Completed Folders</div>
+    <div id="folder-download-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
   <div class="gen-error" id="gen-error" style="display:none;">
     <div class="gen-error-title">Generation encountered an issue</div>
     <div class="gen-error-msg" id="gen-error-msg"></div>
@@ -1637,6 +1641,47 @@ async function startGeneration(resumeFromSaved = false) {
     }
   }
 
+  function showFolderDownload(folderIndex, folderName, docCount) {
+    const folderDownloads = document.getElementById('folder-downloads');
+    const folderList = document.getElementById('folder-download-list');
+    
+    if (!folderDownloads || !folderList) return;
+    
+    folderDownloads.style.display = 'block';
+    
+    const downloadItem = document.createElement('div');
+    downloadItem.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);';
+    downloadItem.innerHTML = `
+      <div>
+        <div style="font-weight:500;color:var(--ink);">${folderName}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${docCount} document${docCount !== 1 ? 's' : ''} ready</div>
+      </div>
+      <button class="btn-primary" onclick="downloadFolderZip(${folderIndex})" style="padding:8px 16px;font-size:14px;">
+        Download
+      </button>
+    `;
+    folderList.appendChild(downloadItem);
+  }
+
+  function downloadFolderZip(folderIndex) {
+    if (!window.folderZips || !window.folderZips[folderIndex]) {
+      console.error('Folder ZIP not found:', folderIndex);
+      return;
+    }
+    
+    const folderZip = window.folderZips[folderIndex];
+    const url = URL.createObjectURL(folderZip.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${folderZip.name}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    addLog(`✓ Downloaded ${folderZip.folderName}`, true);
+  }
+
   try {
     let folders, zip, completedFolders, completedDocs;
     
@@ -1731,6 +1776,13 @@ async function startGeneration(resumeFromSaved = false) {
         let retryCount = 0;
         const maxRetries = 2;
         
+        // Validate business data before API call (prevent token waste)
+        if (!bizData.name || !bizData.industry || !bizData.description) {
+          console.error(`Skipping ${doc.title} - missing required business data`);
+          addLog(`  ⚠️ ${doc.title} — skipped (missing business data)`, false);
+          continue; // Skip this document
+        }
+        
         while (!docSuccess && retryCount <= maxRetries) {
           try {
             if (retryCount > 0) {
@@ -1800,19 +1852,14 @@ async function startGeneration(resumeFromSaved = false) {
               return; // Exit, user can resume
             }
             
-            // If we've exhausted retries, create fallback
+            // If we've exhausted retries, skip this document (don't waste tokens on placeholders)
             if (retryCount > maxRetries) {
-              console.error(`All retries exhausted for ${doc.title}, creating fallback`);
-              addLog(`  ⚠️ ${doc.title} — using fallback after ${maxRetries + 1} attempts`, false);
-              docContent = {
-                filename: doc.filename,
-                title: doc.title,
-                sections: [{
-                  heading: doc.title,
-                  content: `Content generation encountered an issue for ${doc.title}. This document is part of ${folder.name} for ${bizData.name}. Error: ${docErr.message}. Please regenerate this document or contact support with your payment reference: ${bizData.paymentReference || 'N/A'}.`
-                }]
-              };
-              docSuccess = true; // Mark as "success" so we can continue
+              console.error(`All retries exhausted for ${doc.title}, skipping to prevent token waste`);
+              addLog(`  ⚠️ ${doc.title} — skipped after ${maxRetries + 1} failed attempts`, false);
+              addLog(`     You can regenerate this document later. Continuing with other documents...`, false);
+              // Don't create placeholder - skip it entirely
+              docSuccess = false; // Mark as failed, but continue
+              break; // Exit retry loop, continue to next document
             }
           }
         }
@@ -1822,17 +1869,11 @@ async function startGeneration(resumeFromSaved = false) {
         }
       }
       
-      // Ensure folder has at least one document
+      // If folder has no documents, skip it entirely (don't waste tokens on placeholders)
       if (folderDocs.length === 0) {
-        addLog(`⚠️ ${folder.name} had no documents generated`, false);
-        folderDocs = folder.docs.map(d => ({
-          filename: d.filename,
-          title: d.title,
-          sections: [{
-            heading: d.title,
-            content: `Content generation failed for ${d.title}. Please regenerate this folder or contact support.`
-          }]
-        }));
+        addLog(`⚠️ ${folder.name} — all documents failed. Skipping folder.`, false);
+        addLog(`     You can regenerate this folder later. Continuing with other folders...`, false);
+        continue; // Skip this folder entirely, move to next
       }
 
       // Build .docx files for this folder (with validation)
@@ -1874,26 +1915,10 @@ async function startGeneration(resumeFromSaved = false) {
         }
       }
       
-      // Ensure folder has at least one document
+      // If no documents were added, skip this folder (don't waste tokens)
       if (folderDocsAdded === 0) {
-        addLog(`Warning: ${folder.name} had no valid documents, creating placeholder`, false);
-        // Create a minimal placeholder document
-        const placeholderDoc = {
-          filename: `${folder.name.replace(/\s+/g,'_')}_Placeholder`,
-          title: `${folder.name} - Content`,
-          sections: [{
-            heading: 'Overview',
-            content: `This folder contains documents for ${folder.name} related to ${bizData.name}. Please regenerate this folder if content is missing.`
-          }]
-        };
-        try {
-          const docxBlob = await generateDocx(placeholderDoc, bizData);
-          zip.folder(bizData.name).folder(folderName).file(placeholderDoc.filename + '.docx', docxBlob);
-          docsGenerated++;
-          folderDocsAdded++;
-        } catch(e) {
-          console.error('Error creating placeholder:', e);
-        }
+        addLog(`⚠️ ${folder.name} — no valid documents. Skipping folder.`, false);
+        continue; // Skip this folder, move to next
       }
 
       // Save completed folder to state
@@ -1915,6 +1940,35 @@ async function startGeneration(resumeFromSaved = false) {
       const pct = 12 + Math.round((foldersCompleted / folders.length) * 80);
       setProgress(pct);
       addLog(`${folder.name} complete — ${folderDocs.length} files`, true);
+      
+      // Create incremental ZIP for this folder (for immediate download)
+      try {
+        const folderZip = new JSZip();
+        const folderZipFolder = folderZip.folder(bizData.name).folder(folderName);
+        for (const doc of folderDocs) {
+          try {
+            const docxBlob = await generateDocx(doc, bizData);
+            folderZipFolder.file((doc.filename || doc.title.replace(/\s+/g,'_')) + '.docx', docxBlob);
+          } catch(e) {
+            console.error('Error adding doc to folder ZIP:', e);
+          }
+        }
+        const folderZipBlob = await folderZip.generateAsync({ type: 'blob' });
+        
+        // Store folder ZIP for download
+        if (!window.folderZips) window.folderZips = {};
+        window.folderZips[fi] = {
+          blob: folderZipBlob,
+          name: `${bizData.name}_${folderName.replace(/\s+/g,'_')}`,
+          folderName: folder.name,
+          docCount: folderDocs.length
+        };
+        
+        // Show download button for this folder
+        showFolderDownload(fi, folder.name, folderDocs.length);
+      } catch(e) {
+        console.error('Error creating folder ZIP:', e);
+      }
       
       // Save progress after each folder
       saveGenerationState({
