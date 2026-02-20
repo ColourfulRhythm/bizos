@@ -638,11 +638,14 @@
   </div>
   <div class="pricing-box">
     <div class="price-label">Per Generation</div>
-    <div class="price-amount"><span class="price-currency">₦</span>15,000</div>
-    <div class="price-desc">~$10 USD · One-time payment</div>
-    <div style="margin:16px 0;padding:12px;background:rgba(200,150,62,0.1);border-radius:8px;border:1px solid var(--gold);">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Actual Value: <strong style="color:var(--ink);">$200 USD</strong> equivalent</div>
-      <div style="font-size:11px;color:var(--gold);font-weight:600;">You're saving 92% on professional business documentation</div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
+      <div class="price-amount" style="margin-bottom:0;"><span class="price-currency">₦</span>15,000</div>
+      <div class="price-desc">~$10 USD · One-time payment</div>
+    </div>
+    <div style="margin:16px 0;padding:16px;background:linear-gradient(135deg, rgba(200,150,62,0.15) 0%, rgba(200,150,62,0.08) 100%);border-radius:10px;border:2px solid var(--gold);text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;">Worth $200 USD</div>
+      <div style="font-size:13px;color:var(--gold);font-weight:600;letter-spacing:0.5px;">You Save 92% • Professional Documentation</div>
     </div>
     <ul class="price-features" style="list-style:none;">
       <li><span class="check-icon">✦</span> Full AI-generated business system</li>
@@ -903,10 +906,10 @@
 
           <div class="payment-summary">
             <h3>Order Summary</h3>
+            <div class="summary-row" style="margin-bottom:8px;"><span style="font-size:13px;color:var(--muted);text-decoration:line-through;">Market Value: $200 USD</span><span style="font-size:13px;color:var(--gold);font-weight:600;">92% OFF</span></div>
             <div class="summary-row"><span>Business System Generation</span><span>₦15,000</span></div>
             <div class="summary-row"><span>Strategic Documents (24–30 files)</span><span>Included</span></div>
             <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
-            <div class="summary-row" style="border-top:1px solid var(--line);padding-top:12px;margin-top:8px;"><span style="font-size:12px;color:var(--muted);">Value: $200 USD equivalent</span><span style="font-size:12px;color:var(--gold);font-weight:600;">92% OFF</span></div>
             <div class="summary-row"><span><strong>Total</strong></span><span><strong>₦15,000</strong></span></div>
           </div>
 
@@ -924,9 +927,9 @@
             Pay <span id="price-display">₦15,000</span> with Paystack
           </button>
           <div class="payment-note">🔒 Secured by Paystack · Generation starts immediately after payment</div>
-          <div style="margin-top:12px;padding:12px;background:var(--cream);border-radius:8px;border:1px solid var(--gold);text-align:center;">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Actual Value: <strong style="color:var(--ink);">$200 USD</strong> equivalent</div>
-            <div style="font-size:11px;color:var(--gold);font-weight:600;">You're saving 92% on professional business documentation</div>
+          <div style="margin-top:16px;padding:16px;background:linear-gradient(135deg, rgba(200,150,62,0.15) 0%, rgba(200,150,62,0.08) 100%);border-radius:10px;border:2px solid var(--gold);text-align:center;">
+            <div style="font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px;">Worth $200 USD</div>
+            <div style="font-size:13px;color:var(--gold);font-weight:600;letter-spacing:0.5px;">You Save 92% • Professional Documentation</div>
           </div>
 
           <div class="form-nav">
@@ -1388,7 +1391,7 @@ function initPayment() {
       // Retry after 2 seconds
       setTimeout(() => {
         if (typeof PaystackPop !== 'undefined' && window.paystackReady) {
-          payBtn.disabled = false;
+    payBtn.disabled = false;
           payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
         }
       }, 2000);
