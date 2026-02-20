@@ -1804,6 +1804,41 @@ function handleFileUpload(event) {
   }
 }
 
+function handlePlanFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) {
+    uploadedFile = null;
+    uploadedFileContent = null;
+    const fileInfo = document.getElementById('plan-file-info');
+    if (fileInfo) fileInfo.classList.remove('show');
+    return;
+  }
+  
+  uploadedFile = file;
+  const fileInfo = document.getElementById('plan-file-info');
+  const fileSize = (file.size / 1024).toFixed(1);
+  if (fileInfo) {
+    fileInfo.textContent = `✓ ${file.name} (${fileSize} KB)`;
+    fileInfo.classList.add('show');
+  }
+  
+  // Read file content if it's a text file (for use in API call)
+  if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      uploadedFileContent = e.target.result;
+      // Optionally append to description if it's short and description is empty
+      const desc = document.getElementById('plan-biz-description');
+      if (desc && desc.value.trim().length < 50 && uploadedFileContent.length < 3000) {
+        desc.value = desc.value.trim() + (desc.value.trim() ? '\n\n' : '') + uploadedFileContent;
+      }
+    };
+    reader.readAsText(file);
+  } else {
+    uploadedFileContent = null;
+  }
+}
+
 // ─── PREVIEW ───────────────────────────────────────────────────
 function populatePreview() {
   const bizName = document.getElementById('biz-name').value.trim();
@@ -1817,43 +1852,46 @@ function populatePreview() {
 function collectData() {
   const isBusinessPlan = selectedProductType === 'BUSINESS_PLAN';
   
-  const baseData = {
-    name: document.getElementById('biz-name').value.trim(),
-    industry: document.getElementById('biz-industry').value,
-    description: document.getElementById('biz-description').value.trim(),
-    country: document.getElementById('biz-country').value.trim() || 'Nigeria',
-    city: document.getElementById('biz-city').value.trim() || '',
-    userName: document.getElementById('user-name').value.trim(),
-    userEmail: document.getElementById('user-email').value.trim(),
-    uploadedFile: uploadedFile ? uploadedFile.name : null,
-  };
-  
   if (isBusinessPlan) {
-    // Business plan specific fields
+    // Business plan form fields
     return {
-      ...baseData,
-      opportunity: document.getElementById('biz-opportunity')?.value.trim() || '',
-      team: document.getElementById('biz-team')?.value.trim() || '',
-      competitors: document.getElementById('biz-competitors')?.value.trim() || '',
-      targetMarket: document.getElementById('biz-target-market')?.value.trim() || '',
-      timeline: document.getElementById('biz-timeline')?.value.trim() || '',
-      marketing: document.getElementById('biz-marketing')?.value.trim() || '',
-      financials: document.getElementById('biz-financials')?.value.trim() || '',
-      funding: document.getElementById('biz-funding')?.value.trim() || '',
+      name: document.getElementById('plan-biz-name')?.value.trim() || '',
+      industry: document.getElementById('plan-biz-industry')?.value || '',
+      description: document.getElementById('plan-biz-description')?.value.trim() || '',
+      country: document.getElementById('plan-biz-country')?.value.trim() || 'Nigeria',
+      city: document.getElementById('plan-biz-city')?.value.trim() || '',
+      userName: document.getElementById('plan-user-name')?.value.trim() || '',
+      userEmail: document.getElementById('plan-user-email')?.value.trim() || '',
+      uploadedFile: uploadedFile ? uploadedFile.name : null,
+      opportunity: document.getElementById('plan-biz-opportunity')?.value.trim() || '',
+      team: document.getElementById('plan-biz-team')?.value.trim() || '',
+      competitors: document.getElementById('plan-biz-competitors')?.value.trim() || '',
+      targetMarket: document.getElementById('plan-biz-target-market')?.value.trim() || '',
+      timeline: document.getElementById('plan-biz-timeline')?.value.trim() || '',
+      marketing: document.getElementById('plan-biz-marketing')?.value.trim() || '',
+      financials: document.getElementById('plan-biz-financials')?.value.trim() || '',
+      funding: document.getElementById('plan-biz-funding')?.value.trim() || '',
     };
   } else {
-    // Full system fields
+    // Full system form fields
     return {
-      ...baseData,
-    salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
-    delivery: document.getElementById('biz-delivery').value.trim(),
+      name: document.getElementById('biz-name')?.value.trim() || '',
+      industry: document.getElementById('biz-industry')?.value || '',
+      description: document.getElementById('biz-description')?.value.trim() || '',
+      country: document.getElementById('biz-country')?.value.trim() || 'Nigeria',
+      city: document.getElementById('biz-city')?.value.trim() || '',
+      userName: document.getElementById('user-name')?.value.trim() || '',
+      userEmail: document.getElementById('user-email')?.value.trim() || '',
+      uploadedFile: uploadedFile ? uploadedFile.name : null,
+      salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
+      delivery: document.getElementById('biz-delivery')?.value.trim() || '',
       paymentModel: Array.from(document.querySelectorAll('input[name="pay-model"]:checked')).map(cb => cb.value).join(', ') || 'Full payment upfront',
-    bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
-    customer: document.getElementById('biz-customer').value.trim(),
-    existingDocs: document.getElementById('biz-docs').value.trim(),
-    products: document.getElementById('biz-products').value.trim(),
-    brandTone: document.querySelector('input[name="brand-tone"]:checked')?.value || 'Professional & formal',
-  };
+      bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
+      customer: document.getElementById('biz-customer')?.value.trim() || '',
+      existingDocs: document.getElementById('biz-docs')?.value.trim() || '',
+      products: document.getElementById('biz-products')?.value.trim() || '',
+      brandTone: document.querySelector('input[name="brand-tone"]:checked')?.value || 'Professional & formal',
+    };
   }
 }
 
