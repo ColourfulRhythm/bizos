@@ -693,18 +693,43 @@
   <p class="section-sub" id="generator-sub">Answer a few questions about your business and we'll generate everything.</p>
 
   <!-- Product Selection Banner -->
-  <div id="product-selection-banner" style="display:none;background:var(--cream);border:2px solid var(--gold);border-radius:12px;padding:20px;margin-bottom:32px;text-align:center;">
-    <div style="font-size:18px;font-weight:600;color:var(--ink);margin-bottom:8px;" id="selected-product-name">Full Business System</div>
-    <div style="font-size:14px;color:var(--muted);">You're generating: <strong id="selected-product-desc">Complete business transformation system (24-30 documents)</strong></div>
-    <button onclick="showProductSelection()" style="margin-top:12px;background:transparent;border:1px solid var(--line);padding:8px 16px;border-radius:8px;color:var(--ink);cursor:pointer;font-size:13px;">Change Selection</button>
+  <div id="product-selection-banner" style="display:none;background:linear-gradient(135deg, rgba(200,150,62,0.2) 0%, rgba(200,150,62,0.1) 100%);border:3px solid var(--gold);border-radius:16px;padding:24px;margin-bottom:32px;text-align:center;box-shadow:0 4px 20px rgba(200,150,62,0.15);">
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
+      <div style="width:40px;height:40px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;" id="product-icon">📋</div>
+      <div>
+        <div style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:4px;" id="selected-product-name">Full Business System</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;" id="product-badge">COMPLETE SYSTEM</div>
+      </div>
+    </div>
+    <div style="font-size:15px;color:var(--ink);margin-bottom:16px;line-height:1.6;" id="selected-product-desc">You're generating: <strong>Complete business transformation system (24-30 documents)</strong></div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="showProductSelection()" style="background:var(--white);border:2px solid var(--line);padding:10px 20px;border-radius:8px;color:var(--ink);cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;">← Change Selection</button>
+      <div style="padding:10px 20px;background:var(--gold);color:var(--ink);border-radius:8px;font-size:14px;font-weight:600;" id="product-price-badge">₦15,000</div>
+    </div>
   </div>
 
   <!-- FULL SYSTEM FORM -->
   <div id="full-system-form" class="form-container">
-    <div class="form-card">
-      <div class="form-header">
-        <h2>Full Business System Profile</h2>
-        <p>This takes about 3–4 minutes. The more detail you give, the better your documents.</p>
+    <div class="form-card" style="border:2px solid var(--gold);">
+      <div class="form-header" style="background:linear-gradient(135deg, rgba(200,150,62,0.1) 0%, rgba(200,150,62,0.05) 100%);padding:24px;border-radius:12px 12px 0 0;border-bottom:2px solid var(--gold);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="width:48px;height:48px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">📚</div>
+          <div>
+            <h2 style="margin:0;font-size:24px;color:var(--ink);">Full Business System</h2>
+            <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:4px;">24-30 Strategic Documents</div>
+          </div>
+        </div>
+        <p style="margin:0;font-size:15px;color:var(--ink);line-height:1.6;">This takes about 3–4 minutes. The more detail you give, the better your documents.</p>
+        <div style="margin-top:16px;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">You're creating:</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Company Profile & Strategic Foundation</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Client Onboarding & Experience System</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Document Templates & Legal Framework</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Sales & Revenue System</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Marketing & Growth Engine</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Operations & Scalability</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Finance & Business Intelligence</div>
+        </div>
       </div>
       <div class="form-body">
 
@@ -1020,10 +1045,28 @@
 
   <!-- BUSINESS PLAN FORM -->
   <div id="business-plan-form" class="form-container" style="display:none;">
-    <div class="form-card">
-      <div class="form-header">
-        <h2>Business Plan Details</h2>
-        <p>Answer these questions to create your comprehensive one-page business plan. Takes about 2–3 minutes.</p>
+    <div class="form-card" style="border:2px solid var(--gold);">
+      <div class="form-header" style="background:linear-gradient(135deg, rgba(200,150,62,0.1) 0%, rgba(200,150,62,0.05) 100%);padding:24px;border-radius:12px 12px 0 0;border-bottom:2px solid var(--gold);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="width:48px;height:48px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">📄</div>
+          <div>
+            <h2 style="margin:0;font-size:24px;color:var(--ink);">Business Plan Only</h2>
+            <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:4px;">One-Page Comprehensive Plan</div>
+          </div>
+        </div>
+        <p style="margin:0;font-size:15px;color:var(--ink);line-height:1.6;">Answer these questions to create your investor-ready business plan. Takes about 2–3 minutes.</p>
+        <div style="margin-top:16px;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">Your plan will include:</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ The Business Opportunity</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Company Description</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Team Overview</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Industry Analysis</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Target Market</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Implementation Timeline</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Marketing Plan</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Financial Summary</div>
+          <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Funding Required</div>
+        </div>
       </div>
       <div class="form-body">
 
@@ -1031,6 +1074,11 @@
 
         <!-- BUSINESS PLAN STEP 1: BASICS -->
         <div class="form-step active" id="plan-step-1">
+          <div style="background:var(--cream);padding:16px;border-radius:8px;margin-bottom:24px;border-left:4px solid var(--gold);">
+            <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">You're Creating</div>
+            <div style="font-size:18px;font-weight:700;color:var(--ink);">Business Plan Only</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px;">One-page comprehensive business plan with 9 sections</div>
+          </div>
           <div class="step-indicator">
             <div class="step-dot active"></div>
             <div class="step-dot"></div>
@@ -1400,7 +1448,10 @@ function selectProduct(productType) {
     if (productBanner) {
       productBanner.style.display = 'block';
       document.getElementById('selected-product-name').textContent = 'Business Plan Only';
-      document.getElementById('selected-product-desc').textContent = 'One-page comprehensive business plan';
+      document.getElementById('selected-product-desc').innerHTML = 'You\'re generating: <strong>One-page comprehensive business plan</strong>';
+      document.getElementById('product-icon').textContent = '📄';
+      document.getElementById('product-badge').textContent = 'BUSINESS PLAN';
+      document.getElementById('product-price-badge').textContent = '₦5,000';
     }
     if (generatorTitle) generatorTitle.textContent = 'Create Your Business Plan';
     if (generatorSub) generatorSub.textContent = 'Answer a few questions and we'll generate your investor-ready business plan.';
@@ -1410,7 +1461,10 @@ function selectProduct(productType) {
     if (productBanner) {
       productBanner.style.display = 'block';
       document.getElementById('selected-product-name').textContent = 'Full Business System';
-      document.getElementById('selected-product-desc').textContent = 'Complete business transformation system (24-30 documents)';
+      document.getElementById('selected-product-desc').innerHTML = 'You\'re generating: <strong>Complete business transformation system (24-30 documents)</strong>';
+      document.getElementById('product-icon').textContent = '📚';
+      document.getElementById('product-badge').textContent = 'COMPLETE SYSTEM';
+      document.getElementById('product-price-badge').textContent = '₦15,000';
     }
     if (generatorTitle) generatorTitle.textContent = 'Build your system';
     if (generatorSub) generatorSub.textContent = 'Answer a few questions about your business and we'll generate everything.';
@@ -2059,6 +2113,112 @@ function initPayment() {
   // this is usually a Paystack account configuration issue (transfer payments not enabled).
   // Card payments should still work. Check your Paystack dashboard:
   // Settings → Business → Enable Transfer Payments (if needed)
+}
+
+// ─── BUSINESS PLAN PAYMENT ──────────────────────────────────────
+function initPlanPayment() {
+  const email = document.getElementById('plan-user-email')?.value.trim();
+  if (!email) { 
+    showError('Please enter your email address.', 'plan'); 
+    return; 
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showError('Please enter a valid email address.', 'plan');
+    return;
+  }
+
+  if (CONFIG.PAYSTACK_PUBLIC_KEY.includes('YOUR_PAYSTACK')) {
+    showError('Paystack is not configured.', 'plan');
+    return;
+  }
+
+  const bizName = document.getElementById('plan-biz-name')?.value.trim() || '';
+  const userName = document.getElementById('plan-user-name')?.value.trim() || email.split('@')[0];
+  
+  const payBtn = document.getElementById('plan-pay-btn');
+  if (payBtn) {
+    payBtn.disabled = true;
+    payBtn.textContent = 'Processing...';
+  }
+
+  if (typeof PaystackPop === 'undefined') {
+    showError('Paystack payment system is still loading. Please wait a moment and try again.', 'plan');
+    if (payBtn) {
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+    }
+    return;
+  }
+
+  const paymentRef = 'BIZOS_PLAN_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  
+  const handler = PaystackPop.setup({
+    key: CONFIG.PAYSTACK_PUBLIC_KEY,
+    email: email,
+    amount: CONFIG.PRICE_KOBO,
+    currency: 'NGN',
+    ref: paymentRef,
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Business Name",
+          variable_name: "business_name",
+          value: bizName
+        },
+        {
+          display_name: "Customer Name",
+          variable_name: "customer_name",
+          value: userName
+        }
+      ]
+    },
+    callback: function(response) {
+      console.log('Payment successful!', response);
+      
+      bizData = collectData();
+      bizData.paymentReference = response.reference;
+      bizData.paymentStatus = 'success';
+      
+      if (payBtn) {
+        payBtn.disabled = false;
+        payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+      }
+      
+      const planStep3 = document.getElementById('plan-step-3');
+      const formCard = document.querySelector('#business-plan-form .form-card');
+      if (planStep3) planStep3.classList.remove('active');
+      if (formCard) formCard.style.display = 'none';
+      
+      clearFormData();
+      
+      console.log('Starting business plan generation after payment...');
+      startGeneration().catch(err => {
+        console.error('Generation failed after payment:', err);
+        showError('Generation failed: ' + err.message + '. Please contact support with payment reference: ' + response.reference, 'plan');
+      });
+    },
+    onClose: function() {
+      console.log('Payment window closed by user');
+      if (payBtn) {
+        payBtn.disabled = false;
+        payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+      }
+    }
+  });
+  
+  try {
+    handler.openIframe();
+    console.log('Paystack payment popup opened');
+  } catch (error) {
+    console.error('Error opening Paystack payment:', error);
+    showError('Failed to open payment window: ' + (error.message || 'Unknown error') + '. Please try again or contact support.', 'plan');
+    if (payBtn) {
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+    }
+  }
 }
 
 // ─── BACKEND URL ────────────────────────────────────────────────
