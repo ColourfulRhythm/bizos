@@ -1185,24 +1185,44 @@ function selectProduct(productType) {
 
 function updateOrderSummary() {
   const product = CONFIG.PRODUCT_TYPES[selectedProductType];
-  const summaryRows = document.querySelectorAll('.summary-row');
-  if (summaryRows.length > 0) {
-    // Update first row (product name and price)
-    const firstRow = summaryRows[0];
-    if (firstRow) {
-      const span = firstRow.querySelector('span:last-child');
-      if (span) span.textContent = product.priceDisplay;
-      const firstSpan = firstRow.querySelector('span:first-child');
-      if (firstSpan) firstSpan.textContent = product.name;
-    }
-    
-    // Update total
-    const totalRow = summaryRows[summaryRows.length - 1];
-    if (totalRow) {
-      const totalSpan = totalRow.querySelector('span:last-child');
-      if (totalSpan) totalSpan.innerHTML = '<strong>' + product.priceDisplay + '</strong>';
+  
+  // Update product name
+  const productNameEl = document.getElementById('product-name');
+  if (productNameEl) productNameEl.textContent = product.name;
+  
+  // Update product price
+  const productPriceEl = document.getElementById('product-price');
+  if (productPriceEl) productPriceEl.textContent = product.priceDisplay;
+  
+  // Update total
+  const totalPriceEl = document.getElementById('total-price');
+  if (totalPriceEl) totalPriceEl.textContent = product.priceDisplay;
+  
+  // Update features row based on product type
+  const featuresRow = document.getElementById('features-row');
+  if (featuresRow) {
+    if (selectedProductType === 'BUSINESS_PLAN') {
+      featuresRow.innerHTML = '<span>9 Strategic Sections</span><span>Included</span>';
+    } else {
+      featuresRow.innerHTML = '<span>Strategic Documents (24–30 files)</span><span>Included</span>';
     }
   }
+  
+  // Show/hide market value row (only for full system)
+  const marketValueRow = document.getElementById('market-value-row');
+  if (marketValueRow) {
+    marketValueRow.style.display = selectedProductType === 'FULL_SYSTEM' ? 'flex' : 'none';
+  }
+  
+  // Show/hide value messaging box (only for full system)
+  const valueMessagingBox = document.getElementById('value-messaging-box');
+  if (valueMessagingBox) {
+    valueMessagingBox.style.display = selectedProductType === 'FULL_SYSTEM' ? 'block' : 'none';
+  }
+  
+  // Update price display in button
+  const priceDisplay = document.getElementById('price-display');
+  if (priceDisplay) priceDisplay.textContent = product.priceDisplay;
 }
 
 // ─── FORM AUTO-SAVE ────────────────────────────────────────────
