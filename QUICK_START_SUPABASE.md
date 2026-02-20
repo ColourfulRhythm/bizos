@@ -49,13 +49,19 @@ After deployment, note your:
 
 ### Step 7: Update Frontend
 
-Edit `index.html` (line ~981):
+✅ **Already configured!** Your Supabase URL is set: `https://nxygpqnbkoxfdwtvsufw.supabase.co/functions/v1`
+
+Just add your **Anon Key** in `index.html` (line ~988):
+
+1. Go to **Supabase Dashboard** → **Settings** → **API**
+2. Copy the **`anon` public key**
+3. Paste it in `index.html`:
 
 ```javascript
 const CONFIG = {
-  BACKEND_TYPE: 'supabase',  // ✅ Changed from 'vercel'
-  SUPABASE_URL: 'https://YOUR_PROJECT_REF.supabase.co/functions/v1',  // ✅ Your project URL
-  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',  // ✅ Your anon key
+  BACKEND_TYPE: 'supabase',  // ✅ Already set
+  SUPABASE_URL: 'https://nxygpqnbkoxfdwtvsufw.supabase.co/functions/v1',  // ✅ Already set
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',  // ⚠️ ADD THIS - Get from Dashboard
   // ... rest stays the same
 };
 ```
@@ -64,7 +70,13 @@ const CONFIG = {
 
 ```bash
 # Test health endpoint
-curl https://YOUR_PROJECT_REF.supabase.co/functions/v1/health
+curl https://nxygpqnbkoxfdwtvsufw.supabase.co/functions/v1/health
+```
+
+Or with auth header (after you get your anon key):
+```bash
+curl -H "Authorization: Bearer YOUR_ANON_KEY" \
+  https://nxygpqnbkoxfdwtvsufw.supabase.co/functions/v1/health
 ```
 
 Should return: `{"status":"ok","message":"BizOS Backend is running on Supabase Edge Functions",...}`

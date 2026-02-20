@@ -983,11 +983,11 @@ const CONFIG = {
   // BACKEND CONFIGURATION
   // ═══════════════════════════════════════════════════════════════
   // Choose your backend: 'vercel' or 'supabase'
-  BACKEND_TYPE: 'supabase', // Change to 'vercel' to use Vercel functions
+  BACKEND_TYPE: 'supabase', // Using Supabase Edge Functions for 300s timeout
   
   // Supabase Configuration (if BACKEND_TYPE === 'supabase')
-  SUPABASE_URL: 'https://YOUR_PROJECT_REF.supabase.co/functions/v1', // Replace with your Supabase project URL
-  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY', // Get from Supabase Dashboard → Settings → API
+  SUPABASE_URL: 'https://nxygpqnbkoxfdwtvsufw.supabase.co/functions/v1', // Your Supabase project URL
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY', // Get from Supabase Dashboard → Settings → API → anon public key
   
   // Vercel Configuration (if BACKEND_TYPE === 'vercel')
   // Auto-detects based on current domain
@@ -1589,7 +1589,7 @@ async function startGeneration(resumeFromSaved = false) {
     
     // Auto-scroll to bottom - multiple methods for cross-browser/mobile compatibility
     const scrollToBottom = () => {
-      log.scrollTop = log.scrollHeight;
+    log.scrollTop = log.scrollHeight;
       // Also try scrollIntoView for better mobile support
       if (line.scrollIntoView) {
         line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
