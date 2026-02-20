@@ -3954,6 +3954,20 @@ window.addEventListener('DOMContentLoaded', function() {
     }, 30000);
   }
 });
+
+// Ensure all functions are globally accessible for onclick handlers
+// This must be at the end after all functions are defined
+window.selectProduct = selectProduct;
+window.showProductSelection = showProductSelection;
+window.nextPlanStep = nextPlanStep;
+window.prevPlanStep = prevPlanStep;
+window.initPlanPayment = initPlanPayment;
+window.handlePlanFileUpload = handlePlanFileUpload;
+window.scrollToGenerator = scrollToGenerator;
+window.nextStep = nextStep;
+window.prevStep = prevStep;
+window.initPayment = initPayment;
+window.handleFileUpload = handleFileUpload;
 </script>
 </body>
 </html>
