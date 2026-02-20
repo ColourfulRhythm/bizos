@@ -1004,13 +1004,21 @@
     script.onload = function() {
       paystackLoaded = true;
       console.log('Paystack script loaded successfully');
-      // Check if PaystackPop is available
-      if (typeof PaystackPop !== 'undefined') {
-        window.paystackReady = true;
-      } else {
-        console.warn('Paystack script loaded but PaystackPop not available');
-        window.paystackReady = false;
-      }
+      // Wait a bit for PaystackPop to be available (sometimes it's not immediately available)
+      let checkCount = 0;
+      const checkInterval = setInterval(() => {
+        checkCount++;
+        if (typeof PaystackPop !== 'undefined') {
+          window.paystackReady = true;
+          console.log('PaystackPop is ready');
+          clearInterval(checkInterval);
+        } else if (checkCount >= 10) {
+          // After 1 second (10 * 100ms), give up
+          console.warn('Paystack script loaded but PaystackPop not available after 1 second');
+          window.paystackReady = false;
+          clearInterval(checkInterval);
+        }
+      }, 100);
     };
     
     script.onerror = function() {
@@ -1385,12 +1393,20 @@ function initPayment() {
   if (typeof PaystackPop === 'undefined' || !window.paystackReady) {
     if (window.paystackLoadError) {
       showError('Paystack payment system failed to load. Please refresh the page or check your internet connection.');
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+      return;
     } else {
       showError('Paystack payment system is still loading. Please wait a moment and try again.');
       // Retry after 2 seconds
       setTimeout(() => {
         if (typeof PaystackPop !== 'undefined' && window.paystackReady) {
-    payBtn.disabled = false;
+          payBtn.disabled = false;
+          payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+          // Retry payment initialization
+          initPayment();
+        } else {
+          payBtn.disabled = false;
           payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
         }
       }, 2000);
