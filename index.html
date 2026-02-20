@@ -1138,6 +1138,12 @@
   // Start loading
   loadPaystack();
 })();
+
+// Initialize form steps on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Update form steps based on default product type
+  updateFormStepsForProduct();
+});
 </script>
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -1604,24 +1610,46 @@ function populatePreview() {
 
 // ─── COLLECT DATA ──────────────────────────────────────────────
 function collectData() {
-  return {
+  const isBusinessPlan = selectedProductType === 'BUSINESS_PLAN';
+  
+  const baseData = {
     name: document.getElementById('biz-name').value.trim(),
     industry: document.getElementById('biz-industry').value,
     description: document.getElementById('biz-description').value.trim(),
     country: document.getElementById('biz-country').value.trim() || 'Nigeria',
     city: document.getElementById('biz-city').value.trim() || '',
+    userName: document.getElementById('user-name').value.trim(),
+    userEmail: document.getElementById('user-email').value.trim(),
+    uploadedFile: uploadedFile ? uploadedFile.name : null,
+  };
+  
+  if (isBusinessPlan) {
+    // Business plan specific fields
+    return {
+      ...baseData,
+      opportunity: document.getElementById('biz-opportunity')?.value.trim() || '',
+      team: document.getElementById('biz-team')?.value.trim() || '',
+      competitors: document.getElementById('biz-competitors')?.value.trim() || '',
+      targetMarket: document.getElementById('biz-target-market')?.value.trim() || '',
+      timeline: document.getElementById('biz-timeline')?.value.trim() || '',
+      marketing: document.getElementById('biz-marketing')?.value.trim() || '',
+      financials: document.getElementById('biz-financials')?.value.trim() || '',
+      funding: document.getElementById('biz-funding')?.value.trim() || '',
+    };
+  } else {
+    // Full system fields
+    return {
+      ...baseData,
     salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
     delivery: document.getElementById('biz-delivery').value.trim(),
-    paymentModel: Array.from(document.querySelectorAll('input[name="pay-model"]:checked')).map(cb => cb.value).join(', ') || 'Full payment upfront',
+      paymentModel: Array.from(document.querySelectorAll('input[name="pay-model"]:checked')).map(cb => cb.value).join(', ') || 'Full payment upfront',
     bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
     customer: document.getElementById('biz-customer').value.trim(),
     existingDocs: document.getElementById('biz-docs').value.trim(),
     products: document.getElementById('biz-products').value.trim(),
     brandTone: document.querySelector('input[name="brand-tone"]:checked')?.value || 'Professional & formal',
-    userName: document.getElementById('user-name').value.trim(),
-    userEmail: document.getElementById('user-email').value.trim(),
-    uploadedFile: uploadedFile ? uploadedFile.name : null,
   };
+  }
 }
 
 // ─── PAYSTACK ──────────────────────────────────────────────────
