@@ -347,6 +347,16 @@
     background:var(--paper);
     flex-direction:column; align-items:center; justify-content:center;
     padding:48px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overscroll-behavior: contain; /* Prevent scroll chaining */
+  }
+  @media(max-width:640px) {
+    #generation-screen {
+      padding: 20px 16px;
+      justify-content: flex-start;
+      padding-top: 60px; /* Account for status bar on mobile */
+    }
   }
   #generation-screen.active { display:flex; }
   .gen-logo {
@@ -397,6 +407,15 @@
     overflow-y: auto; overflow-x: hidden;
     scroll-behavior: smooth;
     padding-right: 8px;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overscroll-behavior: contain; /* Prevent scroll chaining */
+  }
+  @media(max-width:640px) {
+    .gen-log {
+      max-height: 280px; /* Smaller on mobile */
+      font-size: 12px;
+      padding-right: 4px;
+    }
   }
   .gen-log::-webkit-scrollbar {
     width: 6px;
@@ -1360,8 +1379,24 @@ async function apiCall(endpoint, body) {
   if (!response.ok) {
     const errorText = await response.text();
     let error;
-    try { error = JSON.parse(errorText); } catch { error = { message: errorText }; }
-    throw new Error(error.error || error.message || `Server error: ${response.status}`);
+    try { 
+      error = JSON.parse(errorText); 
+    } catch { 
+      error = { message: errorText }; 
+    }
+    
+    // Enhanced error logging
+    console.error(`API Error [${response.status}]:`, {
+      url: url,
+      status: response.status,
+      statusText: response.statusText,
+      error: error,
+      rawResponse: errorText.substring(0, 500) // First 500 chars
+    });
+    
+    const errorMsg = error.error || error.message || `Server error: ${response.status}`;
+    const detailMsg = error.documentTitle ? ` (Document: ${error.documentTitle})` : '';
+    throw new Error(errorMsg + detailMsg);
   }
 
   return response.json();
@@ -1516,15 +1551,24 @@ async function startGeneration(resumeFromSaved = false) {
     line.innerHTML = `<span class="log-dot"></span>${text}`;
     log.appendChild(line);
     
-    // Auto-scroll to bottom after DOM update
-    // Use setTimeout to ensure the line is rendered first
-    setTimeout(() => {
-    log.scrollTop = log.scrollHeight;
-    }, 10);
+    // Auto-scroll to bottom - multiple methods for cross-browser/mobile compatibility
+    const scrollToBottom = () => {
+      log.scrollTop = log.scrollHeight;
+      // Also try scrollIntoView for better mobile support
+      if (line.scrollIntoView) {
+        line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    };
+    
+    // Immediate scroll
+    scrollToBottom();
+    
+    // Delayed scroll after DOM update (for mobile browsers)
+    setTimeout(scrollToBottom, 50);
     
     // Also use requestAnimationFrame for smoother scrolling
     requestAnimationFrame(() => {
-      log.scrollTop = log.scrollHeight;
+      scrollToBottom();
     });
   }
 
@@ -1648,100 +1692,92 @@ async function startGeneration(resumeFromSaved = false) {
         
         let docContent;
         let docSuccess = false;
+        let retryCount = 0;
+        const maxRetries = 2;
         
-        try {
-          const docResult = await apiCall('/api/generate-document', {
-            businessData: bizData,
-            document: doc,
-            folderName: folder.name,
-            uploadedFileContent: uploadedFileContent || null
-          });
-
-          if (!docResult.success || !docResult.doc) {
-            console.error(`Document ${doc.title} API returned error:`, docResult);
-            throw new Error(docResult.message || docResult.error || 'API returned unsuccessful response');
-          }
-          
-          // Validate doc has proper content
-          if (!docResult.doc.sections || !Array.isArray(docResult.doc.sections) || docResult.doc.sections.length === 0) {
-            throw new Error('Document has no sections');
-          }
-          
-          const hasContent = docResult.doc.sections.some(s => 
-            s.content && s.content.trim().length > 50
-          );
-          
-          if (!hasContent) {
-            throw new Error('Document has insufficient content');
-          }
-          
-          docContent = docResult.doc;
-          docSuccess = true;
-          addLog(`  ✓ ${doc.title} complete`, true);
-          console.log(`Document ${doc.title} success: ${docContent.sections.length} sections`);
-        } catch (docErr) {
-          console.error(`Error generating ${doc.title}:`, docErr);
-          
-          // Check if it's a network error
-          const isNetworkError = docErr.message.includes('Failed to fetch') || 
-                                docErr.message.includes('NetworkError') ||
-                                docErr.message.includes('timeout') ||
-                                docErr.message.includes('FUNCTION_INVOCATION_TIMEOUT');
-          
-          if (isNetworkError) {
-            // Save state and show resume option
-            addLog(`Network/timeout error — ${folder.name} paused`, false);
-            saveGenerationState({
-              bizData: bizData,
-              plan: { folders: folders },
-              folders: folders,
-              completedFolders: completedFolders,
-              completedDocs: completedDocs,
-              startTime: startTime,
-              lastError: docErr.message
-            });
-            
-            showGenError(`Generation timeout while creating ${doc.title} in ${folder.name}. Your progress has been saved.`, true);
-            return; // Exit, user can resume
-          }
-          
-          // For other errors, retry once
-          addLog(`  → ${doc.title} retrying…`);
+        while (!docSuccess && retryCount <= maxRetries) {
           try {
-            const retryResult = await apiCall('/api/generate-document', {
+            if (retryCount > 0) {
+              addLog(`  → Retrying ${doc.title} (attempt ${retryCount + 1}/${maxRetries + 1})…`);
+              // Wait before retry (exponential backoff: 1s, 2s)
+              await new Promise(r => setTimeout(r, 1000 * retryCount));
+            }
+            
+            const docResult = await apiCall('/api/generate-document', {
               businessData: bizData,
               document: doc,
               folderName: folder.name,
-              uploadedFileContent: null
+              uploadedFileContent: uploadedFileContent || null
             });
-            
-            if (!retryResult.success || !retryResult.doc) {
-              throw new Error(retryResult.message || 'Retry returned no document');
+
+            if (!docResult.success || !docResult.doc) {
+              console.error(`Document ${doc.title} API returned error:`, docResult);
+              throw new Error(docResult.message || docResult.error || 'API returned unsuccessful response');
             }
             
-            const hasRetryContent = retryResult.doc.sections?.some(s => 
+            // Validate doc has proper content
+            if (!docResult.doc.sections || !Array.isArray(docResult.doc.sections) || docResult.doc.sections.length === 0) {
+              throw new Error('Document has no sections');
+            }
+            
+            const hasContent = docResult.doc.sections.some(s => 
               s.content && s.content.trim().length > 50
             );
             
-            if (!hasRetryContent) {
-              throw new Error('Retry returned document with insufficient content');
+            if (!hasContent) {
+              throw new Error('Document has insufficient content');
             }
             
-            docContent = retryResult.doc;
+            docContent = docResult.doc;
             docSuccess = true;
-            addLog(`  ✓ ${doc.title} complete (retry)`, true);
-          } catch (retryErr) {
-            console.error(`Retry failed for ${doc.title}:`, retryErr);
-            addLog(`  ⚠️ ${doc.title} — using fallback`, false);
-            // Create minimal fallback
-            docContent = {
-              filename: doc.filename,
-              title: doc.title,
-              sections: [{
-                heading: doc.title,
-                content: `Content generation encountered an issue for ${doc.title}. This document is part of ${folder.name} for ${bizData.name}. Please regenerate this document or contact support.`
-              }]
-            };
+            if (retryCount > 0) {
+              addLog(`  ✓ ${doc.title} complete (retry ${retryCount})`, true);
+            } else {
+              addLog(`  ✓ ${doc.title} complete`, true);
+            }
+            console.log(`Document ${doc.title} success: ${docContent.sections.length} sections`);
+          } catch (docErr) {
+            retryCount++;
+            console.error(`Error generating ${doc.title} (attempt ${retryCount}):`, docErr);
+            
+            // Check if it's a network/timeout error
+            const isNetworkError = docErr.message.includes('Failed to fetch') || 
+                                  docErr.message.includes('NetworkError') ||
+                                  docErr.message.includes('timeout') ||
+                                  docErr.message.includes('FUNCTION_INVOCATION_TIMEOUT') ||
+                                  docErr.message.includes('429'); // Rate limit
+            
+            // If it's a network error and we've exhausted retries, save state
+            if (isNetworkError && retryCount > maxRetries) {
+              addLog(`Network/timeout error — ${folder.name} paused`, false);
+              saveGenerationState({
+                bizData: bizData,
+                plan: { folders: folders },
+                folders: folders,
+                completedFolders: completedFolders,
+                completedDocs: completedDocs,
+                startTime: startTime,
+                lastError: docErr.message
+              });
+              
+              showGenError(`Generation timeout while creating ${doc.title} in ${folder.name}. Your progress has been saved.`, true);
+              return; // Exit, user can resume
+            }
+            
+            // If we've exhausted retries, create fallback
+            if (retryCount > maxRetries) {
+              console.error(`All retries exhausted for ${doc.title}, creating fallback`);
+              addLog(`  ⚠️ ${doc.title} — using fallback after ${maxRetries + 1} attempts`, false);
+              docContent = {
+                filename: doc.filename,
+                title: doc.title,
+                sections: [{
+                  heading: doc.title,
+                  content: `Content generation encountered an issue for ${doc.title}. This document is part of ${folder.name} for ${bizData.name}. Error: ${docErr.message}. Please regenerate this document or contact support with your payment reference: ${bizData.paymentReference || 'N/A'}.`
+                }]
+              };
+              docSuccess = true; // Mark as "success" so we can continue
+            }
           }
         }
         

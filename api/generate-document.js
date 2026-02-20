@@ -166,11 +166,41 @@ Return ONLY valid JSON, no markdown, no explanation.`;
     res.json({ success: true, doc: content });
 
   } catch (error) {
-    console.error(`Document generation error for ${req.body?.document?.title}:`, error.response?.data || error.message);
+    const documentTitle = req.body?.document?.title || 'Unknown';
+    console.error(`=== DOCUMENT GENERATION ERROR ===`);
+    console.error(`Document: ${documentTitle}`);
+    console.error(`Error type: ${error.constructor.name}`);
+    console.error(`Error message: ${error.message}`);
+    
+    // Log Anthropic API errors in detail
+    if (error.response) {
+      console.error(`Anthropic API Status: ${error.response.status}`);
+      console.error(`Anthropic API Data:`, JSON.stringify(error.response.data, null, 2));
+    }
+    
+    // Log request details (without sensitive data)
+    if (req.body?.document) {
+      console.error(`Document filename: ${req.body.document.filename}`);
+      console.error(`Folder: ${req.body.folderName || 'Unknown'}`);
+    }
+    
+    // Provide more helpful error messages
+    let userMessage = error.message;
+    if (error.response?.status === 401) {
+      userMessage = 'Anthropic API authentication failed. Please check API key configuration.';
+    } else if (error.response?.status === 429) {
+      userMessage = 'Rate limit exceeded. Please try again in a moment.';
+    } else if (error.response?.status === 529 || error.message.includes('timeout')) {
+      userMessage = 'Request timed out. The document is too complex. Retrying with simpler request...';
+    } else if (error.message.includes('JSON')) {
+      userMessage = 'Failed to parse AI response. Retrying...';
+    }
+    
     res.status(500).json({
       error: 'Failed to generate document',
-      documentTitle: req.body?.document?.title || 'Unknown',
-      message: error.response?.data?.error?.message || error.message
+      documentTitle: documentTitle,
+      message: userMessage,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
