@@ -1355,14 +1355,6 @@
   loadPaystack();
 })();
 
-// Ensure functions are globally accessible
-window.selectProduct = selectProduct;
-window.showProductSelection = showProductSelection;
-window.nextPlanStep = nextPlanStep;
-window.prevPlanStep = prevPlanStep;
-window.initPlanPayment = initPlanPayment;
-window.handlePlanFileUpload = handlePlanFileUpload;
-
 // Initialize form steps on page load
 document.addEventListener('DOMContentLoaded', function() {
   // Update form steps based on default product type
@@ -1462,7 +1454,7 @@ function selectProduct(productType) {
       document.getElementById('product-price-badge').textContent = '₦5,000';
     }
     if (generatorTitle) generatorTitle.textContent = 'Create Your Business Plan';
-    if (generatorSub) generatorSub.textContent = 'Answer a few questions and we'll generate your investor-ready business plan.';
+    if (generatorSub) generatorSub.textContent = 'Answer a few questions and we will generate your investor-ready business plan.';
   } else {
     if (fullSystemForm) fullSystemForm.style.display = 'block';
     if (businessPlanForm) businessPlanForm.style.display = 'none';
