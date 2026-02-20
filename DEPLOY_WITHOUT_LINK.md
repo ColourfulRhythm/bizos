@@ -8,30 +8,27 @@ Deploy functions directly using your project ref:
 
 ```bash
 # Deploy each function with project ref
+# NOTE: Timeouts must be set in Supabase Dashboard (see below)
+
 supabase functions deploy generate-document \
   --project-ref nxygpqnbkoxfdwtvsufw \
-  --no-verify-jwt \
-  --timeout 300
+  --no-verify-jwt
 
 supabase functions deploy generate-plan \
   --project-ref nxygpqnbkoxfdwtvsufw \
-  --no-verify-jwt \
-  --timeout 60
+  --no-verify-jwt
 
 supabase functions deploy send-email \
   --project-ref nxygpqnbkoxfdwtvsufw \
-  --no-verify-jwt \
-  --timeout 30
+  --no-verify-jwt
 
 supabase functions deploy verify-payment \
   --project-ref nxygpqnbkoxfdwtvsufw \
-  --no-verify-jwt \
-  --timeout 30
+  --no-verify-jwt
 
 supabase functions deploy health \
   --project-ref nxygpqnbkoxfdwtvsufw \
-  --no-verify-jwt \
-  --timeout 10
+  --no-verify-jwt
 ```
 
 ## Option 2: Get Database Password (If You Want to Link)
@@ -58,8 +55,7 @@ export SUPABASE_ACCESS_TOKEN=your_access_token_here
 # Then deploy directly
 supabase functions deploy generate-document \
   --project-ref nxygpqnbkoxfdwtvsufw \
-  --no-verify-jwt \
-  --timeout 300
+  --no-verify-jwt
 ```
 
 ## Quick Deploy Script
@@ -75,28 +71,23 @@ echo "Deploying Supabase functions..."
 
 supabase functions deploy health \
   --project-ref $PROJECT_REF \
-  --no-verify-jwt \
-  --timeout 10
+  --no-verify-jwt
 
 supabase functions deploy generate-plan \
   --project-ref $PROJECT_REF \
-  --no-verify-jwt \
-  --timeout 60
+  --no-verify-jwt
 
 supabase functions deploy generate-document \
   --project-ref $PROJECT_REF \
-  --no-verify-jwt \
-  --timeout 300
+  --no-verify-jwt
 
 supabase functions deploy send-email \
   --project-ref $PROJECT_REF \
-  --no-verify-jwt \
-  --timeout 30
+  --no-verify-jwt
 
 supabase functions deploy verify-payment \
   --project-ref $PROJECT_REF \
-  --no-verify-jwt \
-  --timeout 30
+  --no-verify-jwt
 
 echo "✅ All functions deployed!"
 ```
@@ -107,7 +98,9 @@ chmod +x deploy-supabase.sh
 ./deploy-supabase.sh
 ```
 
-## Important: Set Secrets First!
+## Important: Set Secrets and Timeouts!
+
+### 1. Set Secrets First
 
 Before deploying, make sure you've set all secrets in Supabase Dashboard:
 
@@ -119,6 +112,19 @@ Before deploying, make sure you've set all secrets in Supabase Dashboard:
    - `PAYSTACK_SECRET_KEY`
    - `PAYSTACK_PUBLIC_KEY`
    - `RESEND_API_KEY`
+
+### 2. Set Timeouts After Deployment
+
+**The CLI doesn't support `--timeout` flag.** You must set timeouts in the Dashboard:
+
+1. Go to: https://supabase.com/dashboard/project/nxygpqnbkoxfdwtvsufw/functions
+2. Click each function → **Settings** → **Timeout**
+3. Set these values:
+   - **generate-document**: `300` seconds (5 minutes) - **CRITICAL!**
+   - **generate-plan**: `60` seconds
+   - **send-email**: `30` seconds
+   - **verify-payment**: `30` seconds
+   - **health**: `10` seconds
 
 ## Test After Deployment
 
