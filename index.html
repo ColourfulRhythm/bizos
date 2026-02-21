@@ -1744,7 +1744,7 @@ function nextStep(from) {
   currentStep = from + 1;
 }
 
-function prevStep(from) {
+window.prevStep = function(from) {
   document.getElementById(`step-${from}`).classList.remove('active');
   document.getElementById(`step-${from - 1}`).classList.add('active');
   currentStep = from - 1;
@@ -1897,7 +1897,7 @@ function showError(msg, formType = 'full') {
 }
 
 // ─── FILE UPLOAD ───────────────────────────────────────────────
-function handleFileUpload(event) {
+window.handleFileUpload = function(event) {
   const file = event.target.files[0];
   if (!file) {
     uploadedFile = null;
@@ -1962,7 +1962,9 @@ window.handlePlanFileUpload = function(event) {
   } else {
     uploadedFileContent = null;
   }
-}
+};
+
+window.handleFileUpload = window.handleFileUpload || handleFileUpload;
 
 // ─── PREVIEW ───────────────────────────────────────────────────
 function populatePreview() {
@@ -2290,7 +2292,7 @@ window.initPlanPayment = function() {
       payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
     }
   }
-}
+};
 
 // ─── BACKEND URL ────────────────────────────────────────────────
 function getBackendUrl() {
@@ -4026,19 +4028,8 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Ensure all functions are globally accessible for onclick handlers
-// This must be at the end after all functions are defined
-window.selectProduct = selectProduct;
-window.showProductSelection = showProductSelection;
-window.nextPlanStep = nextPlanStep;
-window.prevPlanStep = prevPlanStep;
-window.initPlanPayment = initPlanPayment;
-window.handlePlanFileUpload = handlePlanFileUpload;
-window.scrollToGenerator = scrollToGenerator;
-window.nextStep = nextStep;
-window.prevStep = prevStep;
-window.initPayment = initPayment;
-window.handleFileUpload = handleFileUpload;
+// All functions are already assigned to window at their definition points above
+// This ensures they're globally accessible for onclick handlers immediately
 </script>
 </body>
 </html>
