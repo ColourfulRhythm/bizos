@@ -1457,7 +1457,13 @@ window.selectProduct = function(productType) {
   
   if (productType === 'BUSINESS_PLAN') {
     if (fullSystemForm) fullSystemForm.style.display = 'none';
-    if (businessPlanForm) businessPlanForm.style.display = 'block';
+    if (businessPlanForm) {
+      businessPlanForm.style.display = 'block';
+      // Reset to step 1 when switching to business plan
+      document.querySelectorAll('#business-plan-form .form-step').forEach((step, idx) => {
+        step.classList.toggle('active', idx === 0);
+      });
+    }
     if (productBanner) {
       productBanner.style.display = 'block';
       document.getElementById('selected-product-name').textContent = 'Business Plan Only';
