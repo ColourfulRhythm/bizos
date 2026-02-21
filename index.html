@@ -2428,7 +2428,7 @@ let generationTimer = null;
 let generationStartTime = null;
 
 // Global functions for folder downloads (must be global for onclick handlers)
-function showFolderDownload(folderIndex, folderName, docCount) {
+window.showFolderDownload = function(folderIndex, folderName, docCount) {
   const folderDownloads = document.getElementById('folder-downloads');
   const folderList = document.getElementById('folder-download-list');
   
@@ -2448,9 +2448,9 @@ function showFolderDownload(folderIndex, folderName, docCount) {
     </button>
   `;
   folderList.appendChild(downloadItem);
-}
+};
 
-function downloadFolderZip(folderIndex) {
+window.downloadFolderZip = function(folderIndex) {
   if (!window.folderZips || !window.folderZips[folderIndex]) {
     console.error('Folder ZIP not found:', folderIndex);
     showError('Folder download not available yet. Please wait for generation to complete.');
@@ -2476,10 +2476,10 @@ function downloadFolderZip(folderIndex) {
     log.appendChild(line);
     log.scrollTop = log.scrollHeight;
   }
-}
+};
 
 // Global helper to add log messages (used by retry functions)
-function addGlobalLog(text, done = false) {
+window.addGlobalLog = function(text, done = false) {
   const log = document.getElementById('gen-log');
   if (!log) return;
   
@@ -2488,9 +2488,9 @@ function addGlobalLog(text, done = false) {
   line.innerHTML = `<span class="log-dot"></span>${text}`;
   log.appendChild(line);
   log.scrollTop = log.scrollHeight;
-}
+};
 
-async function retryFailedDocuments(failedDocs, folders, bizData, uploadedFileContent, zip, completedFolders, completedDocs) {
+window.retryFailedDocuments = async function(failedDocs, folders, bizData, uploadedFileContent, zip, completedFolders, completedDocs) {
   let successCount = 0;
   const remainingFailed = [];
   const maxRetries = 3; // More retries for manual retry
@@ -2574,9 +2574,9 @@ async function retryFailedDocuments(failedDocs, folders, bizData, uploadedFileCo
   }
   
   return { successCount, remainingFailed };
-}
+};
 
-async function retryAllFailedDocuments() {
+window.retryAllFailedDocuments = async function() {
   if (!window.failedDocsForRetry || window.failedDocsForRetry.length === 0) {
     addGlobalLog('No failed documents to retry', false);
     return;
@@ -3345,9 +3345,9 @@ async function startGeneration(resumeFromSaved = false) {
       showGenError(err.message || 'An unexpected error occurred. You can retry, or contact support with your payment reference.');
     }
   }
-}
+};
 
-function retryGeneration() {
+window.retryGeneration = function() {
   // Check if there's saved state to resume from
   const savedState = loadGenerationState();
   const genError = document.getElementById('gen-error');
@@ -3368,7 +3368,7 @@ function retryGeneration() {
   startGeneration(false);
 }
 
-function downloadZip() {
+window.downloadZip = function() {
   if (!generatedZip) return;
   const url = URL.createObjectURL(generatedZip.blob);
   const a = document.createElement('a');
@@ -3376,7 +3376,10 @@ function downloadZip() {
   a.download = generatedZip.name.replace(/[^a-z0-9]/gi,'_') + '_Business_System.zip';
   a.click();
   URL.revokeObjectURL(url);
-}
+};
+
+// Alias for downloadAllZip (for consistency)
+window.downloadAllZip = window.downloadZip;
 
 // ─── GENERATE DOCX CLIENT-SIDE ─────────────────────────────────
 // Uses docx.js loaded via CDN fallback — we'll use a simple HTML→Blob approach
