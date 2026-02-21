@@ -2635,7 +2635,7 @@ window.retryAllFailedDocuments = async function() {
     // Update download button
     const downloadBtn = document.getElementById('download-btn');
     if (downloadBtn) {
-      downloadBtn.onclick = downloadZip;
+      downloadBtn.onclick = window.downloadZip;
       downloadBtn.textContent = 'Download Complete System';
     }
   }
@@ -3317,7 +3317,7 @@ async function startGeneration(resumeFromSaved = false) {
     const emailNote = userEmail ? ` We've also sent it to ${userEmail}.` : '';
     document.getElementById('download-sub').textContent =
       `Your complete operating system for ${bizData.name} is ready. ${docsGenerated} professionally formatted documents across ${folders.length} organised folders.${emailNote}`;
-    document.getElementById('download-btn').onclick = downloadZip;
+    document.getElementById('download-btn').onclick = window.downloadZip;
 
   } catch(err) {
     console.error('=== GENERATION ERROR ===', err);
