@@ -1764,6 +1764,8 @@ window.prevPlanStep = function(from) {
   document.getElementById(`plan-step-${from - 1}`).classList.add('active');
   currentPlanStep = from - 1;
 };
+
+function validatePlanStep(step) {
   const err = document.getElementById('error-banner-plan');
   if (err) err.classList.remove('show');
   
