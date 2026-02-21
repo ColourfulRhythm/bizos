@@ -1726,7 +1726,7 @@ window.scrollToGenerator = function() {
   document.getElementById('generator').scrollIntoView({ behavior: 'smooth' });
 };
 
-function nextStep(from) {
+window.nextStep = function(from) {
   if (!validateStep(from)) return;
   
   // If moving to preview step, populate it
@@ -1742,7 +1742,7 @@ function nextStep(from) {
   document.getElementById(`step-${from}`).classList.remove('active');
   document.getElementById(`step-${from + 1}`).classList.add('active');
   currentStep = from + 1;
-}
+};
 
 window.prevStep = function(from) {
   document.getElementById(`step-${from}`).classList.remove('active');
@@ -2023,7 +2023,7 @@ function collectData() {
 }
 
 // ─── PAYSTACK ──────────────────────────────────────────────────
-function initPayment() {
+window.initPayment = function() {
   const email = document.getElementById('user-email').value.trim();
   if (!email) { 
     showError('Please enter your email address.'); 
@@ -2186,7 +2186,7 @@ function initPayment() {
   // this is usually a Paystack account configuration issue (transfer payments not enabled).
   // Card payments should still work. Check your Paystack dashboard:
   // Settings → Business → Enable Transfer Payments (if needed)
-};
+};;
 
 // ─── BUSINESS PLAN PAYMENT ──────────────────────────────────────
 window.initPlanPayment = function() {
