@@ -613,28 +613,90 @@
   <div class="nav-right">
     <a href="#how-it-works" class="nav-link">How it works</a>
     <a href="#what-you-get" class="nav-link">What you get</a>
-    <button class="nav-cta" onclick="scrollToGenerator()">Build my system →</button>
+    <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Choose your plan →</button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge"><span></span> AI-Powered Business Systems</div>
-  <h1>Your entire business,<br/><em>systematized</em> in minutes.</h1>
-  <p class="hero-sub">Transform your business from chaos to a scalable, automated system. Get a complete operating system — strategic frameworks, SOPs, sales systems, automation guides — that boosts revenue and increases customer retention by 70%+.</p>
-  <div class="hero-actions">
-    <button class="btn-primary" onclick="scrollToGenerator()">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v14M2 9h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-      Build my system
-    </button>
-    <button class="btn-secondary" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works</button>
+<!-- PRICING — First thing visitors see -->
+<section class="section hero-pricing" style="background:var(--cream);padding-top:120px;padding-bottom:72px;" id="pricing">
+  <div style="text-align:center;margin-bottom:32px;">
+    <div class="section-label" style="text-align:center;">Choose your plan</div>
+    <div class="section-title" style="margin-bottom:8px;">Pay once. Own forever.</div>
+    <p class="section-sub" style="margin:0 auto 0;">Click the option you want — we will take you straight to the form.</p>
   </div>
-  <div class="hero-proof">
-    <div class="proof-stat"><strong>5 min</strong>Setup to download</div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><strong>Up to 30</strong>Strategic documents</div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><strong>Any</strong>Business type</div>
+  <div class="bento-grid">
+
+    <!-- Card 1: Business Plan -->
+    <div class="bento-card bento-card--light">
+      <div class="bento-want">I want a <em>one-page</em> business plan</div>
+      <div class="bento-desc">Perfect for pitching investors or validating your idea. A comprehensive 9-section plan tailored to your business.</div>
+      <div class="bento-price"><span class="bento-price-currency">₦</span>5,000</div>
+      <div class="bento-price-sub">~$3.50 USD · One-time payment</div>
+      <ul class="bento-features">
+        <li><span class="check-icon">✦</span> 9 strategic sections</li>
+        <li><span class="check-icon">✦</span> Investor-ready format</li>
+        <li><span class="check-icon">✦</span> Tailored to your business</li>
+        <li><span class="check-icon">✦</span> Immediate download</li>
+      </ul>
+      <button class="bento-cta bento-cta--outline" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">
+        Get Business Plan →
+      </button>
+    </div>
+
+    <!-- Card 2: Starter System -->
+    <div class="bento-card bento-card--warm">
+      <div class="bento-badge bento-badge--popular">POPULAR</div>
+      <div class="bento-want">I want a <em>starter</em> business system</div>
+      <div class="bento-desc">The essential foundation. 3 strategic folders covering profile, sales, and operations — 10 documents that get you running.</div>
+      <div class="bento-price"><span class="bento-price-currency">₦</span>8,000</div>
+      <div class="bento-price-sub">~$5.50 USD · One-time payment</div>
+      <ul class="bento-features">
+        <li><span class="check-icon">✦</span> 3 strategic folders</li>
+        <li><span class="check-icon">✦</span> 10 business documents</li>
+        <li><span class="check-icon">✦</span> Profile, sales &amp; operations</li>
+        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
+      </ul>
+      <button class="bento-cta bento-cta--gold" onclick="selectProduct('STARTER_SYSTEM'); scrollToGenerator();">
+        Build starter system →
+      </button>
+    </div>
+
+    <!-- Card 3: Full System -->
+    <div class="bento-card bento-card--dark">
+      <div class="bento-badge bento-badge--best">BEST VALUE</div>
+      <div class="bento-want">I want the <em>full</em> business system</div>
+      <div class="bento-desc">The complete transformation. 7 folders, 24–30 documents covering every aspect of your business operations.</div>
+      <div style="font-size:13px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
+      <div class="bento-price"><span class="bento-price-currency">₦</span>25,000</div>
+      <div class="bento-price-sub">~$16 USD · One-time payment</div>
+      <div class="bento-value-box">
+        <div class="value-title">Worth $200 USD</div>
+        <div class="value-sub">You Save 92% · Professional Documentation</div>
+      </div>
+      <ul class="bento-features">
+        <li><span class="check-icon">✦</span> 7 strategic folders</li>
+        <li><span class="check-icon">✦</span> 24–30 business documents</li>
+        <li><span class="check-icon">✦</span> Complete operating system</li>
+        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
+      </ul>
+      <button class="bento-cta bento-cta--white" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
+        Build my system now →
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- HERO / SOCIAL PROOF -->
+<section class="section" id="hero-below" style="padding-top:48px;padding-bottom:48px;">
+  <div style="text-align:center;">
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(28px,3vw,40px);letter-spacing:-0.5px;margin-bottom:16px;">Your entire business, <em style="color:var(--gold);font-style:italic;">systematized</em> in minutes.</h2>
+    <p class="section-sub" style="margin:0 auto 24px;">No subscriptions. No upsells. Professional business documentation tailored to your needs.</p>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:24px;font-size:14px;color:var(--muted);">
+      <span><strong style="color:var(--ink);">5 min</strong> setup to download</span>
+      <span><strong style="color:var(--ink);">1–30</strong> documents</span>
+      <span><strong style="color:var(--ink);">Any</strong> business type</span>
+    </div>
   </div>
 </section>
 
@@ -715,76 +777,6 @@
       <p>Financial management systems, forecasting frameworks, pricing strategies, and business intelligence dashboards.</p>
       <span class="output-tag">4–5 documents</span>
     </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="section" style="background:var(--cream);" id="pricing">
-  <div style="text-align:center;">
-    <div class="section-label" style="text-align:center;">Pricing</div>
-    <div class="section-title">Choose your plan.<br/>Pay once, own forever.</div>
-    <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Professional business documentation tailored to your needs.</p>
-  </div>
-  <div class="bento-grid">
-
-    <!-- Card 1: Business Plan -->
-    <div class="bento-card bento-card--light">
-      <div class="bento-want">I want a <em>one-page</em> business plan</div>
-      <div class="bento-desc">Perfect for pitching investors or validating your idea. A comprehensive 9-section plan tailored to your business.</div>
-      <div class="bento-price"><span class="bento-price-currency">₦</span>5,000</div>
-      <div class="bento-price-sub">~$3.50 USD · One-time payment</div>
-      <ul class="bento-features">
-        <li><span class="check-icon">✦</span> 9 strategic sections</li>
-        <li><span class="check-icon">✦</span> Investor-ready format</li>
-        <li><span class="check-icon">✦</span> Tailored to your business</li>
-        <li><span class="check-icon">✦</span> Immediate download</li>
-      </ul>
-      <button class="bento-cta bento-cta--outline" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">
-        Get Business Plan →
-      </button>
-    </div>
-
-    <!-- Card 2: Starter System -->
-    <div class="bento-card bento-card--warm">
-      <div class="bento-badge bento-badge--popular">POPULAR</div>
-      <div class="bento-want">I want a <em>starter</em> business system</div>
-      <div class="bento-desc">The essential foundation. 3 strategic folders covering profile, sales, and operations — 10 documents that get you running.</div>
-      <div class="bento-price"><span class="bento-price-currency">₦</span>8,000</div>
-      <div class="bento-price-sub">~$5.50 USD · One-time payment</div>
-      <ul class="bento-features">
-        <li><span class="check-icon">✦</span> 3 strategic folders</li>
-        <li><span class="check-icon">✦</span> 10 business documents</li>
-        <li><span class="check-icon">✦</span> Profile, sales &amp; operations</li>
-        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
-      </ul>
-      <button class="bento-cta bento-cta--gold" onclick="selectProduct('STARTER_SYSTEM'); scrollToGenerator();">
-        Build starter system →
-      </button>
-    </div>
-
-    <!-- Card 3: Full System -->
-    <div class="bento-card bento-card--dark">
-      <div class="bento-badge bento-badge--best">BEST VALUE</div>
-      <div class="bento-want">I want the <em>full</em> business system</div>
-      <div class="bento-desc">The complete transformation. 7 folders, 24–30 documents covering every aspect of your business operations.</div>
-      <div style="font-size:13px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
-      <div class="bento-price"><span class="bento-price-currency">₦</span>25,000</div>
-      <div class="bento-price-sub">~$16 USD · One-time payment</div>
-      <div class="bento-value-box">
-        <div class="value-title">Worth $200 USD</div>
-        <div class="value-sub">You Save 92% · Professional Documentation</div>
-      </div>
-      <ul class="bento-features">
-        <li><span class="check-icon">✦</span> 7 strategic folders</li>
-        <li><span class="check-icon">✦</span> 24–30 business documents</li>
-        <li><span class="check-icon">✦</span> Complete operating system</li>
-        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
-      </ul>
-      <button class="bento-cta bento-cta--white" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
-        Build my system now →
-      </button>
-    </div>
-
   </div>
 </section>
 
