@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='40' height='40' rx='5' fill='%230A0A0A'/><rect x='50' y='10' width='40' height='40' rx='5' fill='%230A0A0A' opacity='0.6'/><rect x='10' y='50' width='40' height='40' rx='5' fill='%230A0A0A' opacity='0.6'/><rect x='50' y='50' width='40' height='40' rx='5' fill='%23C8963E'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root {
@@ -281,6 +281,144 @@
   .bento-value-box .value-sub {
     font-size:12px; color:var(--gold); font-weight:500; letter-spacing:0.3px;
   }
+
+  /* ── BIZOS LANDING (from bizos-landing.html) ── */
+  #hero-landing { min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0C0A08; }
+  .hero-landing-bg { position:absolute; inset:0; background: radial-gradient(ellipse 70% 55% at 15% 25%,rgba(196,154,60,.07) 0%,transparent 60%), radial-gradient(ellipse 55% 45% at 85% 75%,rgba(120,70,20,.1) 0%,transparent 60%); }
+  .hero-landing-shapes { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .hs { position:absolute; border-radius:9999px; border:1.5px solid rgba(196,154,60,.18); background:linear-gradient(135deg,rgba(196,154,60,.07) 0%,transparent 55%); backdrop-filter:blur(2px); box-shadow:0 8px 32px rgba(196,154,60,.05); animation:hsFloat 12s ease-in-out infinite; }
+  .hs1{width:580px;height:132px;left:-8%;top:20%;--r:12deg;animation-delay:0s}
+  .hs2{width:440px;height:106px;right:-3%;top:66%;--r:-15deg;animation-delay:.8s;background:linear-gradient(135deg,rgba(150,90,30,.09) 0%,transparent 55%);border-color:rgba(150,90,30,.16)}
+  .hs3{width:270px;height:72px;left:7%;bottom:11%;--r:-8deg;animation-delay:.5s}
+  .hs4{width:185px;height:54px;right:19%;top:13%;--r:20deg;animation-delay:1.2s}
+  .hs5{width:135px;height:40px;left:23%;top:7%;--r:-25deg;animation-delay:1.7s}
+  @keyframes hsFloat { 0%,100%{transform:translateY(0) rotate(var(--r,0deg))} 50%{transform:translateY(-15px) rotate(var(--r,0deg))} }
+  .vfade-top{position:absolute;top:0;left:0;right:0;height:180px;background:linear-gradient(to bottom,#0C0A08,transparent);pointer-events:none;z-index:2}
+  .vfade-bot{position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to top,#0C0A08,transparent);pointer-events:none;z-index:2}
+  .hero-landing-content { position:relative;z-index:10;text-align:center;max-width:820px;padding:0 28px; }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+  .hero-landing-badge { display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:100px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);margin-bottom:44px;animation:fadeUp .9s ease both;animation-delay:.25s; }
+  .hero-landing-badge .dot { width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(196,154,60,.65); }
+  .hero-landing-badge span { font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:500; }
+  .hero-landing-title { font-family:'Playfair Display',serif;font-weight:900;line-height:1.04;margin-bottom:30px;animation:fadeUp .9s ease both;animation-delay:.45s; }
+  .hero-landing-title .t1 { display:block;font-size:clamp(50px,8vw,96px);background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.72) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  .hero-landing-title .t2 { display:block;font-size:clamp(42px,7vw,80px);font-style:italic;background:linear-gradient(90deg,#E0C078 0%,#fff 50%,#C8963E 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  .hero-landing-sub { font-size:clamp(15px,1.8vw,18px);color:rgba(255,255,255,.32);font-weight:300;letter-spacing:.04em;line-height:1.75;max-width:460px;margin:0 auto 52px;animation:fadeUp .9s ease both;animation-delay:.65s; }
+  .hero-landing-btns { display:flex;align-items:center;justify-content:center;gap:18px;animation:fadeUp .9s ease both;animation-delay:.85s; }
+  .btn-landing-primary { background:var(--gold);color:var(--ink);padding:14px 34px;border-radius:8px;font-size:15px;font-weight:600;letter-spacing:.025em;text-decoration:none;border:none;cursor:pointer;box-shadow:0 4px 24px rgba(196,154,60,.32);transition:all .25s; }
+  .btn-landing-primary:hover { background:#E0C078;transform:translateY(-2px);box-shadow:0 8px 36px rgba(196,154,60,.42); }
+  .btn-landing-ghost { color:rgba(255,255,255,.42);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s;letter-spacing:.025em; }
+  .btn-landing-ghost:hover { color:rgba(255,255,255,.75); }
+  .scroll-cue { position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.18);font-size:10px;letter-spacing:.14em;text-transform:uppercase;z-index:20;animation:fadeUp .9s ease both;animation-delay:1.1s; }
+  .scroll-cue .sc-line { width:1px;height:38px;background:linear-gradient(to bottom,rgba(196,154,60,.5),transparent);animation:scPulse 2.2s ease-in-out infinite; }
+  @keyframes scPulse{0%,100%{opacity:.4}50%{opacity:1}}
+  .bridge { height:100px;background:linear-gradient(to bottom,#0C0A08,var(--cream)); }
+  #plans-landing { background:var(--cream);padding:60px 0 140px; }
+  .plans-header { text-align:center;max-width:640px;margin:0 auto 72px;padding:0 24px; }
+  .eyebrow { font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px; }
+  .sh2 { font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,58px);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:14px; }
+  .sh2 em { font-style:italic;color:var(--gold); }
+  .sp { font-size:15px;color:var(--muted);line-height:1.65;margin-bottom:28px; }
+  .stats-strip { display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap; }
+  .stat-item { display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:500; }
+  .stat-item strong { font-weight:700;color:var(--ink); }
+  .stat-pip { width:4px;height:4px;border-radius:50%;background:var(--gold); }
+  .tl-wrap { max-width:1140px;margin:0 auto;padding:0 32px;position:relative; }
+  .tl-axis { position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:2px;background:linear-gradient(to bottom,transparent,var(--line) 8%,var(--line) 92%,transparent);pointer-events:none; }
+  .tl-fill { position:absolute;top:0;left:0;right:0;width:2px;height:0%;background:linear-gradient(to bottom,var(--gold),#E0C078);border-radius:2px;transition:height .08s linear; }
+  .pr { display:grid;grid-template-columns:1fr 64px 1fr;align-items:center;margin-bottom:110px;opacity:0;transform:translateY(44px);transition:opacity .75s cubic-bezier(.25,.4,.25,1),transform .75s cubic-bezier(.25,.4,.25,1); }
+  .pr.in { opacity:1;transform:translateY(0); }
+  .pr-mid { display:flex;align-items:center;justify-content:center;position:relative;align-self:stretch; }
+  .pr-dot { width:18px;height:18px;border-radius:50%;background:var(--cream);border:2px solid var(--line);z-index:2;transition:border-color .4s,background .4s; }
+  .pr.in .pr-dot { border-color:var(--gold);background:#F5EDE0;box-shadow:0 0 0 5px rgba(196,154,60,.1); }
+  .pr-left, .pr-right { padding:12px 36px; }
+  .plan-card { background:var(--white);border:1px solid rgba(196,154,60,.15);border-radius:18px;padding:38px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s; }
+  .plan-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#F5EDE0,transparent); }
+  .plan-card:hover { transform:translateY(-5px);box-shadow:0 20px 64px rgba(0,0,0,.09); }
+  .plan-card.featured { border:1.5px solid var(--gold);box-shadow:0 6px 40px rgba(196,154,60,.1); }
+  .plan-card.featured::before { background:linear-gradient(90deg,transparent,var(--gold),transparent);height:1.5px; }
+  .plan-card.dark { background:var(--ink);border-color:rgba(196,154,60,.2);color:rgba(255,255,255,.9); }
+  .plan-card.dark::before { background:linear-gradient(90deg,transparent,var(--gold),transparent);height:1px; }
+  .pc-badge { display:inline-block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:18px;background:#F5EDE0;color:var(--gold);border:1px solid rgba(196,154,60,.28); }
+  .plan-card.dark .pc-badge { background:rgba(196,154,60,.12);color:#E0C078;border-color:rgba(196,154,60,.25); }
+  .pc-title { font-family:'Playfair Display',serif;font-size:24px;font-weight:700;line-height:1.25;color:var(--ink);margin-bottom:8px; }
+  .plan-card.dark .pc-title { color:#fff; }
+  .pc-title em { font-style:italic;color:var(--gold); }
+  .pc-desc { font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:26px; }
+  .plan-card.dark .pc-desc { color:rgba(255,255,255,.38); }
+  .pc-price-row { display:flex;align-items:flex-end;gap:4px;margin-bottom:4px; }
+  .pc-sym { font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:7px; }
+  .pc-price { font-family:'Playfair Display',serif;font-size:46px;font-weight:900;line-height:1;color:var(--ink); }
+  .plan-card.dark .pc-price { color:#fff; }
+  .pc-usd { font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.02em; }
+  .plan-card.dark .pc-usd { color:rgba(255,255,255,.28); }
+  .pc-div { height:1px;background:rgba(196,154,60,.13);margin:22px 0; }
+  .plan-card.dark .pc-div { background:rgba(255,255,255,.07); }
+  .pc-feats { list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px; }
+  .pc-feats li { display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--muted); }
+  .plan-card.dark .pc-feats li { color:rgba(255,255,255,.6); }
+  .fi { width:17px;height:17px;border-radius:50%;background:#F5EDE0;border:1px solid rgba(196,154,60,.22);display:grid;place-items:center;flex-shrink:0; }
+  .fi svg { width:9px;height:9px;stroke:var(--gold);stroke-width:2.5;fill:none; }
+  .plan-card.dark .fi { background:rgba(196,154,60,.1); }
+  .val-banner { background:linear-gradient(135deg,var(--gold) 0%,#8B6A1F 100%);border-radius:10px;padding:14px 18px;margin-bottom:18px; }
+  .val-banner .vb-s { font-size:11px;color:rgba(255,255,255,.38);text-decoration:line-through;margin-bottom:2px; }
+  .val-banner .vb-t { font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff; }
+  .val-banner .vb-sub { font-size:11px;color:rgba(255,255,255,.65);letter-spacing:.04em;margin-top:2px; }
+  .pc-btn { width:100%;padding:13px;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;border:none;text-align:center;transition:all .25s; }
+  .pc-btn-ink { background:var(--ink);color:var(--white); }
+  .pc-btn-ink:hover { background:var(--gold);color:var(--ink); }
+  .pc-btn-gold { background:var(--gold);color:var(--ink);box-shadow:0 4px 20px rgba(196,154,60,.32); }
+  .pc-btn-gold:hover { background:#E0C078;transform:translateY(-1px);box-shadow:0 8px 28px rgba(196,154,60,.42); }
+  .pc-btn-ghost { background:rgba(255,255,255,.07);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.1); }
+  .pc-btn-ghost:hover { background:var(--gold);color:var(--ink);border-color:var(--gold); }
+  .ctx-label { font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:12px; }
+  .ctx-panel { display:flex;flex-direction:column;gap:20px; }
+  .ctx-who { background:var(--white);border:1px solid rgba(196,154,60,.1);border-radius:14px;padding:28px; }
+  .ctx-who h3 { font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:16px;line-height:1.3; }
+  .who-list { list-style:none;display:flex;flex-direction:column;gap:11px; }
+  .who-list li { display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--muted);line-height:1.5; }
+  .who-ico { width:24px;height:24px;border-radius:7px;background:#F5EDE0;flex-shrink:0;display:grid;place-items:center;margin-top:1px; }
+  .who-ico svg { width:13px;height:13px;stroke:var(--gold);stroke-width:2;fill:none; }
+  .ctx-testi { background:var(--ink);border-radius:14px;padding:28px 30px;position:relative;overflow:hidden; }
+  .ctx-testi::before { content:'\201C';position:absolute;top:-10px;left:18px;font-family:'Playfair Display',serif;font-size:96px;font-weight:900;color:rgba(196,154,60,.1);line-height:1; }
+  .ctx-testi p { font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;font-weight:300;font-style:italic;margin-bottom:18px;position:relative;z-index:1; }
+  .testi-row { display:flex;align-items:center;gap:10px; }
+  .testi-av { width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--gold) 0%,#5A3A10 100%);display:grid;place-items:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#fff; }
+  .testi-name { font-size:13px;font-weight:600;color:rgba(255,255,255,.85); }
+  .testi-role { font-size:11px;color:rgba(255,255,255,.32);letter-spacing:.04em; }
+  .ctx-docs-hd { margin-bottom:20px; }
+  .ctx-docs-hd h3 { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:6px; }
+  .ctx-docs-hd p { font-size:13px;color:var(--muted);line-height:1.6; }
+  .folder-block { border:1px solid rgba(196,154,60,.13);border-radius:11px;overflow:hidden;margin-bottom:10px;transition:border-color .25s; }
+  .folder-block:hover { border-color:rgba(196,154,60,.35); }
+  .folder-hd { display:flex;align-items:center;gap:10px;padding:12px 15px;background:var(--white); }
+  .folder-ico { width:28px;height:28px;border-radius:7px;background:#F5EDE0;display:grid;place-items:center;flex-shrink:0; }
+  .folder-ico svg { width:14px;height:14px;stroke:var(--gold);stroke-width:2;fill:none; }
+  .folder-nm { font-size:13.5px;font-weight:600;color:var(--ink);flex:1; }
+  .folder-ct { font-size:11px;color:var(--muted);background:var(--cream);padding:2px 8px;border-radius:100px; }
+  .folder-docs { padding:0 15px 12px 53px;display:flex;flex-direction:column;gap:5px;background:var(--white); }
+  .folder-doc { font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px; }
+  .folder-doc::before { content:'';width:4px;height:4px;border-radius:50%;background:#F5EDE0;border:1px solid rgba(196,154,60,.4);flex-shrink:0; }
+  .dark-panel { background:var(--ink);border:1px solid rgba(196,154,60,.15);border-radius:18px;padding:36px 34px; }
+  .dark-panel .ctx-label { color:rgba(196,154,60,.65); }
+  .stack-hd { margin-bottom:26px; }
+  .stack-hd h3 { font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:7px; }
+  .stack-hd p { font-size:13px;color:rgba(255,255,255,.32);line-height:1.6; }
+  .fs-item { display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:10px;border:1px solid rgba(196,154,60,.1);background:rgba(255,255,255,.03);margin-bottom:8px;position:relative;overflow:hidden;transition:background .25s,border-color .25s; }
+  .fs-item:hover { background:rgba(196,154,60,.07);border-color:rgba(196,154,60,.25); }
+  .fs-item::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity .25s; }
+  .fs-item:hover::before { opacity:1; }
+  .fs-num { font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:rgba(196,154,60,.22);min-width:28px;line-height:1; }
+  .fs-info { flex:1; }
+  .fs-name { font-size:13.5px;font-weight:600;color:rgba(255,255,255,.78);margin-bottom:2px; }
+  .fs-docs { font-size:11.5px;color:rgba(255,255,255,.28);letter-spacing:.03em; }
+  .fs-arr { color:rgba(196,154,60,.28);font-size:16px;transition:color .2s,transform .2s; }
+  .fs-item:hover .fs-arr { color:var(--gold);transform:translateX(3px); }
+  .guarantee { text-align:center;padding:40px 24px 0;max-width:520px;margin:0 auto; }
+  .guarantee h3 { font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:10px; }
+  .guarantee p { font-size:14px;color:var(--muted);line-height:1.65; }
+  .gold-rule { width:44px;height:2px;background:var(--gold);margin:20px auto 0;border-radius:2px; }
+  @media(max-width:900px){ .pr { grid-template-columns:1fr; } .pr-mid { display:none; } .pr-left { order:1; } .pr-right { order:2; } }
 
   /* Legacy compat */
   .price-label { font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:.5; margin-bottom:8px; }
@@ -611,177 +749,188 @@
     BizOS
   </div>
   <div class="nav-right">
-    <a href="#how-it-works" class="nav-link">How it works</a>
-    <a href="#what-you-get" class="nav-link">What you get</a>
+    <a href="#pricing" class="nav-link">Plans</a>
+    <a href="#generator" class="nav-link">Get started</a>
     <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Choose your plan →</button>
   </div>
 </nav>
 
-<!-- HERO — What this site is about -->
-<section class="hero">
-  <div class="hero-badge"><span></span> AI-Powered Business Systems</div>
-  <h1>Your entire business,<br/><em>systematized</em> in minutes.</h1>
-  <p class="hero-sub">Transform your business from chaos to a scalable, automated system. Get strategic frameworks, SOPs, sales systems, and documentation — tailored to your business. No subscriptions. No upsells.</p>
-  <div class="hero-actions">
-    <button class="btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">See plans →</button>
-    <button class="btn-secondary" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How it works</button>
+<!-- HERO (bizos-landing) -->
+<section id="hero-landing">
+  <div class="hero-landing-bg"></div>
+  <div class="hero-landing-shapes">
+    <div class="hs hs1"></div><div class="hs hs2"></div>
+    <div class="hs hs3"></div><div class="hs hs4"></div><div class="hs hs5"></div>
   </div>
-  <div class="hero-proof">
-    <div class="proof-stat"><strong>5 min</strong>Setup to download</div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><strong>1–30</strong>Strategic documents</div>
-    <div class="proof-divider"></div>
-    <div class="proof-stat"><strong>Any</strong>Business type</div>
+  <div class="vfade-top"></div>
+  <div class="vfade-bot"></div>
+  <div class="hero-landing-content">
+    <div class="hero-landing-badge">
+      <div class="dot"></div>
+      <span>Business Documentation System</span>
+    </div>
+    <h1 class="hero-landing-title">
+      <span class="t1">Your entire business,</span>
+      <span class="t2">systematized.</span>
+    </h1>
+    <p class="hero-landing-sub">No subscriptions. No upsells. Professional documentation tailored to your business — delivered in minutes.</p>
+    <div class="hero-landing-btns">
+      <button class="btn-landing-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Choose your plan</button>
+      <a href="#generator" class="btn-landing-ghost">Get started →</a>
+    </div>
   </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="section" id="how-it-works" style="background:var(--cream);">
-  <div class="section-label">Process</div>
-  <div class="section-title">From chaos to<br/>scalable system</div>
-  <p class="section-sub">Four steps. Five minutes. A complete business operating system that transforms operations, boosts revenue, and increases customer retention by 70%+.</p>
-  <div class="steps-grid">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Describe your business</h3>
-      <p>Tell us what you do, how you sell, how you deliver, and who you serve. Takes about 3 minutes.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Pay once</h3>
-      <p>A one-time fee per generation. No subscription. No hidden costs. Pay, and your transformation system is built.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>AI builds your system</h3>
-      <p>Claude creates a complete strategic operating system with frameworks, automation guides, and revenue-boosting systems — tailored to your business.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">04</div>
-      <h3>Transform your business</h3>
-      <p>Download your complete system. Implement the frameworks. Watch revenue grow and customer retention increase by 70%+.</p>
-    </div>
+  <div class="scroll-cue">
+    <div class="sc-line"></div>
+    <span>Scroll</span>
   </div>
 </section>
 
-<!-- WHAT YOU GET -->
-<section class="section" id="what-you-get">
-  <div class="section-label">Deliverables</div>
-  <div class="section-title">Everything a real<br/>business needs</div>
-  <p class="section-sub">Strategic frameworks that boost revenue and increase customer retention by 70%+. Tailored to your specific business — not copy-paste templates. Every system uses your language, your process, your brand.</p>
-  <div class="output-grid">
-    <div class="output-card">
-      <div class="output-icon" style="background:#EAF0F6;">📋</div>
-      <h3>Company Profile & Strategy</h3>
-      <p>Strategic foundation — mission, vision, values, competitive positioning, and growth frameworks.</p>
-      <span class="output-tag">3–4 documents</span>
-    </div>
-    <div class="output-card">
-      <div class="output-icon" style="background:#E8F5EE;">🔄</div>
-      <h3>Client Experience System</h3>
-      <p>Complete onboarding flows, journey mapping, and retention strategies that increase customer retention by 70%+.</p>
-      <span class="output-tag">3–4 documents</span>
-    </div>
-    <div class="output-card">
-      <div class="output-icon" style="background:#FFF9EC;">📄</div>
-      <h3>Document Templates & Legal</h3>
-      <p>Complete legal framework — service agreements, proposals with pricing strategy, client communications, and compliance templates.</p>
-      <span class="output-tag">4–5 documents</span>
-    </div>
-    <div class="output-card">
-      <div class="output-icon" style="background:#FEF3C7;">💬</div>
-      <h3>Sales & Revenue System</h3>
-      <p>Complete sales methodology, discovery frameworks, closing systems, and pipeline management that boost revenue.</p>
-      <span class="output-tag">4–5 documents</span>
-    </div>
-    <div class="output-card">
-      <div class="output-icon" style="background:#FDE8E8;">📣</div>
-      <h3>Marketing & Growth Engine</h3>
-      <p>Brand messaging frameworks, content strategies, growth systems, and referral programs that drive retention.</p>
-      <span class="output-tag">4–5 documents</span>
-    </div>
-    <div class="output-card">
-      <div class="output-icon" style="background:#F3E8FF;">⚙️</div>
-      <h3>Operations & Scalability</h3>
-      <p>Complete SOP library, workflow automation guides, quality systems, and scalability roadmaps for growth.</p>
-      <span class="output-tag">4–5 documents</span>
-    </div>
-    <div class="output-card">
-      <div class="output-icon" style="background:#E0F2FE;">💰</div>
-      <h3>Finance & Business Intelligence</h3>
-      <p>Financial management systems, forecasting frameworks, pricing strategies, and business intelligence dashboards.</p>
-      <span class="output-tag">4–5 documents</span>
+<div class="bridge"></div>
+
+<!-- PLANS (bizos-landing) -->
+<section id="pricing" style="scroll-margin-top:80px;">
+  <div class="plans-header">
+    <p class="eyebrow">Choose your plan</p>
+    <h2 class="sh2">Pay once. <em>Own forever.</em></h2>
+    <p class="sp">Click the option you want — we will take you straight to the form.</p>
+    <div class="stats-strip">
+      <div class="stat-item"><div class="stat-pip"></div><strong>5 min</strong>&nbsp;setup to download</div>
+      <div class="stat-item"><div class="stat-pip"></div><strong>1–30</strong>&nbsp;documents</div>
+      <div class="stat-item"><div class="stat-pip"></div><strong>Any</strong>&nbsp;business type</div>
     </div>
   </div>
-</section>
 
-<!-- PRICING — After they know what the site is -->
-<section class="section" style="background:var(--cream);" id="pricing">
-  <div style="text-align:center;margin-bottom:32px;">
-    <div class="section-label" style="text-align:center;">Choose your plan</div>
-    <div class="section-title" style="margin-bottom:8px;">Pay once. Own forever.</div>
-    <p class="section-sub" style="margin:0 auto 0;">Click the option you want — we will take you straight to the form.</p>
-  </div>
-  <div class="bento-grid">
+  <div class="tl-wrap">
+    <div class="tl-axis"><div class="tl-fill" id="tlFill"></div></div>
 
-    <!-- Card 1: Business Plan -->
-    <div class="bento-card bento-card--light">
-      <div class="bento-want">I want a <em>one-page</em> business plan</div>
-      <div class="bento-desc">Perfect for pitching investors or validating your idea. A comprehensive 9-section plan tailored to your business.</div>
-      <div class="bento-price"><span class="bento-price-currency">₦</span>5,000</div>
-      <div class="bento-price-sub">~$3.50 USD · One-time payment</div>
-      <ul class="bento-features">
-        <li><span class="check-icon">✦</span> 9 strategic sections</li>
-        <li><span class="check-icon">✦</span> Investor-ready format</li>
-        <li><span class="check-icon">✦</span> Tailored to your business</li>
-        <li><span class="check-icon">✦</span> Immediate download</li>
-      </ul>
-      <button class="bento-cta bento-cta--outline" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">
-        Get Business Plan →
-      </button>
-    </div>
-
-    <!-- Card 2: Starter System -->
-    <div class="bento-card bento-card--warm">
-      <div class="bento-badge bento-badge--popular">POPULAR</div>
-      <div class="bento-want">I want a <em>starter</em> business system</div>
-      <div class="bento-desc">The essential foundation. 3 strategic folders covering profile, sales, and operations — 10 documents that get you running.</div>
-      <div class="bento-price"><span class="bento-price-currency">₦</span>8,000</div>
-      <div class="bento-price-sub">~$5.50 USD · One-time payment</div>
-      <ul class="bento-features">
-        <li><span class="check-icon">✦</span> 3 strategic folders</li>
-        <li><span class="check-icon">✦</span> 10 business documents</li>
-        <li><span class="check-icon">✦</span> Profile, sales &amp; operations</li>
-        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
-      </ul>
-      <button class="bento-cta bento-cta--gold" onclick="selectProduct('STARTER_SYSTEM'); scrollToGenerator();">
-        Build starter system →
-      </button>
-    </div>
-
-    <!-- Card 3: Full System -->
-    <div class="bento-card bento-card--dark">
-      <div class="bento-badge bento-badge--best">BEST VALUE</div>
-      <div class="bento-want">I want the <em>full</em> business system</div>
-      <div class="bento-desc">The complete transformation. 7 folders, 24–30 documents covering every aspect of your business operations.</div>
-      <div style="font-size:13px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
-      <div class="bento-price"><span class="bento-price-currency">₦</span>25,000</div>
-      <div class="bento-price-sub">~$16 USD · One-time payment</div>
-      <div class="bento-value-box">
-        <div class="value-title">Worth $200 USD</div>
-        <div class="value-sub">You Save 92% · Professional Documentation</div>
+    <div class="pr" id="pr1">
+      <div class="pr-left">
+        <div class="plan-card">
+          <div class="pc-badge">One-Page Plan</div>
+          <div class="pc-title">I want a <em>one-page</em> business plan</div>
+          <p class="pc-desc">Perfect for pitching investors or validating your idea. A comprehensive 9-section plan tailored to your business.</p>
+          <div class="pc-price-row"><span class="pc-sym">₦</span><span class="pc-price">5,000</span></div>
+          <div class="pc-usd">~$3.50 USD · One-time payment</div>
+          <div class="pc-div"></div>
+          <ul class="pc-feats">
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>9 strategic sections</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Investor-ready format</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Tailored to your business</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Immediate download</li>
+          </ul>
+          <button class="pc-btn pc-btn-ink" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">Get started →</button>
+        </div>
       </div>
-      <ul class="bento-features">
-        <li><span class="check-icon">✦</span> 7 strategic folders</li>
-        <li><span class="check-icon">✦</span> 24–30 business documents</li>
-        <li><span class="check-icon">✦</span> Complete operating system</li>
-        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
-      </ul>
-      <button class="bento-cta bento-cta--white" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
-        Build my system now →
-      </button>
+      <div class="pr-mid"><div class="pr-dot"></div></div>
+      <div class="pr-right">
+        <div class="ctx-panel">
+          <div class="ctx-who">
+            <div class="ctx-label">Who this is for</div>
+            <h3>You're at the starting line</h3>
+            <ul class="who-list">
+              <li><div class="who-ico"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5"/><path d="M7 5v3M7 9.5h.01"/></svg></div>Founders validating a business idea before investing heavily</li>
+              <li><div class="who-ico"><svg viewBox="0 0 14 14"><rect x="2" y="3" width="10" height="8" rx="1.5"/><path d="M5 3V2M9 3V2"/></svg></div>Entrepreneurs seeking seed funding or angel investment</li>
+              <li><div class="who-ico"><svg viewBox="0 0 14 14"><path d="M2 11l3-3 2.5 2.5L11 4"/></svg></div>Anyone who needs a polished, professional plan — fast</li>
+            </ul>
+          </div>
+          <div class="ctx-testi">
+            <p>"I needed something investor-ready by Friday. BizOS gave me a plan so polished my mentor asked which agency produced it."</p>
+            <div class="testi-row">
+              <div class="testi-av">A</div>
+              <div><div class="testi-name">Amara O.</div><div class="testi-role">Tech Startup Founder · Lagos</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div class="pr" id="pr2">
+      <div class="pr-left">
+        <div>
+          <div class="ctx-docs-hd">
+            <div class="ctx-label">What's inside</div>
+            <h3>3 strategic folders,<br>10 ready-to-use documents</h3>
+            <p style="margin-top:6px">Everything a growing business needs to look professional, operate smoothly, and close more deals.</p>
+          </div>
+          <div class="folder-block">
+            <div class="folder-hd"><div class="folder-ico"><svg viewBox="0 0 14 14"><path d="M2 4h4l1.5 2H12v5.5a.5.5 0 01-.5.5h-9A.5.5 0 012 11.5V4z"/></svg></div><span class="folder-nm">Company Profile & Identity</span><span class="folder-ct">3 docs</span></div>
+            <div class="folder-docs"><div class="folder-doc">Company Profile Document</div><div class="folder-doc">Brand Story & Vision Statement</div><div class="folder-doc">Team & Leadership Overview</div></div>
+          </div>
+          <div class="folder-block">
+            <div class="folder-hd"><div class="folder-ico"><svg viewBox="0 0 14 14"><path d="M2 4h4l1.5 2H12v5.5a.5.5 0 01-.5.5h-9A.5.5 0 012 11.5V4z"/></svg></div><span class="folder-nm">Sales & Client System</span><span class="folder-ct">4 docs</span></div>
+            <div class="folder-docs"><div class="folder-doc">Service Proposal Template</div><div class="folder-doc">Client Onboarding Checklist</div><div class="folder-doc">Pricing & Packages Sheet</div><div class="folder-doc">Follow-Up Email Sequence</div></div>
+          </div>
+          <div class="folder-block">
+            <div class="folder-hd"><div class="folder-ico"><svg viewBox="0 0 14 14"><path d="M2 4h4l1.5 2H12v5.5a.5.5 0 01-.5.5h-9A.5.5 0 012 11.5V4z"/></svg></div><span class="folder-nm">Operations Foundation</span><span class="folder-ct">3 docs</span></div>
+            <div class="folder-docs"><div class="folder-doc">Standard Operating Procedures</div><div class="folder-doc">Weekly Operations Checklist</div><div class="folder-doc">Vendor & Supplier Tracker</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pr-mid"><div class="pr-dot"></div></div>
+      <div class="pr-right">
+        <div class="plan-card featured">
+          <div class="pc-badge">⭐ Popular</div>
+          <div class="pc-title">I want a <em>starter</em> business system</div>
+          <p class="pc-desc">The essential foundation. 3 strategic folders covering profile, sales, and operations — 10 documents that get you running.</p>
+          <div class="pc-price-row"><span class="pc-sym">₦</span><span class="pc-price">8,000</span></div>
+          <div class="pc-usd">~$5.50 USD · One-time payment</div>
+          <div class="pc-div"></div>
+          <ul class="pc-feats">
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>3 strategic folders</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>10 business documents</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Profile, sales & operations</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Folder-by-folder download</li>
+          </ul>
+          <button class="pc-btn pc-btn-gold" onclick="selectProduct('STARTER_SYSTEM'); scrollToGenerator();">Get started →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pr" id="pr3">
+      <div class="pr-left">
+        <div class="plan-card dark">
+          <div class="pc-badge">✦ Best Value</div>
+          <div class="pc-title">I want the <em>full</em> business system</div>
+          <p class="pc-desc">The complete transformation. 7 folders, 24–30 documents covering every aspect of your business operations.</p>
+          <div class="val-banner">
+            <div class="vb-s">Market Value: $200 USD</div>
+            <div class="vb-t">Worth $200 USD</div>
+            <div class="vb-sub">You Save 92% · Professional Documentation</div>
+          </div>
+          <div class="pc-price-row"><span class="pc-sym">₦</span><span class="pc-price">25,000</span></div>
+          <div class="pc-usd">~$16 USD · One-time payment</div>
+          <div class="pc-div"></div>
+          <ul class="pc-feats">
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>7 strategic folders</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>24–30 business documents</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Complete operating system</li>
+            <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Folder-by-folder download</li>
+          </ul>
+          <button class="pc-btn pc-btn-ghost" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">Get started →</button>
+        </div>
+      </div>
+      <div class="pr-mid"><div class="pr-dot"></div></div>
+      <div class="pr-right">
+        <div class="dark-panel">
+          <div class="ctx-label">Everything you get</div>
+          <div class="stack-hd"><h3>7 folders. Every system<br>your business needs.</h3><p>Each folder is a complete operational department — ready to use from day one.</p></div>
+          <div class="fs-item"><div class="fs-num">01</div><div class="fs-info"><div class="fs-name">Company Profile & Strategic Foundation</div><div class="fs-docs">3–4 documents</div></div><div class="fs-arr">→</div></div>
+          <div class="fs-item"><div class="fs-num">02</div><div class="fs-info"><div class="fs-name">Client Onboarding & Experience System</div><div class="fs-docs">4–5 documents</div></div><div class="fs-arr">→</div></div>
+          <div class="fs-item"><div class="fs-num">03</div><div class="fs-info"><div class="fs-name">Document Templates & Legal Framework</div><div class="fs-docs">4–5 documents</div></div><div class="fs-arr">→</div></div>
+          <div class="fs-item"><div class="fs-num">04</div><div class="fs-info"><div class="fs-name">Sales & Revenue System</div><div class="fs-docs">4–5 documents</div></div><div class="fs-arr">→</div></div>
+          <div class="fs-item"><div class="fs-num">05</div><div class="fs-info"><div class="fs-name">Marketing & Growth Engine</div><div class="fs-docs">3–4 documents</div></div><div class="fs-arr">→</div></div>
+          <div class="fs-item"><div class="fs-num">06</div><div class="fs-info"><div class="fs-name">Operations & Scalability</div><div class="fs-docs">3–4 documents</div></div><div class="fs-arr">→</div></div>
+          <div class="fs-item"><div class="fs-num">07</div><div class="fs-info"><div class="fs-name">Finance & Business Intelligence</div><div class="fs-docs">3–4 documents</div></div><div class="fs-arr">→</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="guarantee">
+    <h3>Simple, honest pricing.</h3>
+    <p>Pay once, download your documents, and run your business with confidence. No hidden fees, no recurring charges.</p>
+    <div class="gold-rule"></div>
   </div>
 </section>
 
@@ -4150,6 +4299,22 @@ function escapeXml(str) {
 
 // ─── INITIALIZE ON PAGE LOAD ────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
+  // BizOS Landing: plan rows intersection + timeline fill
+  const prRows = document.querySelectorAll('.pr');
+  if (prRows.length && typeof IntersectionObserver !== 'undefined') {
+    const obs = new IntersectionObserver(function(entries) { entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); }); }, { threshold: 0.15 });
+    prRows.forEach(function(r){ obs.observe(r); });
+  }
+  const tlAxis = document.querySelector('.tl-axis');
+  const tlFill = document.getElementById('tlFill');
+  if (tlAxis && tlFill) {
+    window.addEventListener('scroll', function() {
+      const r = tlAxis.getBoundingClientRect();
+      const pct = Math.min(100, Math.max(0, (-r.top + window.innerHeight * 0.55) / r.height * 100));
+      tlFill.style.height = pct + '%';
+    });
+  }
+
   // Setup form auto-save
   setupFormAutoSave();
   
