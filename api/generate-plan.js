@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
   console.log('=== GENERATE PLAN API CALLED ===');
 
   try {
-    const { businessData } = req.body;
+    const { businessData, tier } = req.body;
     if (!businessData) return res.status(400).json({ error: 'Business data is required' });
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -21,27 +21,40 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'Anthropic API key not configured' });
     }
 
-    const prompt = `You are a business systems consultant. Generate a document structure for this business.
+    console.log('Tier:', tier || 'full');
 
-BUSINESS: ${businessData.name}
+    const businessContext = `BUSINESS: ${businessData.name}
 INDUSTRY: ${businessData.industry}
 DESCRIPTION: ${businessData.description}
 PAYMENT MODEL: ${businessData.paymentModel || 'Not specified'}
-PRODUCTS/SERVICES: ${businessData.products || businessData.description}
+PRODUCTS/SERVICES: ${businessData.products || businessData.description}`;
 
-Return a JSON object with folder names and document titles/filenames. NO content — just the structure.
+    const starterFolderSpec = `Create exactly 3 strategic folders with essential business documents (10 total):
+1. Company Profile & Strategy — 3 docs (company overview with vision/mission/values, strategic positioning document, competitive analysis framework)
+2. Sales & Client System — 4 docs (sales methodology & process, client onboarding system, service agreement template, proposal & pricing template)
+3. Operations & Finance — 3 docs (standard operating procedures, financial management system, pricing strategy guide)`;
 
-Format:
-{"folders":[{"name":"Folder Name","docs":[{"filename":"File_Name","title":"Document Title"}]}]}
-
-Create exactly 7 strategic folders with comprehensive business transformation documents:
+    const fullFolderSpec = `Create exactly 7 strategic folders with comprehensive business transformation documents:
 1. Company Profile & Strategic Foundation — 3-4 docs (company overview with vision/mission/values, strategic positioning document, competitive analysis framework, brand identity guide)
 2. Client Onboarding & Experience — 3-4 docs (complete onboarding system, client journey map, welcome package template, client success framework, retention strategy)
 3. Document Templates & Legal Framework — 4-5 docs (service agreements, proposals with pricing strategy, client communication templates, receipts/invoices, terms & conditions, NDAs if needed)
 4. Sales & Revenue System — 4-5 docs (complete sales methodology, discovery call framework, objection handling playbook, proposal template, closing sequences, pipeline management system)
 5. Marketing & Growth Engine — 4-5 docs (brand messaging framework, content strategy playbook, social media system, email marketing sequences, referral program, growth frameworks)
 6. Operations & Scalability — 4-5 docs (complete SOP library, workflow automation guide, quality control system, team structure & responsibilities, scalability roadmap, vendor management)
-7. Finance & Business Intelligence — 4-5 docs (financial management system, budgeting & forecasting framework, expense tracking & categorization, pricing strategy guide, financial reporting dashboard, cash flow management)
+7. Finance & Business Intelligence — 4-5 docs (financial management system, budgeting & forecasting framework, expense tracking & categorization, pricing strategy guide, financial reporting dashboard, cash flow management)`;
+
+    const folderSpec = tier === 'starter' ? starterFolderSpec : fullFolderSpec;
+
+    const prompt = `You are a business systems consultant. Generate a document structure for this business.
+
+${businessContext}
+
+Return a JSON object with folder names and document titles/filenames. NO content — just the structure.
+
+Format:
+{"folders":[{"name":"Folder Name","docs":[{"filename":"File_Name","title":"Document Title"}]}]}
+
+${folderSpec}
 
 Make document titles specific to ${businessData.industry}. Use filenames with underscores, no spaces.
 Return ONLY valid JSON, no markdown, no explanation.`;

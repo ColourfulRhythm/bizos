@@ -180,17 +180,109 @@
   }
 
   /* ── PRICING ── */
-  .pricing-box {
-    max-width:520px; margin:48px auto 0;
-    background:var(--ink); color:var(--white);
-    border-radius:20px; padding:48px;
-    text-align:center; position:relative; overflow:hidden;
+  .bento-grid {
+    display:grid; grid-template-columns:repeat(3, 1fr);
+    gap:20px; max-width:1100px; margin:48px auto 0;
   }
-  .pricing-box::before {
+  .bento-card {
+    border-radius:20px; padding:36px 32px;
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .bento-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,.12); }
+
+  .bento-card--light {
+    background:var(--white); color:var(--ink);
+    border:1.5px solid var(--line);
+  }
+  .bento-card--warm {
+    background:linear-gradient(160deg, #FDF8F0 0%, #F5EDE0 100%);
+    color:var(--ink);
+    border:2px solid var(--gold);
+  }
+  .bento-card--dark {
+    background:var(--ink); color:var(--white);
+    border:2px solid var(--gold);
+  }
+  .bento-card--dark::before {
     content:''; position:absolute; top:-60px; right:-60px;
     width:200px; height:200px; border-radius:50%;
-    background: radial-gradient(circle, rgba(200,150,62,0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(200,150,62,0.25) 0%, transparent 70%);
+    pointer-events:none;
   }
+
+  .bento-badge {
+    position:absolute; top:16px; right:16px;
+    padding:5px 14px; border-radius:100px;
+    font-size:11px; font-weight:600; letter-spacing:0.5px;
+  }
+  .bento-badge--popular { background:var(--gold); color:var(--ink); }
+  .bento-badge--best { background:var(--white); color:var(--ink); }
+
+  .bento-want {
+    font-family:'Instrument Serif', serif;
+    font-size:26px; line-height:1.15; letter-spacing:-0.5px;
+    margin-bottom:8px; margin-top:8px;
+  }
+  .bento-want em { font-style:italic; color:var(--gold); }
+  .bento-desc {
+    font-size:14px; line-height:1.6; margin-bottom:20px;
+    opacity:0.75;
+  }
+  .bento-card--dark .bento-desc { opacity:0.6; }
+
+  .bento-price {
+    font-family:'Instrument Serif', serif;
+    font-size:52px; line-height:1; letter-spacing:-2px;
+    margin-bottom:4px;
+  }
+  .bento-price-currency { font-size:22px; vertical-align:super; }
+  .bento-price-sub { font-size:13px; opacity:.55; margin-bottom:20px; }
+
+  .bento-features { list-style:none; text-align:left; margin-bottom:auto; padding-bottom:24px; }
+  .bento-features li {
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:13px; padding:6px 0; line-height:1.5;
+  }
+  .bento-card--light .bento-features li { border-bottom:1px solid var(--line); }
+  .bento-card--warm .bento-features li { border-bottom:1px solid rgba(200,150,62,.2); }
+  .bento-card--dark .bento-features li { border-bottom:1px solid rgba(255,255,255,.08); }
+  .bento-features li:last-child { border-bottom:none; }
+  .check-icon { color:var(--gold); font-size:14px; flex-shrink:0; margin-top:1px; }
+
+  .bento-cta {
+    width:100%; padding:14px 24px; border-radius:10px;
+    font-size:15px; font-weight:500; border:none; cursor:pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .bento-cta:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,.15); }
+  .bento-cta--outline {
+    background:transparent; color:var(--ink);
+    border:1.5px solid var(--ink);
+  }
+  .bento-cta--gold {
+    background:var(--gold); color:var(--ink);
+  }
+  .bento-cta--white {
+    background:var(--white); color:var(--ink);
+  }
+
+  .bento-value-box {
+    margin:12px 0 20px; padding:12px;
+    background:linear-gradient(135deg, rgba(200,150,62,0.2) 0%, rgba(200,150,62,0.08) 100%);
+    border-radius:10px; border:1.5px solid rgba(200,150,62,.4);
+    text-align:center;
+  }
+  .bento-value-box .value-title {
+    font-size:15px; font-weight:700; color:var(--gold); margin-bottom:3px;
+  }
+  .bento-value-box .value-sub {
+    font-size:12px; color:var(--gold); font-weight:500; letter-spacing:0.3px;
+  }
+
+  /* Legacy compat */
   .price-label { font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:.5; margin-bottom:8px; }
   .price-amount {
     font-family:'Instrument Serif', serif;
@@ -199,14 +291,6 @@
   }
   .price-currency { font-size:28px; vertical-align:super; }
   .price-desc { font-size:14px; opacity:.6; margin-bottom:32px; }
-  .price-features { text-align:left; margin-bottom:36px; }
-  .price-features li {
-    display:flex; align-items:center; gap:12px;
-    font-size:14px; padding:8px 0;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  .price-features li:last-child { border-bottom:none; }
-  .check-icon { color:var(--gold); font-size:16px; flex-shrink:0; }
 
   /* ── FORM SECTION ── */
   #generator { background:var(--cream); }
@@ -493,13 +577,18 @@
     position:relative; z-index:1; font-size:13px; color:var(--muted);
   }
 
+  @media(max-width:900px) {
+    .bento-grid { grid-template-columns:1fr; max-width:440px; }
+  }
   @media(max-width:640px) {
     nav { padding:16px 20px; }
     .hero, .section { padding-left:20px; padding-right:20px; }
     .input-row { grid-template-columns:1fr; }
     .form-body { padding:24px 20px; }
     .form-header { padding:24px 20px; }
-    .pricing-box { padding:32px 24px; }
+    .bento-card { padding:28px 24px; }
+    .bento-want { font-size:22px; }
+    .bento-price { font-size:44px; }
     .hero-proof { flex-direction:column; gap:12px; }
     footer { flex-direction:column; gap:12px; text-align:center; }
     .download-stats { gap:24px; }
@@ -543,7 +632,7 @@
   <div class="hero-proof">
     <div class="proof-stat"><strong>5 min</strong>Setup to download</div>
     <div class="proof-divider"></div>
-    <div class="proof-stat"><strong>24-30</strong>Strategic documents</div>
+    <div class="proof-stat"><strong>Up to 30</strong>Strategic documents</div>
     <div class="proof-divider"></div>
     <div class="proof-stat"><strong>Any</strong>Business type</div>
   </div>
@@ -636,53 +725,66 @@
     <div class="section-title">Choose your plan.<br/>Pay once, own forever.</div>
     <p class="section-sub" style="margin:0 auto 0;">No subscriptions. No upsells. Professional business documentation tailored to your needs.</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:32px;max-width:1000px;margin:0 auto;">
-    <!-- Business Plan Only -->
-    <div class="pricing-box" style="position:relative;">
-      <div style="position:absolute;top:16px;right:16px;background:var(--gold);color:var(--ink);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:0.5px;">POPULAR</div>
-      <div class="price-label">Business Plan Only</div>
-      <div style="margin-bottom:12px;">
-        <div class="price-amount" style="margin-bottom:0;"><span class="price-currency">₦</span>5,000</div>
-        <div class="price-desc">~$3.50 USD · One-time payment</div>
-      </div>
-      <ul class="price-features" style="list-style:none;text-align:left;">
-        <li><span class="check-icon">✦</span> One-page comprehensive business plan</li>
-        <li><span class="check-icon">✦</span> 9 strategic sections included</li>
+  <div class="bento-grid">
+
+    <!-- Card 1: Business Plan -->
+    <div class="bento-card bento-card--light">
+      <div class="bento-want">I want a <em>one-page</em> business plan</div>
+      <div class="bento-desc">Perfect for pitching investors or validating your idea. A comprehensive 9-section plan tailored to your business.</div>
+      <div class="bento-price"><span class="bento-price-currency">₦</span>5,000</div>
+      <div class="bento-price-sub">~$3.50 USD · One-time payment</div>
+      <ul class="bento-features">
+        <li><span class="check-icon">✦</span> 9 strategic sections</li>
         <li><span class="check-icon">✦</span> Investor-ready format</li>
-        <li><span class="check-icon">✦</span> Immediate download</li>
         <li><span class="check-icon">✦</span> Tailored to your business</li>
-        <li><span class="check-icon">✦</span> Editable & brandable</li>
+        <li><span class="check-icon">✦</span> Immediate download</li>
       </ul>
-      <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;margin-top:24px;" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">
+      <button class="bento-cta bento-cta--outline" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">
         Get Business Plan →
       </button>
     </div>
-    
-    <!-- Full System -->
-    <div class="pricing-box" style="border:2px solid var(--gold);position:relative;">
-      <div style="position:absolute;top:16px;right:16px;background:var(--ink);color:var(--white);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:0.5px;">BEST VALUE</div>
-      <div class="price-label">Full Business System</div>
-      <div style="margin-bottom:12px;">
-        <div style="font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
-        <div class="price-amount" style="margin-bottom:0;"><span class="price-currency">₦</span>15,000</div>
-        <div class="price-desc">~$10 USD · One-time payment</div>
-      </div>
-      <div style="margin:16px 0;padding:16px;background:linear-gradient(135deg, rgba(200,150,62,0.15) 0%, rgba(200,150,62,0.08) 100%);border-radius:10px;border:2px solid var(--gold);text-align:center;">
-        <div style="font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px;">Worth $200 USD</div>
-        <div style="font-size:13px;color:var(--gold);font-weight:600;letter-spacing:0.5px;">You Save 92% • Professional Documentation</div>
-      </div>
-      <ul class="price-features" style="list-style:none;text-align:left;">
-      <li><span class="check-icon">✦</span> Full AI-generated business system</li>
-        <li><span class="check-icon">✦</span> 24–30 strategic business documents</li>
-      <li><span class="check-icon">✦</span> Organised folder structure</li>
-      <li><span class="check-icon">✦</span> Immediate ZIP download</li>
-      <li><span class="check-icon">✦</span> Tailored to your specific business</li>
-      <li><span class="check-icon">✦</span> Editable & brandable</li>
-    </ul>
-      <button class="btn-primary" style="width:100%;justify-content:center;font-size:16px;margin-top:24px;" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
-      Build my system now →
-    </button>
+
+    <!-- Card 2: Starter System -->
+    <div class="bento-card bento-card--warm">
+      <div class="bento-badge bento-badge--popular">POPULAR</div>
+      <div class="bento-want">I want a <em>starter</em> business system</div>
+      <div class="bento-desc">The essential foundation. 3 strategic folders covering profile, sales, and operations — 10 documents that get you running.</div>
+      <div class="bento-price"><span class="bento-price-currency">₦</span>8,000</div>
+      <div class="bento-price-sub">~$5.50 USD · One-time payment</div>
+      <ul class="bento-features">
+        <li><span class="check-icon">✦</span> 3 strategic folders</li>
+        <li><span class="check-icon">✦</span> 10 business documents</li>
+        <li><span class="check-icon">✦</span> Profile, sales &amp; operations</li>
+        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
+      </ul>
+      <button class="bento-cta bento-cta--gold" onclick="selectProduct('STARTER_SYSTEM'); scrollToGenerator();">
+        Build starter system →
+      </button>
     </div>
+
+    <!-- Card 3: Full System -->
+    <div class="bento-card bento-card--dark">
+      <div class="bento-badge bento-badge--best">BEST VALUE</div>
+      <div class="bento-want">I want the <em>full</em> business system</div>
+      <div class="bento-desc">The complete transformation. 7 folders, 24–30 documents covering every aspect of your business operations.</div>
+      <div style="font-size:13px;color:var(--muted);text-decoration:line-through;margin-bottom:4px;">Market Value: $200 USD</div>
+      <div class="bento-price"><span class="bento-price-currency">₦</span>25,000</div>
+      <div class="bento-price-sub">~$16 USD · One-time payment</div>
+      <div class="bento-value-box">
+        <div class="value-title">Worth $200 USD</div>
+        <div class="value-sub">You Save 92% · Professional Documentation</div>
+      </div>
+      <ul class="bento-features">
+        <li><span class="check-icon">✦</span> 7 strategic folders</li>
+        <li><span class="check-icon">✦</span> 24–30 business documents</li>
+        <li><span class="check-icon">✦</span> Complete operating system</li>
+        <li><span class="check-icon">✦</span> Folder-by-folder download</li>
+      </ul>
+      <button class="bento-cta bento-cta--white" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">
+        Build my system now →
+      </button>
+    </div>
+
   </div>
 </section>
 
@@ -704,7 +806,7 @@
     <div style="font-size:15px;color:var(--ink);margin-bottom:16px;line-height:1.6;" id="selected-product-desc">You're generating: <strong>Complete business transformation system (24-30 documents)</strong></div>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
       <button onclick="showProductSelection()" style="background:var(--white);border:2px solid var(--line);padding:10px 20px;border-radius:8px;color:var(--ink);cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;">← Change Selection</button>
-      <div style="padding:10px 20px;background:var(--gold);color:var(--ink);border-radius:8px;font-size:14px;font-weight:600;" id="product-price-badge">₦15,000</div>
+      <div style="padding:10px 20px;background:var(--gold);color:var(--ink);border-radius:8px;font-size:14px;font-weight:600;" id="product-price-badge">₦25,000</div>
     </div>
   </div>
 
@@ -713,14 +815,14 @@
     <div class="form-card" style="border:2px solid var(--gold);">
       <div class="form-header" style="background:linear-gradient(135deg, rgba(200,150,62,0.1) 0%, rgba(200,150,62,0.05) 100%);padding:24px;border-radius:12px 12px 0 0;border-bottom:2px solid var(--gold);">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="width:48px;height:48px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">📚</div>
+          <div style="width:48px;height:48px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;" id="form-header-icon">📚</div>
           <div>
-            <h2 style="margin:0;font-size:24px;color:var(--ink);">Full Business System</h2>
-            <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:4px;">24-30 Strategic Documents</div>
+            <h2 style="margin:0;font-size:24px;color:var(--ink);" id="form-header-title">Full Business System</h2>
+            <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:4px;" id="form-header-subtitle">24-30 Strategic Documents</div>
           </div>
         </div>
-        <p style="margin:0;font-size:15px;color:var(--ink);line-height:1.6;">This takes about 3–4 minutes. The more detail you give, the better your documents.</p>
-        <div style="margin-top:16px;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);">
+        <p style="margin:0;font-size:15px;color:var(--ink);line-height:1.6;" id="form-header-desc">This takes about 3–4 minutes. The more detail you give, the better your documents.</p>
+        <div style="margin-top:16px;padding:12px;background:var(--white);border-radius:8px;border:1px solid var(--line);" id="form-header-folders">
           <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">You're creating:</div>
           <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Company Profile & Strategic Foundation</div>
           <div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Client Onboarding & Experience System</div>
@@ -1008,10 +1110,10 @@
             <div id="order-summary-content">
               <!-- Will be populated by updateOrderSummary() -->
               <div class="summary-row" style="margin-bottom:8px;" id="market-value-row"><span style="font-size:13px;color:var(--muted);text-decoration:line-through;">Market Value: $200 USD</span><span style="font-size:13px;color:var(--gold);font-weight:600;">92% OFF</span></div>
-              <div class="summary-row"><span id="product-name">Business System Generation</span><span id="product-price">₦15,000</span></div>
+              <div class="summary-row"><span id="product-name">Business System Generation</span><span id="product-price">₦25,000</span></div>
               <div class="summary-row" id="features-row"><span>Strategic Documents (24–30 files)</span><span>Included</span></div>
             <div class="summary-row"><span>ZIP download</span><span>Included</span></div>
-              <div class="summary-row"><span><strong>Total</strong></span><span><strong id="total-price">₦15,000</strong></span></div>
+              <div class="summary-row"><span><strong>Total</strong></span><span><strong id="total-price">₦25,000</strong></span></div>
             </div>
           </div>
 
@@ -1026,7 +1128,7 @@
 
           <button class="paystack-btn" id="pay-btn" onclick="initPayment()">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg>
-            Pay <span id="price-display">₦15,000</span> with Paystack
+            Pay <span id="price-display">₦25,000</span> with Paystack
           </button>
           <div class="payment-note">🔒 Secured by Paystack · Generation starts immediately after payment</div>
           <div id="value-messaging-box" style="margin-top:16px;padding:16px;background:linear-gradient(135deg, rgba(200,150,62,0.15) 0%, rgba(200,150,62,0.08) 100%);border-radius:10px;border:2px solid var(--gold);text-align:center;">
@@ -1407,23 +1509,32 @@ const CONFIG = {
   PRODUCT_TYPES: {
     FULL_SYSTEM: {
       name: 'Full Business System',
-      priceKobo: 1500000,
-      priceDisplay: '₦15,000',
-      description: 'Complete business transformation system (24-30 documents)'
+      priceKobo: 2500000,
+      priceDisplay: '₦25,000',
+      description: 'Complete business transformation system (24-30 documents)',
+      tier: 'full'
+    },
+    STARTER_SYSTEM: {
+      name: 'Starter Business System',
+      priceKobo: 800000,
+      priceDisplay: '₦8,000',
+      description: '3-folder business system with 10 strategic documents',
+      tier: 'starter'
     },
     BUSINESS_PLAN: {
       name: 'Business Plan Only',
       priceKobo: 500000,
       priceDisplay: '₦5,000',
-      description: 'One-page comprehensive business plan'
+      description: 'One-page comprehensive business plan',
+      tier: 'plan'
     }
   },
   // Default to full system
   SELECTED_PRODUCT: 'FULL_SYSTEM',
   
   // Legacy support - defaults to full system
-  PRICE_KOBO: 1500000,
-  PRICE_DISPLAY: '₦15,000'
+  PRICE_KOBO: 2500000,
+  PRICE_DISPLAY: '₦25,000'
 };
 
 // ─── GLOBALS ───────────────────────────────────────────────────
@@ -1459,7 +1570,6 @@ window.selectProduct = function(productType) {
     if (fullSystemForm) fullSystemForm.style.display = 'none';
     if (businessPlanForm) {
       businessPlanForm.style.display = 'block';
-      // Reset to step 1 when switching to business plan
       document.querySelectorAll('#business-plan-form .form-step').forEach((step, idx) => {
         step.classList.toggle('active', idx === 0);
       });
@@ -1474,6 +1584,30 @@ window.selectProduct = function(productType) {
     }
     if (generatorTitle) generatorTitle.textContent = 'Create Your Business Plan';
     if (generatorSub) generatorSub.textContent = 'Answer a few questions and we will generate your investor-ready business plan.';
+  } else if (productType === 'STARTER_SYSTEM') {
+    if (fullSystemForm) fullSystemForm.style.display = 'block';
+    if (businessPlanForm) businessPlanForm.style.display = 'none';
+    if (productBanner) {
+      productBanner.style.display = 'block';
+      document.getElementById('selected-product-name').textContent = 'Starter Business System';
+      document.getElementById('selected-product-desc').innerHTML = 'You\'re generating: <strong>3 folders with 10 strategic documents</strong>';
+      document.getElementById('product-icon').textContent = '📁';
+      document.getElementById('product-badge').textContent = 'STARTER SYSTEM';
+      document.getElementById('product-price-badge').textContent = '₦8,000';
+    }
+    // Update form header for starter
+    const fhTitle = document.getElementById('form-header-title');
+    const fhSub = document.getElementById('form-header-subtitle');
+    const fhDesc = document.getElementById('form-header-desc');
+    const fhFolders = document.getElementById('form-header-folders');
+    if (fhTitle) fhTitle.textContent = 'Starter Business System';
+    if (fhSub) fhSub.textContent = '3 Folders · 10 Strategic Documents';
+    if (fhDesc) fhDesc.textContent = 'This takes about 1–2 minutes. The more detail you give, the better your documents.';
+    if (fhFolders) fhFolders.innerHTML = '<div style="font-size:13px;color:var(--muted);margin-bottom:6px;">You\'re creating:</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Company Profile & Strategy</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Sales & Client System</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Operations & Finance</div>';
+    const fhIcon = document.getElementById('form-header-icon');
+    if (fhIcon) fhIcon.textContent = '📁';
+    if (generatorTitle) generatorTitle.textContent = 'Build your starter system';
+    if (generatorSub) generatorSub.textContent = 'Answer a few questions about your business and we will generate your essential documents.';
   } else {
     if (fullSystemForm) fullSystemForm.style.display = 'block';
     if (businessPlanForm) businessPlanForm.style.display = 'none';
@@ -1483,8 +1617,19 @@ window.selectProduct = function(productType) {
       document.getElementById('selected-product-desc').innerHTML = 'You\'re generating: <strong>Complete business transformation system (24-30 documents)</strong>';
       document.getElementById('product-icon').textContent = '📚';
       document.getElementById('product-badge').textContent = 'COMPLETE SYSTEM';
-      document.getElementById('product-price-badge').textContent = '₦15,000';
+      document.getElementById('product-price-badge').textContent = '₦25,000';
     }
+    // Reset form header to full system defaults
+    const fhTitle = document.getElementById('form-header-title');
+    const fhSub = document.getElementById('form-header-subtitle');
+    const fhDesc = document.getElementById('form-header-desc');
+    const fhFolders = document.getElementById('form-header-folders');
+    if (fhTitle) fhTitle.textContent = 'Full Business System';
+    if (fhSub) fhSub.textContent = '24-30 Strategic Documents';
+    if (fhDesc) fhDesc.textContent = 'This takes about 3\u20134 minutes. The more detail you give, the better your documents.';
+    if (fhFolders) fhFolders.innerHTML = '<div style="font-size:13px;color:var(--muted);margin-bottom:6px;">You\'re creating:</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Company Profile & Strategic Foundation</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Client Onboarding & Experience System</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Document Templates & Legal Framework</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Sales & Revenue System</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Marketing & Growth Engine</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Operations & Scalability</div><div style="font-size:14px;color:var(--ink);font-weight:500;">✓ Finance & Business Intelligence</div>';
+    const fhIcon = document.getElementById('form-header-icon');
+    if (fhIcon) fhIcon.textContent = '📚';
     if (generatorTitle) generatorTitle.textContent = 'Build your system';
     if (generatorSub) generatorSub.textContent = 'Answer a few questions about your business and we will generate everything.';
   }
@@ -1604,8 +1749,10 @@ function updateOrderSummary() {
   if (featuresRow) {
     if (selectedProductType === 'BUSINESS_PLAN') {
       featuresRow.innerHTML = '<span>9 Strategic Sections</span><span>Included</span>';
+    } else if (selectedProductType === 'STARTER_SYSTEM') {
+      featuresRow.innerHTML = '<span>Strategic Documents (3 folders, ~10 files)</span><span>Included</span>';
     } else {
-      featuresRow.innerHTML = '<span>Strategic Documents (24–30 files)</span><span>Included</span>';
+      featuresRow.innerHTML = '<span>Strategic Documents (7 folders, 24–30 files)</span><span>Included</span>';
     }
   }
   
@@ -2076,46 +2223,44 @@ window.initPayment = function() {
 
   // Check if PaystackPop is loaded
   // Direct check - sometimes PaystackPop is available even if window.paystackReady is false
+  const payBtnLabel = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ' + CONFIG.PRICE_DISPLAY + ' with Paystack';
+
   if (typeof PaystackPop === 'undefined') {
     if (window.paystackLoadError) {
       showError('Paystack payment system failed to load. Please refresh the page or check your internet connection.');
-    payBtn.disabled = false;
-      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+      payBtn.disabled = false;
+      payBtn.innerHTML = payBtnLabel;
       return;
     } else {
       showError('Paystack payment system is still loading. Please wait a moment and try again.');
-      // Retry after 2 seconds
       setTimeout(() => {
         if (typeof PaystackPop !== 'undefined' && window.paystackReady) {
           payBtn.disabled = false;
-          payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
-          // Retry payment initialization
+          payBtn.innerHTML = payBtnLabel;
           initPayment();
         } else {
           payBtn.disabled = false;
-          payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+          payBtn.innerHTML = payBtnLabel;
         }
       }, 2000);
     }
     payBtn.disabled = false;
-    payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+    payBtn.innerHTML = payBtnLabel;
     return;
   }
 
-  // Validate amount
   if (!CONFIG.PRICE_KOBO || CONFIG.PRICE_KOBO < 100) {
     showError('Invalid payment amount. Please contact support.');
     console.error('Invalid PRICE_KOBO:', CONFIG.PRICE_KOBO);
     payBtn.disabled = false;
-    payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+    payBtn.innerHTML = payBtnLabel;
     return;
   }
 
-  // Validate email again
   if (!email || !email.includes('@')) {
     showError('Please enter a valid email address.');
     payBtn.disabled = false;
-    payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+    payBtn.innerHTML = payBtnLabel;
     return;
   }
 
@@ -2163,7 +2308,7 @@ window.initPayment = function() {
       
       // Payment successful - start generation
       payBtn.disabled = false;
-      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+      payBtn.innerHTML = payBtnLabel;
         
         // Close payment form and show generation screen
         const step5 = document.getElementById('step-5');
@@ -2188,18 +2333,18 @@ window.initPayment = function() {
     onClose: function() {
       console.log('Payment window closed by user');
       payBtn.disabled = false;
-      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+      payBtn.innerHTML = payBtnLabel;
     }
   });
   
   try {
-  handler.openIframe();
+    handler.openIframe();
     console.log('Paystack payment popup opened');
   } catch (error) {
     console.error('Error opening Paystack payment:', error);
     showError('Failed to open payment window: ' + (error.message || 'Unknown error') + '. Please try again or contact support.');
     payBtn.disabled = false;
-    payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦15,000 with Paystack';
+    payBtn.innerHTML = payBtnLabel;
   }
   
   // Note: If you see a 400 error about "pay_with_transfer" in the console,
@@ -2902,7 +3047,9 @@ async function startGeneration(resumeFromSaved = false) {
       return; // Exit early for business plan
     }
     
-    // ── FULL SYSTEM GENERATION (original flow) ──
+    // ── MULTI-FOLDER GENERATION (Starter System or Full System) ──
+    const tier = CONFIG.PRODUCT_TYPES[selectedProductType]?.tier || 'full';
+    const isStarter = selectedProductType === 'STARTER_SYSTEM';
     let folders, zip, completedFolders, completedDocs;
     
     // ── PHASE 1: Get document structure plan (or use saved) ──
@@ -2927,14 +3074,16 @@ async function startGeneration(resumeFromSaved = false) {
       
       addLog(`Resuming — ${completedFolders.length} folders already done`, true);
       setProgress(12 + Math.round((completedFolders.length / folders.length) * 80));
-      totalFolders = folders.length; // Set for timer estimates
+      totalFolders = folders.length;
     } else {
-      setPhase(1, 8, 'Planning document structure');
-    addLog('Analysing your business profile…');
+      const expectedSteps = isStarter ? 4 : 8;
+      setPhase(1, expectedSteps, 'Planning document structure');
+      addLog('Analysing your business profile…');
       setProgress(5);
 
       const planResult = await apiCall('/api/generate-plan', {
-        businessData: bizData
+        businessData: bizData,
+        tier: tier
       });
 
       if (!planResult.success || !planResult.plan) {
