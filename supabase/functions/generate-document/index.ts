@@ -4,13 +4,42 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+const ALLOWED_ORIGINS = [
+  "https://bizos.adparlay.com",
+  "https://www.bizos.adparlay.com",
+  "http://localhost:3000",
+  "http://localhost:8080",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:8080",
+  ...(Deno.env.get("ALLOWED_ORIGINS")?.split(",").map((o) => o.trim()) || []),
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("Origin") || "";
+  const allowOrigin =
+    ALLOWED_ORIGINS.includes(origin) ||
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+      ? origin
+      : "https://bizos.adparlay.com";
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  };
+}
+
+async function verifyPayment(reference: string): Promise<boolean> {
+  const secretKey = Deno.env.get("PAYSTACK_SECRET_KEY");
+  if (!secretKey || secretKey.includes("YOUR_PAYSTACK")) return false;
+  const res = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
+    headers: { Authorization: `Bearer ${secretKey}` },
+  });
+  if (!res.ok) return false;
+  const data = await res.json();
+  return !!(data.status && data.data?.status === "success");
+}
 
 serve(async (req) => {
-  // Handle CORS preflight
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -22,6 +51,20 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Business data and document are required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const paymentRef = businessData.paymentReference;
+    if (!paymentRef || typeof paymentRef !== "string") {
+      return new Response(
+        JSON.stringify({ error: "Payment reference is required. Please complete payment first." }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (!(await verifyPayment(paymentRef))) {
+      return new Response(
+        JSON.stringify({ error: "Payment could not be verified. Please complete payment first." }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
