@@ -815,7 +815,7 @@
       <div class="stat-item"><div class="stat-pip"></div><strong>1–30</strong>&nbsp;documents</div>
       <div class="stat-item"><div class="stat-pip"></div><strong>Any</strong>&nbsp;business type</div>
     </div>
-  </div>
+    </div>
 
   <div class="tl-wrap">
     <div class="tl-axis"><div class="tl-fill" id="tlFill"></div></div>
@@ -836,8 +836,8 @@
             <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Immediate download</li>
           </ul>
           <button class="pc-btn pc-btn-ink" onclick="selectProduct('BUSINESS_PLAN'); scrollToGenerator();">Get started →</button>
-        </div>
-      </div>
+    </div>
+    </div>
       <div class="pr-mid"><div class="pr-dot"></div></div>
       <div class="pr-right">
         <div class="ctx-panel">
@@ -849,7 +849,7 @@
               <li><div class="who-ico"><svg viewBox="0 0 14 14"><rect x="2" y="3" width="10" height="8" rx="1.5"/><path d="M5 3V2M9 3V2"/></svg></div>Entrepreneurs seeking seed funding or angel investment</li>
               <li><div class="who-ico"><svg viewBox="0 0 14 14"><path d="M2 11l3-3 2.5 2.5L11 4"/></svg></div>Anyone who needs a polished, professional plan — fast</li>
             </ul>
-          </div>
+  </div>
           <div class="ctx-testi">
             <p>"I needed something investor-ready by Friday. BizOS gave me a plan so polished my mentor asked which agency produced it."</p>
             <div class="testi-row">
@@ -868,21 +868,21 @@
             <div class="ctx-label">What's inside</div>
             <h3>3 strategic folders,<br>10 ready-to-use documents</h3>
             <p style="margin-top:6px">Everything a growing business needs to look professional, operate smoothly, and close more deals.</p>
-          </div>
+    </div>
           <div class="folder-block">
             <div class="folder-hd"><div class="folder-ico"><svg viewBox="0 0 14 14"><path d="M2 4h4l1.5 2H12v5.5a.5.5 0 01-.5.5h-9A.5.5 0 012 11.5V4z"/></svg></div><span class="folder-nm">Company Profile & Identity</span><span class="folder-ct">3 docs</span></div>
             <div class="folder-docs"><div class="folder-doc">Company Profile Document</div><div class="folder-doc">Brand Story & Vision Statement</div><div class="folder-doc">Team & Leadership Overview</div></div>
-          </div>
+    </div>
           <div class="folder-block">
             <div class="folder-hd"><div class="folder-ico"><svg viewBox="0 0 14 14"><path d="M2 4h4l1.5 2H12v5.5a.5.5 0 01-.5.5h-9A.5.5 0 012 11.5V4z"/></svg></div><span class="folder-nm">Sales & Client System</span><span class="folder-ct">4 docs</span></div>
             <div class="folder-docs"><div class="folder-doc">Service Proposal Template</div><div class="folder-doc">Client Onboarding Checklist</div><div class="folder-doc">Pricing & Packages Sheet</div><div class="folder-doc">Follow-Up Email Sequence</div></div>
-          </div>
+    </div>
           <div class="folder-block">
             <div class="folder-hd"><div class="folder-ico"><svg viewBox="0 0 14 14"><path d="M2 4h4l1.5 2H12v5.5a.5.5 0 01-.5.5h-9A.5.5 0 012 11.5V4z"/></svg></div><span class="folder-nm">Operations Foundation</span><span class="folder-ct">3 docs</span></div>
             <div class="folder-docs"><div class="folder-doc">Standard Operating Procedures</div><div class="folder-doc">Weekly Operations Checklist</div><div class="folder-doc">Vendor & Supplier Tracker</div></div>
-          </div>
-        </div>
-      </div>
+    </div>
+    </div>
+    </div>
       <div class="pr-mid"><div class="pr-dot"></div></div>
       <div class="pr-right">
         <div class="plan-card featured">
@@ -899,8 +899,8 @@
             <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Folder-by-folder download</li>
           </ul>
           <button class="pc-btn pc-btn-gold" onclick="selectProduct('STARTER_SYSTEM'); scrollToGenerator();">Get started →</button>
-        </div>
-      </div>
+    </div>
+  </div>
     </div>
 
     <div class="pr" id="pr3">
@@ -913,7 +913,7 @@
             <div class="vb-s">Market Value: $200 USD</div>
             <div class="vb-t">Worth $200 USD</div>
             <div class="vb-sub">You Save 92% · Professional Documentation</div>
-          </div>
+  </div>
           <div class="pc-price-row"><span class="pc-sym">₦</span><span class="pc-price">25,000</span></div>
           <div class="pc-usd">~$16 USD · One-time payment</div>
           <div class="pc-div"></div>
@@ -922,7 +922,7 @@
             <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>24–30 business documents</li>
             <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Complete operating system</li>
             <li><div class="fi"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Folder-by-folder download</li>
-          </ul>
+    </ul>
           <button class="pc-btn pc-btn-ghost" onclick="selectProduct('FULL_SYSTEM'); scrollToGenerator();">Get started →</button>
         </div>
       </div>
@@ -2230,8 +2230,8 @@ function validateStep(step) {
 function showError(msg, formType = 'full') {
   const el = document.getElementById(formType === 'plan' ? 'error-banner-plan' : 'error-banner');
   if (el) {
-    el.textContent = msg;
-    el.classList.add('show');
+  el.textContent = msg;
+  el.classList.add('show');
   }
 }
 
@@ -2320,7 +2320,7 @@ function collectData() {
   
   if (isBusinessPlan) {
     // Business plan form fields
-    return {
+  return {
       name: document.getElementById('plan-biz-name')?.value.trim() || '',
       industry: document.getElementById('plan-biz-industry')?.value || '',
       description: document.getElementById('plan-biz-description')?.value.trim() || '',
@@ -2349,15 +2349,15 @@ function collectData() {
       userName: document.getElementById('user-name')?.value.trim() || '',
       userEmail: document.getElementById('user-email')?.value.trim() || '',
       uploadedFile: uploadedFile ? uploadedFile.name : null,
-      salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
+    salesChannel: document.querySelector('input[name="sales-channel"]:checked')?.value || 'Multiple channels',
       delivery: document.getElementById('biz-delivery')?.value.trim() || '',
       paymentModel: Array.from(document.querySelectorAll('input[name="pay-model"]:checked')).map(cb => cb.value).join(', ') || 'Full payment upfront',
-      bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
+    bizSize: document.querySelector('input[name="biz-size"]:checked')?.value || 'Small team (2–10)',
       customer: document.getElementById('biz-customer')?.value.trim() || '',
       existingDocs: document.getElementById('biz-docs')?.value.trim() || '',
       products: document.getElementById('biz-products')?.value.trim() || '',
-      brandTone: document.querySelector('input[name="brand-tone"]:checked')?.value || 'Professional & formal',
-    };
+    brandTone: document.querySelector('input[name="brand-tone"]:checked')?.value || 'Professional & formal',
+  };
   }
 }
 
@@ -2556,14 +2556,14 @@ window.initPlanPayment = function() {
   if (typeof PaystackPop === 'undefined') {
     showError('Paystack payment system is still loading. Please wait a moment and try again.', 'plan');
     if (payBtn) {
-      payBtn.disabled = false;
-      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+    payBtn.disabled = false;
+    payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
     }
     return;
   }
 
   const paymentRef = 'BIZOS_PLAN_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-  
+
   const handler = PaystackPop.setup({
     key: CONFIG.PAYSTACK_PUBLIC_KEY,
     email: email,
@@ -2592,8 +2592,8 @@ window.initPlanPayment = function() {
       bizData.paymentStatus = 'success';
       
       if (payBtn) {
-        payBtn.disabled = false;
-        payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
       }
       
       const planStep3 = document.getElementById('plan-step-3');
@@ -2612,14 +2612,14 @@ window.initPlanPayment = function() {
     onClose: function() {
       console.log('Payment window closed by user');
       if (payBtn) {
-        payBtn.disabled = false;
-        payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="white"/></svg> Pay ₦5,000 with Paystack';
       }
     }
   });
   
   try {
-    handler.openIframe();
+  handler.openIframe();
     console.log('Paystack payment popup opened');
   } catch (error) {
     console.error('Error opening Paystack payment:', error);

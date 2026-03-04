@@ -43,6 +43,10 @@
       "destination": "/api/send-email.js"
     },
     {
+      "source": "/api/chat",
+      "destination": "/api/chat.js"
+    },
+    {
       "source": "/favicon.ico",
       "destination": "/api/favicon.js"
     },

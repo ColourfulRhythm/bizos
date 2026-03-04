@@ -8,7 +8,9 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3002',
+  origin: process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',')
+    : ['http://localhost:3002', 'http://localhost:5173', 'http://127.0.0.1:5173'],
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
@@ -170,6 +172,64 @@ app.post('/api/verify-payment', async (req, res) => {
       error: 'Verification failed', 
       message: error.response?.data?.message || error.message 
     });
+  }
+});
+
+// ─── CHAT (Conversational onboarding) ───────────────────────────
+app.post('/api/chat', async (req, res) => {
+  try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey || apiKey.includes('YOUR_ANTHROPIC')) {
+      return res.status(500).json({ error: 'API key not configured' });
+    }
+    const { messages, bizData = {} } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'messages array required' });
+    }
+    const systemPrompt = `You are BizOS, a friendly business consultant helping users structure and grow their business. Your goal is to collect enough information to generate professional business documents.
+
+Greeting: Start with "Good day, Let's make your business profitable." Ask: "What's your business name?"
+
+Then, through natural conversation, gather: business name, industry, description, country/city, opportunity, team, competitors, target market, timeline, marketing, financials, funding (and optionally email).
+
+Keep responses SHORT (1–3 sentences). Ask ONE question at a time. Be warm and convincing.
+
+When you have enough info, say: "Great! Here are your 3 options: 1. Business Plan Only — ₦5,000  2. Starter System — ₦8,000  3. Full Business System — ₦25,000. Which option? (Reply 1, 2, or 3)"
+
+Extract bizData from conversation. When ready for plan selection output: {"bizData": {...}, "readyForPlan": true}`;
+
+    const chatRes = await axios.post('https://api.anthropic.com/v1/messages', {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: messages.map(m => ({ role: m.role, content: m.content })),
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+    });
+
+    const text = chatRes.data.content?.[0]?.text || '';
+    let bizDataOut = { ...bizData };
+    let readyForPlan = false;
+    const jsonMatch = text.match(/\{\s*"bizData"\s*:\s*\{[\s\S]*?\}\s*,\s*"readyForPlan"\s*:\s*true\s*\}/);
+    if (jsonMatch) {
+      try {
+        const parsed = JSON.parse(jsonMatch[0]);
+        bizDataOut = { ...bizData, ...parsed.bizData };
+        readyForPlan = true;
+      } catch (_) {}
+    }
+    res.json({
+      text: text.replace(/\{[\s\S]*"bizData"[\s\S]*"readyForPlan"[\s\S]*\}/g, '').trim(),
+      bizData: bizDataOut,
+      readyForPlan,
+    });
+  } catch (error) {
+    console.error('Chat API error:', error.response?.data || error.message);
+    res.status(500).json({ error: error.message || 'Chat failed' });
   }
 });
 
