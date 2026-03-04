@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { MessageDock } from "@/components/ui/message-dock";
 import { SlideTabs } from "@/components/ui/slide-tabs";
 
 const geistSans = Geist({
@@ -33,7 +32,6 @@ export default function RootLayout({
           <SlideTabs />
         </header>
         <main className="pt-16">{children}</main>
-        <MessageDock theme="light" enableAnimations />
       </body>
     </html>
   );
