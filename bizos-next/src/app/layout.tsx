@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "BizOS — Your Business Operating System",
   description: "AI-powered business documentation. Get investor-ready plans and operating systems in minutes.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
