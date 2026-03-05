@@ -313,7 +313,7 @@ export default function Home() {
     ) : null;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-zinc-950">
+    <div className="relative min-h-screen overflow-hidden bg-white">
       <div className="absolute inset-0 z-0">
         <GLSLHills />
       </div>
