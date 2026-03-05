@@ -111,7 +111,7 @@ const Tab = React.forwardRef<HTMLLIElement | null, TabProps>(
     <li
       ref={ref}
         onMouseEnter={(e) => onMouseEnter(e.currentTarget)}
-        className="relative z-10 block cursor-pointer px-2.5 py-1 text-[10px] uppercase tracking-wide text-zinc-900 md:px-4 md:py-2 md:text-xs dark:text-zinc-100"
+        className="relative z-10 block cursor-pointer px-2.5 py-1 text-[10px] uppercase tracking-wide text-white mix-blend-difference md:px-4 md:py-2 md:text-xs"
       >
         <Link href={href} onClick={onSelect} className="block">
           {children}
@@ -131,7 +131,7 @@ function Cursor({ position }: { position: Position }) {
         opacity: position.opacity,
       }}
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className="absolute left-0 top-1 z-0 h-5 rounded-full bg-zinc-800 md:top-1 md:h-6 dark:bg-zinc-100"
+      className="absolute left-0 top-1 z-0 h-5 rounded-full bg-zinc-900 md:top-1 md:h-6 dark:bg-zinc-100"
       aria-hidden
     />
   );

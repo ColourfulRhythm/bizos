@@ -4,6 +4,8 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { API_BASE, PRODUCTS, PAYSTACK_KEY } from "@/lib/config";
 import { GLSLHills } from "@/components/ui/glsl-hills";
 import { buildBusinessPlanDocxBlob, buildDocxBlob, type BizData } from "@/lib/docx-builder";
+import { extractFileText } from "@/lib/extract-file-text";
+import { isAllowedFile, ACCEPT_ATTR, MAX_FILE_BYTES } from "@/lib/file-upload-config";
 import JSZip from "jszip";
 
 declare global {
@@ -105,10 +107,14 @@ export default function Home() {
 
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.size <= 3072) {
+    if (!file) {
+      e.target.value = "";
+      return;
+    }
+    if (isAllowedFile(file)) {
       setUploadedFile(file);
-    } else if (file) {
-      alert("File must be 3KB or less. Please use a shorter text file.");
+    } else {
+      alert(`Only .txt, .doc, .docx, and small .pdf allowed. Max size ${MAX_FILE_BYTES / 1024}KB.`);
     }
     e.target.value = "";
   }, []);
@@ -135,14 +141,7 @@ export default function Home() {
   const buildPlanZip = useCallback(
     async (overridePaymentRef?: string): Promise<Blob> => {
       const ref = overridePaymentRef ?? paymentRef;
-      const uploadedFileContent = uploadedFile
-        ? await new Promise<string>((res, rej) => {
-            const r = new FileReader();
-            r.onload = () => res((r.result as string) || "");
-            r.onerror = rej;
-            r.readAsText(uploadedFile);
-          })
-        : null;
+      const uploadedFileContent = uploadedFile ? await extractFileText(uploadedFile) : null;
 
       const body = {
         businessData: { ...bizData, paymentReference: ref },
@@ -177,14 +176,7 @@ export default function Home() {
   const generateFullZip = useCallback(
     async (overridePaymentRef?: string): Promise<Blob> => {
       const ref = overridePaymentRef ?? paymentRef;
-      const uploadedFileContent = uploadedFile
-        ? await new Promise<string>((res, rej) => {
-            const r = new FileReader();
-            r.onload = () => res((r.result as string) || "");
-            r.onerror = rej;
-            r.readAsText(uploadedFile);
-          })
-        : null;
+      const uploadedFileContent = uploadedFile ? await extractFileText(uploadedFile) : null;
 
       const businessData = { ...mapBizDataForGenerate(), paymentReference: ref };
 
@@ -313,8 +305,8 @@ export default function Home() {
     ) : null;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white">
-      <div className="absolute inset-0 z-0">
+    <div className="relative min-h-screen min-h-[100dvh] overflow-hidden bg-white">
+      <div className="fixed inset-0 z-0 h-[100dvh] min-h-screen w-full">
         <GLSLHills />
       </div>
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
@@ -354,7 +346,7 @@ export default function Home() {
               <div className="flex gap-2">
                 <input
                   type="file"
-                  accept=".txt"
+                  accept={ACCEPT_ATTR}
                   onChange={handleFileUpload}
                   className="hidden"
                   id="file-upload"
@@ -365,12 +357,18 @@ export default function Home() {
                 >
                   {uploadedFile ? (uploadedFile.name.length > 12 ? "📎 …" : "📎 " + uploadedFile.name) : "📎"}
                 </label>
-                <input
+                <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
                   placeholder="What's your business name?"
-                  className="min-w-0 flex-1 rounded-xl border border-stone-300 bg-white px-3 sm:px-4 py-2.5 text-base sm:text-sm outline-none focus:border-amber-500"
+                  rows={1}
+                  className="min-w-0 flex-1 rounded-xl border border-stone-300 bg-white px-3 sm:px-4 py-2.5 text-base sm:text-sm outline-none focus:border-amber-500 resize-none"
                 />
                 <button
                   onClick={sendMessage}

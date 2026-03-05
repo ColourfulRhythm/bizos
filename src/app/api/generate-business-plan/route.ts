@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { verifyPayment } from "@/lib/verify-payment";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -14,6 +15,20 @@ export async function POST(request: Request) {
     const { businessData, uploadedFileContent } = await request.json();
     if (!businessData) {
       return NextResponse.json({ error: "Business data is required" }, { status: 400, ...cors });
+    }
+
+    const paymentRef = businessData?.paymentReference;
+    if (!paymentRef || typeof paymentRef !== "string") {
+      return NextResponse.json(
+        { error: "Payment reference required. Complete payment first." },
+        { status: 403, ...cors }
+      );
+    }
+    if (!(await verifyPayment(paymentRef))) {
+      return NextResponse.json(
+        { error: "Payment could not be verified. Complete payment first." },
+        { status: 403, ...cors }
+      );
     }
 
     const apiKey = process.env.ANTHROPIC_API_KEY;

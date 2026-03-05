@@ -11,9 +11,16 @@ interface GLSLHillsProps {
   speed?: number;
 }
 
+function getViewportSize() {
+  if (typeof window === "undefined") return { w: 800, h: 600 };
+  const w = window.innerWidth;
+  const h = window.visualViewport?.height ?? window.innerHeight;
+  return { w, h };
+}
+
 export function GLSLHills({
-  width = "100vw",
-  height = "100vh",
+  width = "100%",
+  height = "100%",
   cameraZ = 125,
   planeSize = 256,
   speed = 0.5,
@@ -121,50 +128,67 @@ export function GLSLHills({
       }
     }
 
+    const { w: initW, h: initH } = getViewportSize();
     const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, antialias: false });
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-    const clock = new THREE.Clock();
+    const camera = new THREE.PerspectiveCamera(45, initW / initH, 1, 10000);
     const plane = new Plane();
+    let lastTime = performance.now();
 
     const resize = () => {
       if (!canvasRef.current) return;
+      const { w, h } = getViewportSize();
       const canvas = canvasRef.current;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      camera.aspect = window.innerWidth / window.innerHeight;
+      canvas.width = w;
+      canvas.height = h;
+      camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(w, h);
     };
 
     let frameId: number;
     const renderLoop = () => {
-      plane.render(clock.getDelta());
+      const now = performance.now();
+      plane.render((now - lastTime) / 1000);
+      lastTime = now;
       renderer.render(scene, camera);
       frameId = requestAnimationFrame(renderLoop);
     };
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(initW, initH);
     renderer.setClearColor(0x000000, 0);
     camera.position.set(0, 16, cameraZ);
     camera.lookAt(new THREE.Vector3(0, 28, 0));
     scene.add(plane.mesh);
-    window.addEventListener("resize", resize);
+    const onResize = () => resize();
+    window.addEventListener("resize", onResize);
+    window.visualViewport?.addEventListener("resize", onResize);
+    window.visualViewport?.addEventListener("scroll", onResize);
     resize();
     renderLoop();
 
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("scroll", onResize);
       cancelAnimationFrame(frameId);
       renderer.dispose();
     };
   }, [cameraZ, planeSize, speed]);
 
   return (
-    <div ref={containerRef} style={{ position: "relative", width, height }}>
+    <div ref={containerRef} style={{ position: "relative", width, height, minHeight: "100%", minWidth: "100%" }}>
       <canvas
         ref={canvasRef}
-        style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0, zIndex: 1 }}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 1,
+          display: "block",
+        }}
       />
     </div>
   );

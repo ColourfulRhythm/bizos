@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSupabaseAdmin } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -52,7 +53,7 @@ Then, through natural conversation, gather:
 
 Keep responses SHORT (1–3 sentences). Ask ONE question at a time. Be warm and convincing that you have what they need to grow significantly and structure their business.
 
-When you need document uploads, say: "You can upload a short text file (max 3KB) with any notes if helpful — otherwise just type your answer." Accept typed answers if they prefer.
+When you need document uploads, say: "You can attach a .txt, .doc, .docx, or small .pdf (max 500KB) with any notes if helpful — otherwise just type your answer." Accept typed answers if they prefer.
 
 When you have: name, industry, description, opportunity, team, competitors, target market, timeline, marketing, financials, funding (and optionally email, country, city) — say:
 
@@ -100,6 +101,33 @@ Extract and update bizData from the conversation. Output JSON at the end of your
         const parsed = JSON.parse(jsonMatch[0]);
         bizDataOut = { ...bizData, ...parsed.bizData };
         readyForPlan = true;
+
+        // Store in Supabase when we have full business data
+        const supabase = getSupabaseAdmin();
+        if (supabase) {
+          try {
+            await supabase.from("business_submissions").insert({
+              name: bizDataOut.name,
+              industry: bizDataOut.industry,
+              description: bizDataOut.description,
+              country: bizDataOut.country,
+              city: bizDataOut.city,
+              opportunity: bizDataOut.opportunity,
+              team: bizDataOut.team,
+              competitors: bizDataOut.competitors,
+              target_market: bizDataOut.targetMarket,
+              timeline: bizDataOut.timeline,
+              marketing: bizDataOut.marketing,
+              financials: bizDataOut.financials,
+              funding: bizDataOut.funding,
+              email: bizDataOut.email,
+              products: bizDataOut.products,
+              raw_data: bizDataOut,
+            });
+          } catch (e) {
+            console.warn("Supabase save failed:", e);
+          }
+        }
       } catch {
         // ignore
       }
