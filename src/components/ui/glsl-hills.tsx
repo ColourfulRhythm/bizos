@@ -106,8 +106,8 @@ export function GLSLHills({
               #define GLSLIFY 1
               varying vec3 vPosition;
               void main(){
-                float opacity=(96.0-length(vPosition))/256.0*0.65;
-                vec3 color=vec3(0.65);
+                float opacity=(96.0-length(vPosition))/256.0*0.8;
+                vec3 color=vec3(0.55);
                 gl_FragColor=vec4(color,opacity);
               }
             `,
