@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { API_BASE, PRODUCTS, PAYSTACK_KEY } from "@/lib/config";
+import { GLSLHills } from "@/components/ui/glsl-hills";
 import { buildBusinessPlanDocxBlob, buildDocxBlob, type BizData } from "@/lib/docx-builder";
 import JSZip from "jszip";
 
@@ -312,7 +313,11 @@ export default function Home() {
     ) : null;
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-white px-4 py-8">
+    <div className="relative min-h-screen overflow-hidden bg-zinc-950">
+      <div className="absolute inset-0 z-0">
+        <GLSLHills />
+      </div>
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-8">
       {phase === "chat" && (
         <>
           <h1 className="text-center text-3xl font-semibold text-zinc-900 md:text-4xl">
@@ -441,6 +446,7 @@ export default function Home() {
           </a>
         </div>
       )}
+      </div>
     </div>
   );
 }
