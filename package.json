@@ -1,43 +1,33 @@
 {
-  "name": "bizos",
-  "version": "1.0.0",
-  "description": "BizOS - AI-Powered Business Operating System Generator",
-  "main": "BizOS_MVP.html",
+  "name": "bizos-next",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "frontend": "python3 -m http.server 3002",
-    "serve": "npx http-server -p 3002",
-    "vercel": "npx vercel",
-    "vercel:dev": "npx vercel dev",
-    "vercel:prod": "npx vercel --prod",
-    "supabase:login": "supabase login",
-    "supabase:link": "supabase link",
-    "supabase:deploy": "./deploy-supabase.sh",
-    "supabase:deploy:direct": "supabase functions deploy --project-ref nxygpqnbkoxfdwtvsufw",
-    "supabase:deploy:plan": "supabase functions deploy generate-plan",
-    "supabase:deploy:doc": "supabase functions deploy generate-document",
-    "supabase:deploy:email": "supabase functions deploy send-email",
-    "supabase:deploy:payment": "supabase functions deploy verify-payment",
-    "supabase:deploy:health": "supabase functions deploy health",
-    "supabase:serve": "supabase functions serve"
-  },
-  "keywords": [
-    "business",
-    "sop",
-    "documentation",
-    "ai"
-  ],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "vercel": "^34.0.0"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "axios": "^1.6.0",
-    "dotenv": "^16.3.1"
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.0",
+    "jszip": "^3.10.1",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "tailwind-merge": "^2.5.0",
+    "tailwindcss-animate": "^1.0.7",
+    "tw-animate": "^1.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5"
   }
 }
-
