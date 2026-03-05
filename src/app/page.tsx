@@ -317,22 +317,22 @@ export default function Home() {
       <div className="absolute inset-0 z-0">
         <GLSLHills />
       </div>
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-8">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
       {phase === "chat" && (
         <>
-          <h1 className="text-center text-3xl font-semibold text-zinc-900 md:text-4xl">
+          <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold text-zinc-900 px-2">
             Good day, Let&apos;s make your business profitable.
           </h1>
 
-          <div className="mt-8 w-full max-w-2xl rounded-2xl border border-stone-200/60 bg-white/90 shadow-xl backdrop-blur overflow-hidden">
-            <div className="max-h-[280px] overflow-y-auto p-4">
+          <div className="mt-6 md:mt-8 w-full max-w-2xl rounded-2xl border border-stone-200/60 bg-white/95 shadow-xl backdrop-blur overflow-hidden mx-2 md:mx-0">
+            <div className="max-h-[200px] sm:max-h-[280px] overflow-y-auto p-3 sm:p-4">
               {messages.map((m, i) => (
                 <div
                   key={i}
-                  className={`mb-3 ${m.role === "user" ? "ml-8 text-right" : "mr-8 text-left"}`}
+                  className={`mb-3 ${m.role === "user" ? "ml-4 sm:ml-8 text-right" : "mr-4 sm:mr-8 text-left"}`}
                 >
                   <div
-                    className={`inline-block max-w-[85%] rounded-xl px-4 py-2 text-sm ${
+                    className={`inline-block max-w-[92%] sm:max-w-[85%] rounded-xl px-3 sm:px-4 py-2 text-sm ${
                       m.role === "user" ? "bg-stone-900 text-white" : "bg-stone-100 text-stone-800"
                     }`}
                   >
@@ -350,7 +350,7 @@ export default function Home() {
 
             {summary}
 
-            <div className="border-t border-stone-200/60 p-4 flex-shrink-0">
+            <div className="border-t border-stone-200/60 p-3 sm:p-4 flex-shrink-0">
               <div className="flex gap-2">
                 <input
                   type="file"
@@ -361,21 +361,21 @@ export default function Home() {
                 />
                 <label
                   htmlFor="file-upload"
-                  className="flex cursor-pointer items-center rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-600 hover:bg-stone-100"
+                  className="flex-shrink-0 flex cursor-pointer items-center rounded-lg border border-stone-300 bg-stone-50 px-3 py-2.5 text-sm text-stone-600 hover:bg-stone-100"
                 >
-                  {uploadedFile ? uploadedFile.name : "📎 Upload"}
+                  {uploadedFile ? (uploadedFile.name.length > 12 ? "📎 …" : "📎 " + uploadedFile.name) : "📎"}
                 </label>
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-                  placeholder="Type your message…"
-                  className="flex-1 rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm outline-none focus:border-amber-500"
+                  placeholder="What's your business name?"
+                  className="min-w-0 flex-1 rounded-xl border border-stone-300 bg-white px-3 sm:px-4 py-2.5 text-base sm:text-sm outline-none focus:border-amber-500"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={loading}
-                  className="rounded-xl bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 disabled:opacity-50"
+                  className="flex-shrink-0 rounded-xl bg-stone-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-stone-800 disabled:opacity-50"
                 >
                   Send
                 </button>
@@ -386,7 +386,7 @@ export default function Home() {
       )}
 
       {phase === "plans" && (
-        <div className="mt-8 w-full max-w-2xl rounded-2xl border border-stone-200/60 bg-white/90 p-6 shadow-xl backdrop-blur">
+        <div className="mt-6 md:mt-8 w-full max-w-2xl rounded-2xl border border-stone-200/60 bg-white/95 p-4 sm:p-6 shadow-xl backdrop-blur mx-2 md:mx-0">
           <h2 className="mb-4 font-serif text-xl font-semibold text-stone-900">Great! Here are your options</h2>
           {genError && (
             <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{genError}</div>
@@ -401,7 +401,7 @@ export default function Home() {
               className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
             />
           </div>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
             {(Object.keys(PRODUCTS) as ProductKey[]).map((key) => {
               const p = PRODUCTS[key];
               return (
@@ -427,7 +427,7 @@ export default function Home() {
       )}
 
       {phase === "generating" && (
-        <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-stone-200/60 bg-white/90 p-8 shadow-xl backdrop-blur">
+        <div className="mt-6 md:mt-8 flex flex-col items-center justify-center rounded-2xl border border-stone-200/60 bg-white/95 p-6 sm:p-8 shadow-xl backdrop-blur mx-2 md:mx-0">
           <div className="h-10 w-10 animate-spin rounded-full border-2 border-stone-300 border-t-stone-900" />
           <p className="mt-4 text-stone-600">{genProgress || "Generating…"}</p>
           {genError && <p className="mt-2 text-sm text-red-600">{genError}</p>}
@@ -435,7 +435,7 @@ export default function Home() {
       )}
 
       {phase === "done" && downloadUrl && (
-        <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-stone-200/60 bg-white/90 p-8 shadow-xl backdrop-blur">
+        <div className="mt-6 md:mt-8 flex flex-col items-center justify-center rounded-2xl border border-stone-200/60 bg-white/95 p-6 sm:p-8 shadow-xl backdrop-blur mx-2 md:mx-0">
           <p className="text-lg font-medium text-stone-900">Your documents are ready!</p>
           <a
             href={downloadUrl}
